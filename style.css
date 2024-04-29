@@ -1,4 +1,4 @@
-/* POPPINS FONT */
+/**********************Login page *********************/
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
 
 *{
@@ -14,28 +14,33 @@
     align-items: center;
     min-height: 100vh;
 }
-.side-image{
+.side-image {
+    position: relative;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     border-radius: 10px 0 0 10px;
-    position: relative;
 }
 
 .side-image img {
-    width: 200px; 
+    width: 200px;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
 }
 
 .text{
     text-align: center;
 }
 
-.text p{
-    color: #fff;
-    font-size: 20px; 
-    margin-top: 10px;
+.text p {
+    color: #ff0000; 
+    font-size: 24px; 
+    margin-top: 10px; 
+    font-weight: bold;
 }
+
 
 .row{
   width:  900px;
@@ -71,6 +76,7 @@ img{
     font-weight: 700;
     text-align: center;
     margin-bottom: 45px;
+    font-size: 25px;
 }
 
 .input-field{
