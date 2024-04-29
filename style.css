@@ -170,3 +170,146 @@ span a:hover{
     text-decoration: underline;
 }
 
+/*********************** reclamation page ****************/
+
+.sidebar{
+    width: 280px;
+    position: fixed;
+    left: 0;
+    top: 0;
+    height: 100%;
+    padding: 1rem 1.5rem;
+    background: #ff0000;
+    color:#fff;
+    margin: 0;
+    padding: 0;
+
+}
+
+.sidebar-brand{
+    height: 70px;
+}
+
+
+.brand-flex{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.brand-icons span{
+    font-size: 1.5rem;
+    margin-left: .5rem;
+}
+
+.sidebar-user{
+    margin: 1rem 0rem 1rem 0rem;
+    text-align: center;
+}
+
+.sidebar-user img{
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+    border-left: 2px solid #efefef;
+    border-right: 2px solid #efefef;
+    border-bottom: 2px solid #efefef;
+    border-top: 2px solid #efefef;
+    margin-left: 70px;
+}
+
+.sidebar-user h3{
+    font-size: 1rem;
+    margin-top: 70px;
+}
+
+.sidebar-user span{
+    font-size: .8rem;
+}
+
+.sidebar-menu{
+    margin-top: 3rem;
+}
+
+.menu head{
+    text-transform: uppercase;
+    color: #8da2fb;
+    font-size: .8rem;
+    font-weight: 500;
+    margin-bottom: .5rem;
+}
+
+.sidebar-menu ul{
+    margin-bottom: 1.5rem;
+}
+
+.sidebar-menu li{
+    margin-bottom: .9rem;
+}
+
+.sidebar-menu li a{
+    color: #efefef ;
+    font-size: .9rem;
+    display: flex;
+    align-items: center;
+}
+
+.sidebar-menu li a span{
+    font-size: 1.5rem;
+    display: inline-block;
+    margin-right: .8rem;
+}
+
+
+.header{
+    height: 70px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 1.5rem;
+}
+
+.menu-toggle label{
+    height: 60px;
+    width: 60px;
+    display: grid;
+    place-items: center;
+    font-size: 1.5rem;
+    border-radius: 50%;
+}
+
+.header-icons span{
+    display: inline-block;
+    margin-left: .7rem;
+    font-size: 1.4rem;
+}
+
+.menu-toggle label:hover{
+    background: #efefef;
+}
+
+
+.main-content{
+    margin-left: 280px;
+}
+
+.main{
+    padding: 1.5rem;
+    background: #f1f5f9;
+    min-height: 90vh;
+}
+
+.page-header{
+    display: flex;
+    justify-content: space-between;
+}
+
+.header-actions button{
+    outline: none;
+    background: transparent;
+    border: 1px solid #333;
+    padding: .6rem 1rem;
+    margin-left: 1rem;
+    border-radius: 3px;
+}
+
