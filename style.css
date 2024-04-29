@@ -15,13 +15,28 @@
     min-height: 100vh;
 }
 .side-image{
-    background-image: url("images/2.jpg");
-    background-position: center;
-    background-size: cover;
-    background-repeat: no-repeat;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     border-radius: 10px 0 0 10px;
     position: relative;
 }
+
+.side-image img {
+    width: 200px; 
+}
+
+.text{
+    text-align: center;
+}
+
+.text p{
+    color: #fff;
+    font-size: 20px; 
+    margin-top: 10px;
+}
+
 .row{
   width:  900px;
   height:550px;
@@ -30,50 +45,41 @@
   padding: 0px;
   box-shadow: 5px 5px 10px 1px rgba(0,0,0,0.2);
 }
-.text{
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+
+.right{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  background-color: #ff0000; 
+  color: #ffffff; 
 }
-.text p{
-    color: #fff;
-    font-size: 20px; 
-}
-i{
-    font-weight: 400;
-    font-size: 15px;
-}
-.right {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: relative;
-    background-color: #ff0000; /* Rouge */
-    color: #ffffff; /* Blanc */
-  }
-  
+
 .input-box{
   width: 330px;
   box-sizing: border-box;
 }
+
 img{
     width: 35px;
     position: absolute;
     top: 30px;
     left: 30px;
 }
+
 .input-box header{
     font-weight: 700;
     text-align: center;
     margin-bottom: 45px;
 }
+
 .input-field{
     display: flex;
     flex-direction: column;
     position: relative;
     padding: 0 10px 0 10px;
 }
+
 .input{
     height: 45px;
     width: 100%;
@@ -84,6 +90,7 @@ img{
     margin-bottom: 20px;
     color: #40414a;
 }
+
 .input-box .input-field label{
     position: absolute;
     top: 10px;
@@ -91,21 +98,25 @@ img{
     pointer-events: none;
     transition: .5s;
 }
+
 .input-field input:focus ~ label
    {
     top: -10px;
     font-size: 13px;
   }
-  .input-field input:valid ~ label
+
+.input-field input:valid ~ label
   {
    top: -10px;
    font-size: 13px;
    color: #5d5076;
  }
- .input-field .input:focus, .input-field .input:valid{
+
+.input-field .input:focus, .input-field .input:valid{
     border-bottom: 1px solid #743ae1;
  }
- .submit{
+
+.submit{
     border: none;
     outline: none;
     height: 45px;
@@ -113,21 +124,25 @@ img{
     border-radius: 5px;
     transition: .4s;
  }
- .submit:hover{
+
+.submit:hover{
     background: rgba(37, 95, 156, 0.937);
     color: #fff;
  }
- .signin{
+
+.signin{
     text-align: center;
     font-size: small;
     margin-top: 25px;
 }
+
 span a{
     text-decoration: none;
     font-weight: 700;
     color: #000;
     transition: .5s;
 }
+
 span a:hover{
     text-decoration: underline;
     color: #000;
@@ -148,5 +163,4 @@ span a:hover{
 .change-password button:hover {
     text-decoration: underline;
 }
-
 
