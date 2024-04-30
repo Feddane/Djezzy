@@ -205,7 +205,6 @@ span a:hover{
     margin: 15px; 
 }
 
-
 .sidebar-user img {
     width: 110px;
     height: 110px;
@@ -259,7 +258,7 @@ span a:hover{
 }
 
 .main-content {
-    padding-left: 280px; /* Pour compenser la largeur de la barre latérale */
+    padding-left: 280px;
 }
 
 .page-header {
@@ -270,7 +269,7 @@ span a:hover{
 }
 
 .header-content {
-    flex: 1; /* Pour que le contenu prenne tout l'espace disponible */
+    flex: 1;
 }
 
 .header-content h1 {
