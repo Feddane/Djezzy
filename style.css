@@ -258,7 +258,7 @@ span a:hover{
 }
 
 .main-content {
-    padding-left: 280px;
+    padding-left: 280px; /* Pour compenser la largeur de la barre latérale */
 }
 
 .page-header {
@@ -269,18 +269,15 @@ span a:hover{
 }
 
 .header-content {
-    flex: 1;
+    flex: 1; /* Pour que le contenu prenne tout l'espace disponible */
 }
 
 .header-content h1 {
     font-size: 24px;
     font-weight: bold;
     margin-bottom: 5px;
-}
-
-.header-content p {
-    font-size: 14px;
-    color: #6c757d;
+    color: #ff0000; /* Couleur rouge */
+    text-align: center; /* Centre */
 }
 
 .header-actions {
