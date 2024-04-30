@@ -258,7 +258,7 @@ span a:hover{
 }
 
 .main-content {
-    padding-left: 280px; /* Pour compenser la largeur de la barre latérale */
+    padding-left: 280px;
 }
 
 .page-header {
@@ -269,34 +269,25 @@ span a:hover{
 }
 
 .header-content {
-    flex: 1; /* Pour que le contenu prenne tout l'espace disponible */
+    flex: 1; 
 }
 
 .header-content h1 {
     font-size: 24px;
     font-weight: bold;
     margin-bottom: 5px;
-    color: #ff0000; /* Couleur rouge */
-    text-align: center; /* Centre */
+    color: #ff0000; 
+    text-align: center; 
+    margin-top: 40px;
 }
 
 .header-actions {
     display: flex;
 }
 
-.header-actions button {
-    margin-left: 10px;
-    background: transparent;
-    border: none;
-    color: #343a40;
-    cursor: pointer;
+.header-actions img {
+    width: 90px;
+    height: auto; 
+    margin-left: 1400px;
+
 }
-
-.header-actions button:hover {
-    color: #007bff;
-}
-
-
-
-
-
