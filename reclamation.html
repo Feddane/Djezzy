@@ -70,6 +70,44 @@
             <input type="text" id="sites" name="sites">
         </div>
     </div>
+
+    <!-- Ajout des nouveaux éléments -->
+    <div class="additional-fields">
+        <div class="field-group">
+            <div class="field shift">
+                <label for="shift">Shift</label>
+                <div class="select-wrapper">
+                    <select id="shift" name="shift">
+                        <option value="" hidden disabled selected></option>
+                        <option value="matin">Matin</option>
+                        <option value="soir">Soir</option>
+                    </select>
+                </div>
+            </div>
+            <div class="field date-ouverture">
+                <label for="date-ouverture">Date Ouverture*</label>
+                <div class="datepicker">
+                    <input type="date" id="date-ouverture" name="date-ouverture" required>
+                </div>
+            </div>
+            <div class="field batiment">
+                <label for="batiment">Bâtiments</label>
+                <div class="select-wrapper">
+                    <select id="batiment" name="batiment">
+                        <option value="" hidden disabled selected></option>
+                        <option value="B1">B1</option>
+                        <option value="B2">B2</option>
+                        <option value="B3">B3</option>
+                        <option value="B4">B4</option>
+                        <option value="B6">B6</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
   </main>
 </body>
 </html>

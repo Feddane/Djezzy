@@ -213,14 +213,14 @@ span a:hover{
     border-right: 2px solid #efefef;
     border-bottom: 2px solid #efefef;
     border-top: 2px solid #efefef;
-    margin-left: 70px;
+    margin-left: 50px;
 }
 
 .sidebar-user h3 {
     font-size: 1rem;
     margin-top: 100px;
     text-align: center;
-    margin-left: 30px;
+    margin-left: 5px;
 }
 
 .sidebar-menu {
@@ -309,7 +309,7 @@ span a:hover{
 }
 
 .field.sites {
-    margin-left: 400px;
+    margin-left: 480px;
     margin-right: 100px;
 }
 
@@ -323,10 +323,60 @@ span a:hover{
 }
 
 .field.titre input[type="text"] {
-    width: 180%;
+    width: 205%;
 }
 
 /* .field.sites input[type="text"] {
     height: 85%;
 } */
+
+.additional-fields {
+    margin-top: 20px;
+}
+
+.additional-fields .field-group {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.additional-fields .field.shift select {
+    width: 70%;
+}
+
+.additional-fields .field.date-ouverture input[type="date"] {
+    width: 58%;
+    height: 25px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    padding: 8px;
+}
+
+
+.additional-fields .field.batiment select {
+    width: 80%;
+}
+
+.additional-fields .field.shift select,
+.additional-fields .field.batiment select {
+    height: 40px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    padding: 8px;
+    background-color: #dfdfdf;
+}
+
+.additional-fields .field.shift select option,
+.additional-fields .field.batiment select option {
+    background-color: white;
+}
+
+
+
+
+
+
+
+
+
 
