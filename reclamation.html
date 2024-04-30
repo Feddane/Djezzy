@@ -74,6 +74,7 @@
     <!-- Ajout des nouveaux éléments -->
     <div class="additional-fields">
         <div class="field-group">
+            <!-- Shift -->
             <div class="field shift">
                 <label for="shift">Shift</label>
                 <div class="select-wrapper">
@@ -84,29 +85,79 @@
                     </select>
                 </div>
             </div>
+            <!-- Date Ouverture -->
             <div class="field date-ouverture">
                 <label for="date-ouverture">Date Ouverture*</label>
                 <div class="datepicker">
                     <input type="date" id="date-ouverture" name="date-ouverture" required>
                 </div>
             </div>
+            <!-- Batiment -->
             <div class="field batiment">
-                <label for="batiment">Bâtiments</label>
+                <label for="batiment">Bâtiment</label>
                 <div class="select-wrapper">
                     <select id="batiment" name="batiment">
                         <option value="" hidden disabled selected></option>
-                        <option value="B1">B1</option>
-                        <option value="B2">B2</option>
-                        <option value="B3">B3</option>
-                        <option value="B4">B4</option>
-                        <option value="B6">B6</option>
+                        <option value="Data Center">Data Center</option>
+                        <option value="S/SOL1">S/SOL1</option>
+                        <option value="S/SOL2">S/SOL2</option>
+                        <option value="RDC">RDC</option>
+                        <option value="1er">1er</option>
+                        <option value="2ème">2ème</option>
+                        <option value="3ème">3ème</option>
+                        <option value="4ème">4ème</option>
+                        <option value="5ème">5ème</option>
+                        <option value="6ème">6ème</option>
+                        <option value="7ème">7ème</option>
+                        <option value="8ème">8ème</option>
+                        <option value="Terasse">Terasse</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="field-group">
+            <!-- Operateur -->
+            <div class="field operateur">
+                <label for="operateur">Opérateur*</label>
+                <div class="select-wrapper">
+                    <select id="operateur" name="operateur" required>
+                        <option value="" hidden disabled selected></option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                    </select>
+                </div>
+            </div>
+             <!-- Echeance -->
+             <div class="field echeance">
+                <label for="echeance">Échéance*</label>
+                <div class="datepicker">
+                    <input type="date" id="echeance" name="echeance" required>
+                </div>
+            </div>
+            <!-- Etages -->
+            <div class="field etages">
+                <label for="etages">Étages</label>
+                <div class="select-wrapper">
+                    <select id="etages" name="etages">
+                        <option value="" hidden disabled selected></option>
+                        <option value="Data Center">Data Center</option>
+                        <option value="S/SOL1">S/SOL1</option>
+                        <option value="S/SOL2">S/SOL2</option>
+                        <option value="RDC">RDC</option>
+                        <option value="1er">1er</option>
+                        <option value="2ème">2ème</option>
+                        <option value="3ème">3ème</option>
+                        <option value="4ème">4ème</option>
+                        <option value="5ème">5ème</option>
+                        <option value="6ème">6ème</option>
+                        <option value="7ème">7ème</option>
+                        <option value="8ème">8ème</option>
+                        <option value="Terasse">Terasse</option>
                     </select>
                 </div>
             </div>
         </div>
     </div>
-
-
 
   </main>
 </body>
