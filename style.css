@@ -341,17 +341,19 @@ span a:hover{
 }
 
 .additional-fields .field.shift select,
-.additional-fields .field.operateur select  {
+.additional-fields .field.operateur select,
+.additional-fields .field.affecte select  {
     width: 70%;
 }
 
 .additional-fields .field.batiment select,
-.additional-fields .field.etages select {
+.additional-fields .field.etages select,
+.additional-fields .field.acces select {
     width: 80%;
 }
 
 .additional-fields .field.date-ouverture input[type="date"],
-.additional-fields .field.echeance input[type="date"] {
+.additional-fields .field.echeance input[type="date"]{
     width: 58%;
     height: 25px;
     border-radius: 5px;
@@ -359,15 +361,17 @@ span a:hover{
     padding: 8px;
 }
 
-
-.additional-fields .field.batiment select {
-    width: 80%;
+.additional-fields .field.priorite select{
+    width: 62%;
 }
 
 .additional-fields .field.shift select,
 .additional-fields .field.operateur select,
 .additional-fields .field.batiment select,
-.additional-fields .field.etages select {
+.additional-fields .field.etages select,
+.additional-fields .field.affecte select,
+.additional-fields .field.priorite select,
+.additional-fields .field.acces select {
     height: 40px;
     border-radius: 5px;
     border: 1px solid #ccc;
@@ -378,7 +382,10 @@ span a:hover{
 .additional-fields .field.shift select option,
 .additional-fields .field.operateur select option,
 .additional-fields .field.batiment select option,
-.additional-fields .field.etages select option {
+.additional-fields .field.etages select option,
+.additional-fields .field.affecte select option,
+.additional-fields .field.priorite select option,
+.additional-fields .field.acces select option {
     background-color: white;
 }
 
