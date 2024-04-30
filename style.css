@@ -199,6 +199,12 @@ span a:hover{
     text-align: center;
 }
 
+.white-line {
+    border: 0; 
+    border-top: 1px solid #fff; 
+    margin: 15px; 
+}
+
 
 .sidebar-user img {
     width: 110px;
@@ -235,7 +241,7 @@ span a:hover{
 }
 
 .sidebar-menu li {
-    margin-bottom: .9rem;
+    margin-bottom: 30px;
 }
 
 .sidebar-menu li a {
