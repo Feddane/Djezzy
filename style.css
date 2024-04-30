@@ -195,8 +195,7 @@ span a:hover{
 }
 
 .brand-icons span{
-    font-size: 1.5rem;
-    margin-left: .5rem;
+    display: none; /* Pour cacher les icônes */
 }
 
 .sidebar-user{
@@ -271,9 +270,7 @@ span a:hover{
 }
 
 .header-icons span{
-    display: inline-block;
-    margin-left: .7rem;
-    font-size: 1.4rem;
+    display: none; /* Pour cacher les icônes */
 }
 
 .menu-toggle label:hover{
@@ -303,6 +300,7 @@ span a:hover{
     margin-left: 1rem;
     border-radius: 3px;
 }
+
 
 
 
