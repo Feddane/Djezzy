@@ -171,7 +171,7 @@ span a:hover{
 }
 
 /*********************** reclamation page ****************/
-.sidebar{
+.sidebar {
     width: 280px;
     position: fixed;
     left: 0;
@@ -184,26 +184,23 @@ span a:hover{
     padding: 0;
 }
 
-.sidebar-brand{
+.sidebar-brand {
     height: 70px;
 }
 
-.brand-flex{
+.brand-flex {
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
-.brand-icons span{
-    display: none; /* Pour cacher les icônes */
-}
-
-.sidebar-user{
+.sidebar-user {
     margin: 1rem 0rem 1rem 0rem;
     text-align: center;
 }
 
-.sidebar-user img{
+
+.sidebar-user img {
     width: 110px;
     height: 110px;
     border-radius: 50%;
@@ -214,16 +211,18 @@ span a:hover{
     margin-left: 70px;
 }
 
-.sidebar-user h3{
+.sidebar-user h3 {
     font-size: 1rem;
-    margin-top: 70px;
+    margin-top: 100px;
+    text-align: center;
+    margin-left: 30px;
 }
 
-.sidebar-menu{
+.sidebar-menu {
     margin-top: 3rem;
 }
 
-.menu-head{
+.menu-head {
     text-transform: uppercase;
     color: #8da2fb;
     font-size: .8rem;
@@ -231,74 +230,68 @@ span a:hover{
     margin-bottom: .5rem;
 }
 
-.sidebar-menu ul{
+.sidebar-menu ul {
     margin-bottom: 1.5rem;
 }
 
-.sidebar-menu li{
+.sidebar-menu li {
     margin-bottom: .9rem;
 }
 
-.sidebar-menu li a{
-    color: #efefef ;
+.sidebar-menu li a {
+    color: #efefef;
     font-size: .9rem;
     display: flex;
     align-items: center;
+    text-decoration: none;
 }
 
-.sidebar-menu li a span{
+.sidebar-menu li a span {
     font-size: 1.5rem;
     display: inline-block;
     margin-right: .8rem;
 }
 
-.header{
-    height: 70px;
+.main-content {
+    padding-left: 280px; /* Pour compenser la largeur de la barre latérale */
+}
+
+.page-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 1rem 1.5rem;
 }
 
-.menu-toggle label{
-    height: 60px;
-    width: 60px;
-    display: grid;
-    place-items: center;
-    font-size: 1.5rem;
-    border-radius: 50%;
+.header-content {
+    flex: 1; /* Pour que le contenu prenne tout l'espace disponible */
 }
 
-.header-icons span{
-    display: none; /* Pour cacher les icônes */
+.header-content h1 {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 5px;
 }
 
-.menu-toggle label:hover{
-    background: #efefef;
+.header-content p {
+    font-size: 14px;
+    color: #6c757d;
 }
 
-.main-content{
-    margin-left: 280px;
-}
-
-.main{
-    padding: 1.5rem;
-    background: #f1f5f9;
-    min-height: 90vh;
-}
-
-.page-header{
+.header-actions {
     display: flex;
-    justify-content: space-between;
 }
 
-.header-actions button{
-    outline: none;
+.header-actions button {
+    margin-left: 10px;
     background: transparent;
-    border: 1px solid #333;
-    padding: .6rem 1rem;
-    margin-left: 1rem;
-    border-radius: 3px;
+    border: none;
+    color: #343a40;
+    cursor: pointer;
+}
+
+.header-actions button:hover {
+    color: #007bff;
 }
 
 
