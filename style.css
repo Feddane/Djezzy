@@ -291,3 +291,42 @@ span a:hover{
     margin-left: 1400px;
 
 }
+
+.text-fields {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.field {
+    flex: 1;
+    margin-right: 20px;
+}
+
+.field.titre {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.field.sites {
+    margin-left: 400px;
+    margin-right: 100px;
+}
+
+
+.field input[type="text"] {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.field.titre input[type="text"] {
+    width: 180%;
+}
+
+/* .field.sites input[type="text"] {
+    height: 85%;
+} */
+
