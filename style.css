@@ -171,7 +171,6 @@ span a:hover{
 }
 
 /*********************** reclamation page ****************/
-
 .sidebar{
     width: 280px;
     position: fixed;
@@ -183,13 +182,11 @@ span a:hover{
     color:#fff;
     margin: 0;
     padding: 0;
-
 }
 
 .sidebar-brand{
     height: 70px;
 }
-
 
 .brand-flex{
     display: flex;
@@ -223,15 +220,11 @@ span a:hover{
     margin-top: 70px;
 }
 
-.sidebar-user span{
-    font-size: .8rem;
-}
-
 .sidebar-menu{
     margin-top: 3rem;
 }
 
-.menu head{
+.menu-head{
     text-transform: uppercase;
     color: #8da2fb;
     font-size: .8rem;
@@ -260,7 +253,6 @@ span a:hover{
     margin-right: .8rem;
 }
 
-
 .header{
     height: 70px;
     display: flex;
@@ -288,7 +280,6 @@ span a:hover{
     background: #efefef;
 }
 
-
 .main-content{
     margin-left: 280px;
 }
@@ -312,4 +303,7 @@ span a:hover{
     margin-left: 1rem;
     border-radius: 3px;
 }
+
+
+
 
