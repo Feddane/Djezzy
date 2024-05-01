@@ -265,7 +265,6 @@ span a:hover{
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1rem 1.5rem;
 }
 
 .header-content {
@@ -295,7 +294,6 @@ span a:hover{
 .text-fields {
     display: flex;
     justify-content: space-between;
-    margin-top: 20px;
 }
 
 .field {
@@ -342,7 +340,7 @@ span a:hover{
 
 .additional-fields .field.shift select,
 .additional-fields .field.operateur select,
-.additional-fields .field.affecte select, 
+.additional-fields .field.affecte select,
 .additional-fields .field.ouvert-par select {
     width: 70%;
 }
@@ -352,6 +350,16 @@ span a:hover{
 .additional-fields .field.acces select,
 .additional-fields .field.numerous select {
     width: 80%;
+}
+
+.additional-fields .field.valider button {
+    height: 45px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    margin-top: 20px;
+    width: 80%;
+    color: #fff;
+    background-color: #ff0000;
 }
 
 .additional-fields .field.date-ouverture input[type="date"],
@@ -364,7 +372,9 @@ span a:hover{
 }
 
 .additional-fields .field.priorite select,
-.additional-fields .field.status select {
+.additional-fields .field.status select,
+.additional-fields .field.categorie select,
+.additional-fields .field.famille select{
     width: 62%;
 }
 
@@ -377,7 +387,9 @@ span a:hover{
 .additional-fields .field.acces select,
 .additional-fields .field.status select,
 .additional-fields .field.numerous select,
-.additional-fields .field.ouvert-par select {
+.additional-fields .field.ouvert-par select,
+.additional-fields .field.categorie select,
+.additional-fields .field.famille select {
     height: 40px;
     border-radius: 5px;
     border: 1px solid #ccc;
@@ -394,7 +406,9 @@ span a:hover{
 .additional-fields .field.acces select option,
 .additional-fields .field.status select option,
 .additional-fields .field.numerous select option,
-.additional-fields .field.ouvert-par select option{
+.additional-fields .field.ouvert-par select option,
+.additional-fields .field.categorie select option,
+.additional-fields .field.famille select option {
     background-color: white;
 }
 
