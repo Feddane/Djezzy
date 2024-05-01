@@ -342,13 +342,15 @@ span a:hover{
 
 .additional-fields .field.shift select,
 .additional-fields .field.operateur select,
-.additional-fields .field.affecte select  {
+.additional-fields .field.affecte select, 
+.additional-fields .field.ouvert-par select {
     width: 70%;
 }
 
 .additional-fields .field.batiment select,
 .additional-fields .field.etages select,
-.additional-fields .field.acces select {
+.additional-fields .field.acces select,
+.additional-fields .field.numerous select {
     width: 80%;
 }
 
@@ -361,7 +363,8 @@ span a:hover{
     padding: 8px;
 }
 
-.additional-fields .field.priorite select{
+.additional-fields .field.priorite select,
+.additional-fields .field.status select {
     width: 62%;
 }
 
@@ -371,7 +374,10 @@ span a:hover{
 .additional-fields .field.etages select,
 .additional-fields .field.affecte select,
 .additional-fields .field.priorite select,
-.additional-fields .field.acces select {
+.additional-fields .field.acces select,
+.additional-fields .field.status select,
+.additional-fields .field.numerous select,
+.additional-fields .field.ouvert-par select {
     height: 40px;
     border-radius: 5px;
     border: 1px solid #ccc;
@@ -385,7 +391,10 @@ span a:hover{
 .additional-fields .field.etages select option,
 .additional-fields .field.affecte select option,
 .additional-fields .field.priorite select option,
-.additional-fields .field.acces select option {
+.additional-fields .field.acces select option,
+.additional-fields .field.status select option,
+.additional-fields .field.numerous select option,
+.additional-fields .field.ouvert-par select option{
     background-color: white;
 }
 
