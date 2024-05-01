@@ -265,6 +265,7 @@ span a:hover{
     display: flex;
     justify-content: space-between;
     align-items: center;
+    padding: 1rem 0.5rem;
 }
 
 .header-content {
@@ -294,6 +295,7 @@ span a:hover{
 .text-fields {
     display: flex;
     justify-content: space-between;
+    margin-top: 20px;
 }
 
 .field {
@@ -340,26 +342,14 @@ span a:hover{
 
 .additional-fields .field.shift select,
 .additional-fields .field.operateur select,
-.additional-fields .field.affecte select,
-.additional-fields .field.ouvert-par select {
+.additional-fields .field.affecte select  {
     width: 70%;
 }
 
 .additional-fields .field.batiment select,
 .additional-fields .field.etages select,
-.additional-fields .field.acces select,
-.additional-fields .field.numerous select {
+.additional-fields .field.acces select {
     width: 80%;
-}
-
-.additional-fields .field.valider button {
-    height: 45px;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-    margin-top: 20px;
-    width: 80%;
-    color: #fff;
-    background-color: #ff0000;
 }
 
 .additional-fields .field.date-ouverture input[type="date"],
@@ -371,10 +361,7 @@ span a:hover{
     padding: 8px;
 }
 
-.additional-fields .field.priorite select,
-.additional-fields .field.status select,
-.additional-fields .field.categorie select,
-.additional-fields .field.famille select{
+.additional-fields .field.priorite select{
     width: 62%;
 }
 
@@ -384,12 +371,7 @@ span a:hover{
 .additional-fields .field.etages select,
 .additional-fields .field.affecte select,
 .additional-fields .field.priorite select,
-.additional-fields .field.acces select,
-.additional-fields .field.status select,
-.additional-fields .field.numerous select,
-.additional-fields .field.ouvert-par select,
-.additional-fields .field.categorie select,
-.additional-fields .field.famille select {
+.additional-fields .field.acces select {
     height: 40px;
     border-radius: 5px;
     border: 1px solid #ccc;
@@ -403,21 +385,73 @@ span a:hover{
 .additional-fields .field.etages select option,
 .additional-fields .field.affecte select option,
 .additional-fields .field.priorite select option,
-.additional-fields .field.acces select option,
-.additional-fields .field.status select option,
-.additional-fields .field.numerous select option,
-.additional-fields .field.ouvert-par select option,
-.additional-fields .field.categorie select option,
-.additional-fields .field.famille select option {
+.additional-fields .field.acces select option {
     background-color: white;
 }
 
+.container {
+    display: flex;
+}
+.vertical-div {
+    flex: 1;
+    margin-right: 20px;
+}
 
+.vertical-div label {
+    display: block;
+    margin-bottom: 1px;
+}
 
+.vertical-div select,
+.vertical-div input[type="text"] {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
 
+.vertical-div .ouvert select  {
+    background-color: #dfdfdf;
+    width: 70%;
+}
 
+.vertical-div .ouvert,
+.vertical-div .status,
+.vertical-div .categorie{
+    margin-bottom: 20px;
+}
 
+.vertical-div .description input[type="text"] {
+    width: 70%;
+    height: 120px;
+}
 
+.vertical-div .status select,
+.vertical-div .categorie select,
+.vertical-div .famille select  {
+    background-color: #dfdfdf;
+    width: 240px;
+}
 
+.vertical-div .ouvert select option,
+.vertical-div .status select option,
+.vertical-div .categorie select option,
+.vertical-div .famille select option{
+    background-color: white;
+}
 
+.vertical-div .commentaire input[type="text"] {
+        width: 320px;
+        height: 122px;
+}
 
+.vertical-div .valider button[type="submit"] {
+    height: 45px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    margin-top: 40px;
+    width: 82%;
+    color: #fff;
+    background-color: #ff0000;
+}

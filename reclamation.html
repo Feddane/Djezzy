@@ -164,8 +164,8 @@
                 <div class="select-wrapper">
                     <select id="affecte" name="affecte">
                         <option value="" hidden disabled selected></option>
-                        <option value="Kamel">Kamel</option>
-                        <option value="Sarah">Sarah</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
                     </select>
                 </div>
             </div>
@@ -192,127 +192,77 @@
                     </select>
                 </div>
             </div>
-    </div>
-    <div class="field-group">
-           <!-- Ouvert par -->
-           <div class="field ouvert-par">
-            <label for="ouvert-par">Ouvert par:</label>
-            <div class="select-wrapper">
-                <select id="ouvert-par" name="ouvert-par">
-                    <option value="" hidden disabled selected></option>
-                    <option value="Amel">Amel</option>
-                    <option value="Mohamed">Mohamed</option>
-                </select>
-            </div>
-        </div>
-
-        <!-- status -->
-        <div class="field status">
-            <label for="status">Status:</label>
-            <div class="select-wrapper">
-                <select id="status" name="status">
-                    <option value="" hidden disabled selected></option>
-                    <option value="1">Actif</option>
-                    <option value="2">Résolu</option>
-                    <option value="3">Fermé</option>
-                </select>
-            </div>
-        </div>
-
-        <!-- numerous111 -->
-        <div class="field numerous">
-            <label for="numerous">numerous:</label>
-            <div class="select-wrapper">
-                <select id="numerous" name="numerous">
-                    <option value="" hidden disabled selected></option>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                </select>
-            </div>
         </div>
     </div>
-
-    <div class="field-group">
-           <!-- Ouvert par222 -->
-           <div class="field ouvert-par">
-            <label for="ouvert-par">Ouvert par:</label>
-            <div class="select-wrapper">
-                <select id="ouvert-par" name="ouvert-par">
-                    <option value="" hidden disabled selected></option>
-                    <option value="1">Amel</option>
-                    <option value="2">Mohamed</option>
-                </select>
-            </div>
+  <!-- Nouvelle div contenant trois div verticales côte à côte -->
+<div class="container">
+    <!-- Première div verticale -->
+    <div class="vertical-div">
+        <div class="ouvert">
+            <label for="ouvert par">Ouvert par</label>
+            <select id="ouvert par" name="ouvert par">
+                <option value="" hidden disabled selected></option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+            </select>
         </div>
 
-        <!-- status -->
-        <div class="field categorie">
-            <label for="categorie">Catégorie:</label>
-            <div class="select-wrapper">
-                <select id="categorie" name="categorie">
-                    <option value="" hidden disabled selected></option>
-                    <option value="1">Acte de malveillance</option>
-                    <option value="2">Autres</option>
-                    <option value="3">Contrôle</option>
-                    <option value="4">Demande d'accès</option>
-                    <option value="5">Mission</option>
-                    <option value="6">Panne technique systeme</option>
-                    <option value="7">Travaux</option>
-                    <option value="8">Accident</option>
-                    <option value="9">Incident</option>
-                    <option value="10">Demande de sécurisation</option>
-                </select>
-            </div>
-        </div>
-
-        <!-- numerous222 -->
-        <div class="field numerous">
-            <label for="numerous">numerous:</label>
-            <div class="select-wrapper">
-                <select id="numerous" name="numerous">
-                    <option value="" hidden disabled selected></option>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                </select>
-            </div>
+        <div class="description">
+            <label for="description">Description</label>
+            <input type="text" id="description" name="description">
         </div>
     </div>
+    
+    <!-- Deuxième div verticale -->
+    <div class="vertical-div">
+        <div class="status">
+            <label for="status">Status</label>
+            <select id="status" name="status">
+                <option value="" hidden disabled selected></option>
+                <option value="option1">Option 1</option>
+                <option value="option2">Option 2</option>
+                <option value="option3">Option 3</option>
+            </select>
+        </div>
+        
+        <div class="categorie">
+            <label for="categorie">Catégorie</label>
+            <select id="categorie" name="categorie">
+                <option value="" hidden disabled selected></option>
+                <option value="option1">Option 1</option>
+                <option value="option2">Option 2</option>
+                <option value="option3">Option 3</option>
+            </select>
+        </div>
 
-    <div class="field-group">
-        <!-- Ouvert par333 -->
-        <div class="field ouvert-par">
-         <label for="ouvert-par">Ouvert par:</label>
-         <div class="select-wrapper">
-             <select id="ouvert-par" name="ouvert-par">
-                 <option value="" hidden disabled selected></option>
-                 <option value="1">Amel</option>
-                 <option value="2">Mohamed</option>
-             </select>
-         </div>
-     </div>
-
-     <!-- Famille -->
-     <div class="field famille">
-         <label for="famille">Famille:</label>
-         <div class="select-wrapper">
-             <select id="famille" name="famille">
-                 <option value="" hidden disabled selected></option>
-                 <option value="1">1</option>
-                 <option value="2">2</option>
-                 <option value="3">3</option>
-             </select>
-         </div>
-     </div>
-
-     <!-- valider -->
-     <div class="field valider">
-         <button>
-            Valider
-         </button>
-         </div>
-     </div>
- </div>
+        <div class="famille">
+            <label for="famille">Famille</label>
+            <select id="famille" name="famille">
+                <option value="" hidden disabled selected></option>
+                <option value="option1">Option 1</option>
+                <option value="option2">Option 2</option>
+                <option value="option3">Option 3</option>
+            </select>
+        </div>
+        
     </div>
-  </main
+    
+    <!-- Troisième div verticale -->
+    <div class="vertical-div">
+        <div class="commentaire">
+            <label for="commentaire">Commentaires</label>
+            <input type="text" id="commentaire" name="commentaire">
+        </div>
+
+        <div class="valider">
+            <button type="submit">Valider</button>
+        </div>
+    </div>
+</div>
+
+
+
+  </main>
 </body>
 </html>
