@@ -265,7 +265,8 @@ span a:hover{
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1rem 0.5rem;
+    padding: 0.5rem 0.5rem;
+    margin-bottom: -1rem;
 }
 
 .header-content {
