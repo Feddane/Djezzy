@@ -265,7 +265,7 @@ span a:hover{
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0.5rem 0.5rem;
+    padding: 0.3rem 0.3rem;
     margin-bottom: -1rem;
 }
 
@@ -376,7 +376,11 @@ span a:hover{
     border-radius: 5px;
     border: 1px solid #ccc;
     padding: 8px;
-    background-color: #dfdfdf;
+    background-color: #dfdfdf !important;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 5'%3E%3Cpath fill='%23343a40' d='M4 5L8 0H0z'/%3E%3C/svg%3E") no-repeat right .75rem center/8px 10px;
 }
 
 /********************affecte searchable*******************/
@@ -508,6 +512,7 @@ span a:hover{
     width: 70%;
     height: 40px;
     background: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 5'%3E%3Cpath fill='%23343a40' d='M4 5L8 0H0z'/%3E%3C/svg%3E") no-repeat right .75rem center/8px 10px;
+    margin-bottom: 20px;
 }
 
 .ouvert ul{
@@ -526,12 +531,12 @@ span a:hover{
 
 
 .ouvert ul li {
-    padding: 3px 4px; /* Réduire l'espacement intérieur */
+    padding: 3px 4px;
     border-bottom: 1px solid #e1e1e1;
     cursor: pointer;
     color: black;
-    margin-bottom: 2px; /* Réduire l'espacement entre les éléments */
-    font-size: 14px; /* Réduire la taille de la police */
+    margin-bottom: 2px;
+    font-size: 14px;
 }
 
 .ouvert ul li.selected {
