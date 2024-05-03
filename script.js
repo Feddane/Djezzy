@@ -2,7 +2,6 @@
 const categorieSelect = document.getElementById('categorie');
 const familleSelect = document.getElementById('famille');
 
-
 const optionsParCategorie = {
     "Acte de malveillance": ["Vols", "Incendie volontaire", "Agressions", "Investigations"],
     "Contrôle": ["CCTV/Jour"],
@@ -15,32 +14,28 @@ const optionsParCategorie = {
     "Demande de sécurisation": ["Véhicules employé en mission", "Véhicules OTA", "Matériel OTA"]
 };
 
-
 function mettreAJourFamilleOptions() {
     const selectedCategorie = categorieSelect.value;
-    const familleOptions = optionsParCategorie[selectedCategorie];
+    if (selectedCategorie && optionsParCategorie[selectedCategorie]) {
+        const familleOptions = optionsParCategorie[selectedCategorie];
+        familleSelect.innerHTML = '';
+        const defaultOption = document.createElement('option');
+        defaultOption.value = '';
+        defaultOption.setAttribute('hidden', true);
+        defaultOption.setAttribute('disabled', true);
+        defaultOption.setAttribute('selected', true);
+        familleSelect.add(defaultOption);
 
-    familleSelect.innerHTML = '';
-
-    const defaultOption = document.createElement('option');
-    defaultOption.value = '';
-    defaultOption.setAttribute('hidden', true);
-    defaultOption.setAttribute('disabled', true);
-    defaultOption.setAttribute('selected', true);
-    familleSelect.add(defaultOption);
-
-
-    familleOptions.forEach(option => {
-        const newOption = document.createElement('option');
-        newOption.text = option;
-        familleSelect.add(newOption);
-    });
+        familleOptions.forEach(option => {
+            const newOption = document.createElement('option');
+            newOption.text = option;
+            familleSelect.add(newOption);
+        });
+    }
 }
 
 
 categorieSelect.addEventListener('change', mettreAJourFamilleOptions);
-
-
 mettreAJourFamilleOptions();
 
 /******searchable***********/
@@ -137,6 +132,3 @@ $("ul li").on("mouseenter", function () {
     $(this).siblings().removeClass("selected");
     $(this).addClass("selected");
 });
-
-
-
