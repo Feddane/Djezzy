@@ -456,19 +456,3 @@ span a:hover{
     color: #fff;
     background-color: #ff0000;
 }
-
-
-
-/* Style personnalisé pour le select Chosen */
-.chosen-container-single.chosen-container-active.chosen-with-drop .chosen-single {
-    width: 100%;
-}
-
-/* Cacher le texte "Select an option" */
-.chosen-container-single .chosen-single span {
-    font-size: 0;
-}
-
-
-
-
