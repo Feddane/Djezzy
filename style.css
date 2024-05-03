@@ -412,10 +412,7 @@ span a:hover{
     box-sizing: border-box;
 }
 
-.vertical-div .ouvert select  {
-    background-color: #dfdfdf;
-    width: 70%;
-}
+
 
 .vertical-div .ouvert,
 .vertical-div .status,
@@ -431,11 +428,16 @@ span a:hover{
 .vertical-div .status select,
 .vertical-div .categorie select,
 .vertical-div .famille select  {
-    background-color: #dfdfdf;
+    background-color: #dfdfdf !important;
     width: 240px;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 5'%3E%3Cpath fill='%23343a40' d='M4 5L8 0H0z'/%3E%3C/svg%3E") no-repeat right .75rem center/8px 10px;
+    height: 40px;
+    padding-right: 30px;
 }
 
-.vertical-div .ouvert select option,
 .vertical-div .status select option,
 .vertical-div .categorie select option,
 .vertical-div .famille select option{
@@ -455,4 +457,41 @@ span a:hover{
     width: 82%;
     color: #fff;
     background-color: #ff0000;
+}
+
+/****************searcheable ouvert par****************/
+.vertical-div .ouvert input {
+    background-color: #dfdfdf !important;
+    width: 70%;
+    height: 40px;
+    background: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 5'%3E%3Cpath fill='%23343a40' d='M4 5L8 0H0z'/%3E%3C/svg%3E") no-repeat right .75rem center/8px 10px;
+}
+
+.ouvert ul {
+    display: none;
+    list-style-type: none;
+    background-color: #fff;
+    border-radius: 5px; /* Ajouter une bordure arrondie */
+    border: 1px solid #ccc; /* Ajouter une bordure solide de 1 pixel avec une couleur grise */
+    max-height: 180px;
+    margin: 0;
+    overflow-y: hidden;
+    overflow-x: hidden;
+    padding: 0;
+    width: 70%;
+}
+
+
+.ouvert ul li {
+    padding: 3px 4px; /* Réduire l'espacement intérieur */
+    border-bottom: 1px solid #e1e1e1;
+    cursor: pointer;
+    color: black;
+    margin-bottom: 2px; /* Réduire l'espacement entre les éléments */
+    font-size: 14px; /* Réduire la taille de la police */
+}
+
+.ouvert ul li.selected {
+    background-color: #1967d2;
+    color: #fff;
 }
