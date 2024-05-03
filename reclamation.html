@@ -155,13 +155,12 @@
               <!-- Affecté à -->
               <div class="field affecte">
                 <label for="affecte">Affecté à:</label>
-                <div class="select-wrapper">
-                    <select id="affecte" name="affecte">
-                        <option value="" hidden disabled selected></option>
-                        <option value="Aeml">Amel</option>
-                        <option value="Mohamed">Mohamed</option>
-                    </select>
-                </div>
+                <input type="text" onkeyup="filterFunction(this,event)">
+                <ul class="affecte">
+                    <li>Sarah</li>
+                    <li>Kamel</li>
+                    <li>Amine</li>
+                </ul>
             </div>
             <!-- Priorité -->
             <div class="field priorite">

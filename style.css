@@ -370,7 +370,6 @@ span a:hover{
 .additional-fields .field.operateur select,
 .additional-fields .field.batiment select,
 .additional-fields .field.etages select,
-.additional-fields .field.affecte select,
 .additional-fields .field.priorite select,
 .additional-fields .field.acces select {
     height: 40px;
@@ -380,11 +379,56 @@ span a:hover{
     background-color: #dfdfdf;
 }
 
+/********************affecte searchable*******************/
+.field.affecte {
+    display: flex;
+    flex-direction: column;
+}
+
+.field.affecte label {
+    margin-bottom: 5px;
+}
+
+.field.affecte input {
+    background-color: #dfdfdf !important;
+    width: 270px;
+    background: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 5'%3E%3Cpath fill='%23343a40' d='M4 5L8 0H0z'/%3E%3C/svg%3E") no-repeat right .75rem center/8px 10px;
+}
+
+
+.field.affecte ul {
+    display: none;
+    list-style-type: none;
+    background-color: #fff;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    max-height: 180px;
+    margin: 0;
+    overflow-y: hidden;
+    overflow-x: hidden;
+    padding: 0;
+    width: 70%;
+}
+
+.field.affecte ul li {
+    padding: 3px 4px;
+    border-bottom: 1px solid #e1e1e1;
+    cursor: pointer;
+    color: black;
+    margin-bottom: 2px;
+    font-size: 14px;
+}
+
+.field.affecte ul li.selected {
+    background-color: #1967d2;
+    color: #fff;
+}
+
+
 .additional-fields .field.shift select option,
 .additional-fields .field.operateur select option,
 .additional-fields .field.batiment select option,
 .additional-fields .field.etages select option,
-.additional-fields .field.affecte select option,
 .additional-fields .field.priorite select option,
 .additional-fields .field.acces select option {
     background-color: white;
@@ -414,7 +458,6 @@ span a:hover{
 
 
 
-.vertical-div .ouvert,
 .vertical-div .status,
 .vertical-div .categorie{
     margin-bottom: 20px;
@@ -459,7 +502,7 @@ span a:hover{
     background-color: #ff0000;
 }
 
-/****************searcheable ouvert par****************/
+/****************ouvert par searcheable ****************/
 .vertical-div .ouvert input {
     background-color: #dfdfdf !important;
     width: 70%;
@@ -467,12 +510,12 @@ span a:hover{
     background: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 5'%3E%3Cpath fill='%23343a40' d='M4 5L8 0H0z'/%3E%3C/svg%3E") no-repeat right .75rem center/8px 10px;
 }
 
-.ouvert ul {
+.ouvert ul{
     display: none;
     list-style-type: none;
     background-color: #fff;
-    border-radius: 5px; /* Ajouter une bordure arrondie */
-    border: 1px solid #ccc; /* Ajouter une bordure solide de 1 pixel avec une couleur grise */
+    border-radius: 5px;
+    border: 1px solid #ccc;
     max-height: 180px;
     margin: 0;
     overflow-y: hidden;

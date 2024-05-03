@@ -44,81 +44,103 @@
 // mettreAJourFamilleOptions();
 
 
+
+
+
+/************************ */
 function filterFunction(that, event) {
-    let container, input, filter, li, input_val;
-    container = $(that).closest(".ouvert");
-    input_val = container.find("input").val().toUpperCase();
+    let input = $(that);
+    let input_val = input.val().toUpperCase();
+    let ul = input.next("ul");
 
     if (["ArrowDown", "ArrowUp", "Enter"].indexOf(event.key) != -1) {
-        keyControl(event, container)
+        keyControl(event, ul);
     } else {
-        li = container.find("ul li");
-        li.each(function (i, obj) {
-            if ($(this).text().toUpperCase().indexOf(input_val) > -1) {
-                $(this).show();
+        ul.find("li").each(function() {
+            let li = $(this);
+            if (li.text().toUpperCase().indexOf(input_val) > -1) {
+                li.show();
             } else {
-                $(this).hide();
+                li.hide();
             }
         });
 
-        container.find("ul li").removeClass("selected");
+        ul.find("li").removeClass("selected");
         setTimeout(function () {
-            container.find("ul li:visible").first().addClass("selected");
-        }, 100)
+            ul.find("li:visible").first().addClass("selected");
+        }, 100);
     }
 }
 
-function keyControl(e, container) {
+function keyControl(e, ul) {
+    let selected = ul.find("li.selected");
     if (e.key == "ArrowDown") {
-
-        if (container.find("ul li").hasClass("selected")) {
-            if (container.find("ul li:visible").index(container.find("ul li.selected")) + 1 < container.find("ul li:visible").length) {
-                container.find("ul li.selected").removeClass("selected").nextAll().not('[style*="display: none"]').first().addClass("selected");
+        if (selected.length) {
+            let nextVisible = selected.nextAll(":visible").first();
+            if (nextVisible.length) {
+                selected.removeClass("selected");
+                nextVisible.addClass("selected");
             }
-
         } else {
-            container.find("ul li:first-child").addClass("selected");
+            ul.find("li:visible").first().addClass("selected");
         }
-
     } else if (e.key == "ArrowUp") {
-
-        if (container.find("ul li:visible").index(container.find("ul li.selected")) > 0) {
-            container.find("ul li.selected").removeClass("selected").prevAll().not('[style*="display: none"]').first().addClass("selected");
+        if (selected.length) {
+            let prevVisible = selected.prevAll(":visible").first();
+            if (prevVisible.length) {
+                selected.removeClass("selected");
+                prevVisible.addClass("selected");
+            }
         }
     } else if (e.key == "Enter") {
-        container.find("input").val(container.find("ul li.selected").text()).blur();
-        onSelect(container.find("ul li.selected").text(), container.find("input"));
+        if (selected.length) {
+            let input = ul.prev("input");
+            input.val(selected.text()).blur();
+            onSelect(selected.text(), input);
+        }
     }
 
-    container.find("ul li.selected")[0].scrollIntoView({
-        behavior: "smooth",
-    });
+    selected = ul.find("li.selected");
+    if (selected.length) {
+        selected[0].scrollIntoView({
+            behavior: "smooth"
+        });
+    }
 }
 
 function onSelect(val, inputElement) {
-    // Vérifie si la valeur sélectionnée est différente de la valeur actuelle de l'input
     if (inputElement.val() !== val) {
-        alert(val); // Affiche la valeur sélectionnée seulement si elle est différente
+        alert(val);
     }
 }
 
-$(".ouvert input").focus(function () {
-    $(this).closest(".ouvert").find("ul").show();
-    $(this).closest(".ouvert").find("ul li").show();
+$(".affecte input, .ouvert input").on("input", function(event) {
+    filterFunction(this, event);
 });
-$(".ouvert input").blur(function () {
+
+$(".affecte input, .ouvert input").focus(function () {
+    let ul = $(this).next("ul");
+    ul.show();
+    ul.find("li").show();
+});
+
+$(".affecte input, .ouvert input").blur(function () {
     let that = this;
     setTimeout(function () {
-        $(that).closest(".ouvert").find("ul").hide();
+        $(that).next("ul").hide();
     }, 300);
 });
 
-$(document).on('click', '.ouvert ul li', function () {
-    $(this).closest(".ouvert").find("input").val($(this).text()).blur();
-    onSelect($(this).text(), $(this).closest(".ouvert").find("input"));
+$("ul li").on("click", function () {
+    let input = $(this).closest("ul").prev("input");
+    input.val($(this).text()).blur();
+    onSelect($(this).text(), input);
 });
 
-$(".ouvert ul li").hover(function () {
-    $(this).closest(".ouvert").find("ul li.selected").removeClass("selected");
+$("ul li").on("mouseenter", function () {
+    $(this).siblings().removeClass("selected");
     $(this).addClass("selected");
 });
+
+
+
