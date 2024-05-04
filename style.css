@@ -341,9 +341,7 @@ span a:hover{
     margin-bottom: 20px;
 }
 
-.additional-fields .field.shift select,
-.additional-fields .field.operateur select,
-.additional-fields .field.affecte select  {
+.additional-fields .field.shift select {
     width: 70%;
 }
 
@@ -367,7 +365,6 @@ span a:hover{
 }
 
 .additional-fields .field.shift select,
-.additional-fields .field.operateur select,
 .additional-fields .field.batiment select,
 .additional-fields .field.etages select,
 .additional-fields .field.priorite select,
@@ -383,24 +380,28 @@ span a:hover{
     background: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 5'%3E%3Cpath fill='%23343a40' d='M4 5L8 0H0z'/%3E%3C/svg%3E") no-repeat right .75rem center/8px 10px;
 }
 
-/********************affecte searchable*******************/
-.field.affecte {
+/********************affecte + operateur searchable*******************/
+.field.affecte,
+.field.operateur {
     display: flex;
     flex-direction: column;
 }
 
-.field.affecte label {
+.field.affecte label,
+.field.operateur label{
     margin-bottom: 5px;
 }
 
-.field.affecte input {
+.field.affecte input,
+.field.operateur input {
     background-color: #dfdfdf !important;
     width: 270px;
     background: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 5'%3E%3Cpath fill='%23343a40' d='M4 5L8 0H0z'/%3E%3C/svg%3E") no-repeat right .75rem center/8px 10px;
 }
 
 
-.field.affecte ul {
+.field.affecte ul,
+.field.operateur ul {
     display: none;
     list-style-type: none;
     background-color: #fff;
@@ -414,7 +415,8 @@ span a:hover{
     width: 70%;
 }
 
-.field.affecte ul li {
+.field.affecte ul li,
+.field.operateur ul li {
     padding: 3px 4px;
     border-bottom: 1px solid #e1e1e1;
     cursor: pointer;
@@ -423,14 +425,14 @@ span a:hover{
     font-size: 14px;
 }
 
-.field.affecte ul li.selected {
+.field.affecte ul li.selected,
+.field.operateur ul li.selected {
     background-color: #1967d2;
     color: #fff;
 }
 
 
 .additional-fields .field.shift select option,
-.additional-fields .field.operateur select option,
 .additional-fields .field.batiment select option,
 .additional-fields .field.etages select option,
 .additional-fields .field.priorite select option,
@@ -506,7 +508,7 @@ span a:hover{
     background-color: #ff0000;
 }
 
-/****************ouvert par searcheable ****************/
+/****************ouvert par searchable ****************/
 .vertical-div .ouvert input {
     background-color: #dfdfdf !important;
     width: 70%;

@@ -105,17 +105,17 @@ function onSelect(val, inputElement) {
     }
 }
 
-$(".affecte input, .ouvert input").on("input", function(event) {
+$(".affecte input, .ouvert input, .operateur input").on("input", function(event) {
     filterFunction(this, event);
 });
 
-$(".affecte input, .ouvert input").focus(function () {
+$(".affecte input, .ouvert input, .operateur input").focus(function () {
     let ul = $(this).next("ul");
     ul.show();
     ul.find("li").show();
 });
 
-$(".affecte input, .ouvert input").blur(function () {
+$(".affecte input, .ouvert input, .operateur input").blur(function () {
     let that = this;
     setTimeout(function () {
         $(that).next("ul").hide();
@@ -132,3 +132,4 @@ $("ul li").on("mouseenter", function () {
     $(this).siblings().removeClass("selected");
     $(this).addClass("selected");
 });
+

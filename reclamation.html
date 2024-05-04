@@ -120,14 +120,12 @@
         <div class="field-group">
             <!-- Operateur -->
             <div class="field operateur">
-                <label for="operateur">Opérateur*</label>
-                <div class="select-wrapper">
-                    <select id="operateur" name="operateur" required>
-                        <option value="" hidden disabled selected></option>
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                    </select>
-                </div>
+                <label for="Operateur">Opérateur*</label>
+                <input type="text" onkeyup="filterFunction(this,event)">
+                <ul class="operateur">
+                    <li>Aimen</li>
+                    <li>Maroua</li>
+                </ul>
             </div>
              <!-- Echeance -->
              <div class="field echeance">
@@ -154,17 +152,16 @@
         <div class="field-group">
               <!-- Affecté à -->
               <div class="field affecte">
-                <label for="affecte">Affecté à:</label>
+                <label for="affecte">Affecté à</label>
                 <input type="text" onkeyup="filterFunction(this,event)">
                 <ul class="affecte">
-                    <li>Sarah</li>
-                    <li>Kamel</li>
-                    <li>Amine</li>
+                    <li>Mohamed</li>
+                    <li>Lilia</li>
                 </ul>
             </div>
             <!-- Priorité -->
             <div class="field priorite">
-                <label for="priorite">Priorité:</label>
+                <label for="priorite">Priorité</label>
                 <div class="select-wrapper">
                     <select id="priorite" name="priorite">
                         <option value="" hidden disabled selected></option>
@@ -176,7 +173,7 @@
             </div>
             <!-- Accès -->
             <div class="field acces">
-                <label for="acces">Accès:</label>
+                <label for="acces">Accès</label>
                 <div class="select-wrapper">
                     <select id="acces" name="acces">
                         <option value="" hidden disabled selected></option>
