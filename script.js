@@ -133,3 +133,9 @@ $("ul li").on("mouseenter", function () {
     $(this).addClass("selected");
 });
 
+
+
+document.getElementById('file-upload').addEventListener('change', function() {
+    var fileName = this.files.length ? this.files[0].name : 'Aucun fichier choisi';
+    document.getElementById('file-chosen').textContent = fileName;
+});
