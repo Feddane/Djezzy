@@ -499,53 +499,29 @@ span a:hover{
     height: 50px;
 }
 
-.vertical-div .choose {
-    margin-top: 40px;
+.vertical-div .upload-file {
     display: flex;
     align-items: center;
-    justify-content: center;
+    margin-top: 28px;
 }
 
-.vertical-div .choose .upload-box {
-    display: none;
-}
-
-.vertical-div .choose .custom-file-upload {
-    display: flex;
-    align-items: center;
-    border-radius: 25px;
-    width: 350px;
+.vertical-div .file-label {
     height: 45px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    width: 150px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    background-color: #007bff;
     cursor: pointer;
-    box-shadow: 2px 2px 5px gray;
-    overflow: hidden;
+    text-align: center;
+    margin-right: 10px;
 }
 
-.vertical-div .choose .file-upload-text {
-    background: red;
-    color: white;
-    padding: 10px 20px;
-    text-align: center;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-top-left-radius: 25px;
-    border-bottom-left-radius: 25px;
-}
-
-.vertical-div .choose #file-chosen {
-    background: white;
-    color: black;
-    padding: 10px 20px;
-    text-align: center;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-grow: 1;
-    border-top-right-radius: 25px;
-    border-bottom-right-radius: 25px;
+.vertical-div .upload-file span {
+    color: #000;
 }
 
 .vertical-div .valider button[type="submit"] {
@@ -557,8 +533,6 @@ span a:hover{
     color: #fff;
     background-color: #ff0000;
 }
-
-
 /****************ouvert par searchable ****************/
 .vertical-div .ouvert input {
     background-color: #dfdfdf !important;

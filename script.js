@@ -135,7 +135,13 @@ $("ul li").on("mouseenter", function () {
 
 
 
-document.getElementById('file-upload').addEventListener('change', function() {
-    var fileName = this.files.length ? this.files[0].name : 'Aucun fichier choisi';
-    document.getElementById('file-chosen').textContent = fileName;
+function updateFileName() {
+    var input = document.getElementById('fileUpload');
+    var fileName = input.files.length > 0 ? input.files[0].name : "Aucun fichier disponible";
+    document.getElementById('fileName').textContent = fileName;
+}
+
+document.querySelector('.file-label').addEventListener('click', function(event) {
+    event.preventDefault();
+    document.getElementById('fileUpload').click();
 });

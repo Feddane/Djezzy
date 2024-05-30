@@ -229,19 +229,18 @@
                 <label for="commentaire">Commentaires</label>
                 <input type="text" id="commentaire" name="commentaire">
             </div>
-    
-            <div class="choose">
-                <label for="file-upload" class="custom-file-upload">
-                    <span class="file-upload-text">Choisir un fichier</span>
-                    <input type="file" id="file-upload" class="upload-box">
-                    <span id="file-chosen">Aucun fichier choisi</span>
-                </label>
+            
+            <div class="upload-file">
+                <label for="fileUpload" class="file-label">Choisir un fichier</label>
+                <input type="file" id="fileUpload" name="fileUpload" style="display:none;" onchange="updateFileName()">
+                <span id="fileName">Aucun fichier disponible</span>
             </div>
-    
+            
             <div class="valider">
                 <button type="submit">Valider</button>
             </div>
-    </div>
+        </div>
+        
   </main>
 </body>
 </html>
