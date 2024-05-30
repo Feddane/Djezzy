@@ -76,16 +76,10 @@
     <!-- Ajout des nouveaux éléments -->
     <div class="additional-fields">
         <div class="field-group">
-            <!-- Shift -->
-            <div class="field shift">
-                <label for="shift">Shift</label>
-                <div class="select-wrapper">
-                    <select id="shift" name="shift">
-                        <option value="" hidden disabled selected></option>
-                        <option value="matin">Matin</option>
-                        <option value="soir">Soir</option>
-                    </select>
-                </div>
+            <!-- Action entreprise -->
+            <div class="field action">
+                <label for="action">Action entreprise</label>
+                <input type="text" id="action" name="action">
             </div>
             <!-- Date Ouverture -->
             <div class="field date-ouverture">
@@ -94,26 +88,11 @@
                     <input type="date" id="date-ouverture" name="date-ouverture" required>
                 </div>
             </div>
-            <!-- Batiment -->
-            <div class="field batiment">
-                <label for="batiment">Bâtiment</label>
-                <div class="select-wrapper">
-                    <select id="batiment" name="batiment">
-                        <option value="" hidden disabled selected></option>
-                        <option value="Data Center">Data Center</option>
-                        <option value="S/SOL1">S/SOL1</option>
-                        <option value="S/SOL2">S/SOL2</option>
-                        <option value="RDC">RDC</option>
-                        <option value="1er">1er</option>
-                        <option value="2ème">2ème</option>
-                        <option value="3ème">3ème</option>
-                        <option value="4ème">4ème</option>
-                        <option value="5ème">5ème</option>
-                        <option value="6ème">6ème</option>
-                        <option value="7ème">7ème</option>
-                        <option value="8ème">8ème</option>
-                        <option value="Terasse">Terasse</option>
-                    </select>
+            <!-- Date fin -->
+            <div class="field date-fin">
+                <label for="date-fin">Date fin*</label>
+                <div class="datepicker">
+                    <input type="date" id="date-fin" name="date-fin" required>
                 </div>
             </div>
         </div>

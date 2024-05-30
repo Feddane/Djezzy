@@ -341,11 +341,7 @@ span a:hover{
     margin-bottom: 20px;
 }
 
-.additional-fields .field.shift select {
-    width: 70%;
-}
 
-.additional-fields .field.batiment select,
 .additional-fields .field.etages select,
 .additional-fields .field.acces select {
     width: 80%;
@@ -360,12 +356,18 @@ span a:hover{
     padding: 8px;
 }
 
+.additional-fields .field.date-fin input[type="date"]{
+    width: 75%;
+    height: 25px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    padding: 8px;
+}
+
 .additional-fields .field.priorite select{
     width: 62%;
 }
 
-.additional-fields .field.shift select,
-.additional-fields .field.batiment select,
 .additional-fields .field.etages select,
 .additional-fields .field.priorite select,
 .additional-fields .field.acces select {
@@ -432,7 +434,6 @@ span a:hover{
 }
 
 
-.additional-fields .field.shift select option,
 .additional-fields .field.batiment select option,
 .additional-fields .field.etages select option,
 .additional-fields .field.priorite select option,
