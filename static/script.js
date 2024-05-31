@@ -134,7 +134,7 @@ $("ul li").on("mouseenter", function () {
 });
 
 
-
+/*******************upload file *******************/
 function updateFileName() {
     var input = document.getElementById('fileUpload');
     var fileName = input.files.length > 0 ? input.files[0].name : "Aucun fichier disponible";
