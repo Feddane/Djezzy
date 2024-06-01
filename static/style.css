@@ -593,3 +593,41 @@ span a:hover{
 .header-actions .export:hover, .header-actions .refresh:hover {
     background-color: #e60000;
 }
+
+
+.form-container {
+    margin-top: 50px;
+    padding: 40px;
+    margin-left: 20px;
+    width: 300px;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.form-container label {
+    display: block;
+    margin-bottom: 8px;
+}
+
+.form-container input {
+    width: calc(100% - 20px);
+    padding: 8px;
+    margin: 0 10px 10px 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.form-container button {
+    background-color: red;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    width: auto;
+    margin: 10px auto;
+    display: block;
+}
+
