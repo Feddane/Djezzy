@@ -26,27 +26,26 @@
         </div>
 
         <div class="sidebar-menu">
-            <div class="menu-head">
-            </div>
-            <ul>
-                <li>
-                    <a href="">
-                        <span class="las la-plus-circle"></span> Nouvelle requête
-                    </a>
-                </li>
-                <li>
-                    <a href="">
-                        <span class="las la-plus-circle"></span> Consulter historique
-                    </a>
-                </li>
-
-                <li>
-                    <a href="">
-                        <span class="las la-sign-out-alt"></span> Se déconnecter
-                    </a>
-                </li>
-            </ul>
-        </div>
+          <div class="menu-head">
+          </div>
+          <ul>
+              <li>
+                  <a href="{{ url_for('reclamation') }}">
+                      <span class="las la-plus-circle"></span> Nouvelle requête
+                  </a>
+              </li>
+              <li>
+                  <a href="{{ url_for('historique') }}">
+                      <span class="las la-plus-circle"></span> Consulter historique
+                  </a>
+              </li>
+              <li>
+                  <a href="{{ url_for('logout') }}">
+                      <span class="las la-sign-out-alt"></span> Se déconnecter
+                  </a>
+              </li>
+          </ul>
+      </div>
     </div>
   </div>
 
