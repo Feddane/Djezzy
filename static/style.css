@@ -595,10 +595,16 @@ span a:hover{
 }
 
 
+.form-and-table {
+    display: flex;
+    align-items: flex-start;
+    margin-top: 50px;
+}
+
 .form-container {
     margin-top: 50px;
+    margin-left: 30px;
     padding: 40px;
-    margin-left: 20px;
     width: 300px;
     background-color: #f9f9f9;
     border: 1px solid #ddd;
@@ -614,7 +620,7 @@ span a:hover{
 .form-container input {
     width: calc(100% - 20px);
     padding: 8px;
-    margin: 0 10px 10px 10px;
+    margin: 0 10px 20px 10px;
     border: 1px solid #ddd;
     border-radius: 4px;
 }
@@ -631,3 +637,36 @@ span a:hover{
     display: block;
 }
 
+.table-container {
+    margin-top: 50px;
+    height: 410px;
+    overflow-y: scroll;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    width: 60%;
+    margin-left: 40px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+thead {
+    background-color: #f1f1f1;
+}
+
+th, td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+th {
+    background-color: #f9f9f9;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+}
