@@ -1,19 +1,19 @@
 
-/*********table_users --> authentification**********/
+----------table_users --> authentification----------------
 CREATE TABLE table_users (
     id INT AUTO_INCREMENT PRIMARY KEY,
     username VARCHAR(20) NOT NULL,
     password VARCHAR(20) NOT NULL
 );
 
-/********insert admins****************/
+-------------insert admins---------
 INSERT INTO table_users (username, password) VALUES
 ('mezzoudj', 'mezzoudj'),
 ('hamidani', 'hamidani@202'),
 ('malik', 'malik99');
 
 
-/*********reclamation --> table de reclamation**********/
+-------------reclamation --> table de reclamation---------------
 CREATE TABLE reclamation (
     id INT AUTO_INCREMENT PRIMARY KEY,
     titre VARCHAR(255),
