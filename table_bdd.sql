@@ -6,6 +6,13 @@ CREATE TABLE table_users (
     password VARCHAR(20) NOT NULL
 );
 
+/********insert admins****************/
+INSERT INTO table_users (username, password) VALUES
+('mezzoudj', 'mezzoudj'),
+('hamidani', 'hamidani@202'),
+('malik', 'malik99');
+
+
 /*********reclamation --> table de reclamation**********/
 CREATE TABLE reclamation (
     id INT AUTO_INCREMENT PRIMARY KEY,
