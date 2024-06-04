@@ -95,6 +95,12 @@ def reclamation():
             fichier_path = None
 
         cursor = mysql.connection.cursor()
+
+        cursor.execute('SELECT COUNT(*) FROM reclamation')
+        result = cursor.fetchone()
+        if result[0] == 0:
+            cursor.execute('ALTER TABLE reclamation AUTO_INCREMENT = 1')
+
         cursor.execute('''INSERT INTO reclamation (titre, sites, action_entreprise, date_ouverture, date_fin, operateur, echeance, etages, affecte_a, priorite, acces, ouvert_par, description, status, categorie, famille, commentaire, fichier) 
                           VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)''',
                        (titre, sites, action_entreprise, date_ouverture, date_fin, operateur, echeance, etages, affecte_a, priorite, acces, ouvert_par, description, status, categorie, famille, commentaire, fichier_path))
