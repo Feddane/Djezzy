@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css">
   <title>Historique</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-  <script src="script.js" defer></script>
+  
 </head>
 <body>
   <div class="sidebar">
@@ -64,7 +64,7 @@
     </div>
     <div class="form-and-table">
       <div class="form-container">
-        <form action="/search" method="get">
+        <form action="{{ url_for('historique') }}" method="get">
           <label for="categorie">Catégorie</label>
           <input type="text" id="categorie" name="categorie">
           
@@ -75,98 +75,38 @@
           <input type="text" id="status" name="status">
           
           <button type="submit">Rechercher</button>
-        </form>
+      </form>
+          
       </div>
       <div class="table-container">
         <table>
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Catégorie</th>
-              <th>Date</th>
-              <th>Status</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>1</td>
-              <td>Example Category</td>
-              <td>2024-06-01</td>
-              <td>Completed</td>
-            </tr>
-
-            <tr>
-                <td>1</td>
-                <td>Example Category</td>
-                <td>2024-06-01</td>
-                <td>Completed</td>
-              </tr>
-
-              <tr>
-                <td>1</td>
-                <td>Example Category</td>
-                <td>2024-06-01</td>
-                <td>Completed</td>
-              </tr>
-
-
-              <tr>
-                <td>1</td>
-                <td>Example Category</td>
-                <td>2024-06-01</td>
-                <td>Completed</td>
-              </tr>
-
-
-              <tr>
-                <td>1</td>
-                <td>Example Category</td>
-                <td>2024-06-01</td>
-                <td>Completed</td>
-              </tr>
-
-              <tr>
-                <td>1</td>
-                <td>Example Category</td>
-                <td>2024-06-01</td>
-                <td>Completed</td>
-              </tr>
-              <tr>
-                <td>1</td>
-                <td>Example Category</td>
-                <td>2024-06-01</td>
-                <td>Completed</td>
-              </tr>
-              <tr>
-                <td>1</td>
-                <td>Example Category</td>
-                <td>2024-06-01</td>
-                <td>Completed</td>
-              </tr>
-              <tr>
-                <td>1</td>
-                <td>Example Category</td>
-                <td>2024-06-01</td>
-                <td>Completed</td>
-              </tr>
-
-              <tr>
-                <td>1</td>
-                <td>Example Category</td>
-                <td>2024-06-01</td>
-                <td>Completed</td>
-              </tr>
-
-              <tr>
-                <td>1</td>
-                <td>Example Category</td>
-                <td>2024-06-01</td>
-                <td>Completed</td>
-              </tr>
-            <!-- Additional rows as needed -->
-          </tbody>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Catégorie</th>
+                    <th>Date</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if results %}
+                    {% for row in results %}
+                        <tr>
+                            <td>{{ row[0] }}</td>
+                            <td>{{ row[1] }}</td>
+                            <td>{{ row[2] }}</td>
+                            <td>{{ row[3] }}</td>
+                        </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr>
+                        <td colspan="4">Aucun résultat trouvé</td>
+                    </tr>
+                {% endif %}
+            </tbody>
         </table>
-      </div>
+    </div>
+    
     </div>
   </main>
 </body>

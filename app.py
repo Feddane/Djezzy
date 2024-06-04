@@ -15,7 +15,6 @@ mysql = MySQL(app)
 upload_dir = 'static/uploads'
 os.makedirs(upload_dir, exist_ok=True)
 
-# Page de connexion
 @app.route('/', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
@@ -35,8 +34,6 @@ def login():
 
     return render_template('login.html')
 
-
-# Page de changement de mot de passe
 @app.route('/changer_mdp', methods=['GET', 'POST'])
 def changer_mdp():
     if request.method == 'POST':
@@ -62,31 +59,30 @@ def changer_mdp():
 
     return render_template('changer_mdp.html')
 
-# Page de réclamation
 @app.route('/reclamation', methods=['GET', 'POST'])
 def reclamation():
     if 'username' not in session:
         return redirect(url_for('login'))
 
     if request.method == 'POST':
-        titre = request.form['titre']
-        sites = request.form['sites']
-        action_entreprise = request.form['action_entreprise']
-        date_ouverture = request.form['date_ouverture']
-        date_fin = request.form['date-fin']
-        operateur = request.form['operateur']
-        echeance = request.form['echeance']
-        etages = request.form['etages']
-        affecte_a = request.form['affecte_a']
-        priorite = request.form['priorite']
-        acces = request.form['acces']
-        ouvert_par = request.form['ouvert_par']
-        description = request.form['description']
-        status = request.form['status']
-        categorie = request.form['categorie']
-        famille = request.form['famille']
-        commentaire = request.form['commentaire']
-        fichier = request.files['fileUpload']
+        titre = request.form.get('titre')
+        sites = request.form.get('sites')
+        action_entreprise = request.form.get('action_entreprise')
+        date_ouverture = request.form.get('date_ouverture')
+        date_fin = request.form.get('date-fin')
+        operateur = request.form.get('operateur')
+        echeance = request.form.get('echeance')
+        etages = request.form.get('etages') 
+        affecte_a = request.form.get('affecte_a')
+        priorite = request.form.get('priorite')
+        acces = request.form.get('acces')
+        ouvert_par = request.form.get('ouvert_par')
+        description = request.form.get('description')
+        status = request.form.get('status')
+        categorie = request.form.get('categorie')
+        famille = request.form.get('famille')
+        commentaire = request.form.get('commentaire')
+        fichier = request.files.get('fileUpload')
 
         if fichier:
             fichier_path = os.path.join(upload_dir, fichier.filename)
@@ -111,12 +107,37 @@ def reclamation():
 
     return render_template('reclamation.html')
 
-@app.route('/historique')
+@app.route('/historique', methods=['GET'])
 def historique():
-    return render_template('historique.html')
+    if 'username' not in session:
+        return redirect(url_for('login'))
+
+    categorie = request.args.get('categorie')
+    date = request.args.get('date')
+    status = request.args.get('status')
+    
+    cursor = mysql.connection.cursor()
+    
+    query = "SELECT id, categorie, date_ouverture, status FROM reclamation WHERE 1=1"
+    params = []
+
+    if categorie:
+        query += " AND categorie LIKE %s"
+        params.append(f"%{categorie}%")
+    if date:
+        query += " AND date_ouverture = %s"
+        params.append(date)
+    if status:
+        query += " AND status LIKE %s"
+        params.append(f"%{status}%")
+    
+    cursor.execute(query, params)
+    results = cursor.fetchall()
+    cursor.close()
+
+    return render_template('historique.html', results=results)
 
 
-# Page de déconnexion
 @app.route('/logout')
 def logout():
     session.pop('username', None)
