@@ -149,4 +149,13 @@ document.addEventListener('DOMContentLoaded', function() {
         $(this).siblings().removeClass("selected");
         $(this).addClass("selected");
     });
+
+    // Fonction pour rafraîchir la page lors du clic sur le bouton "Refresh"
+    const refreshButton = document.getElementById('refreshButton');
+
+    refreshButton.addEventListener('click', function() {
+        // Vider le contenu du tableau
+        const tbody = document.querySelector('tbody');
+        tbody.innerHTML = '';
+    });
 });
