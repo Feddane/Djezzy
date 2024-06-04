@@ -150,12 +150,18 @@ document.addEventListener('DOMContentLoaded', function() {
         $(this).addClass("selected");
     });
 
-    // Fonction pour rafraîchir la page lors du clic sur le bouton "Refresh"
+    /****************refresh button */
     const refreshButton = document.getElementById('refreshButton');
 
     refreshButton.addEventListener('click', function() {
-        // Vider le contenu du tableau
         const tbody = document.querySelector('tbody');
+        const noResultsRow = document.createElement('tr');
+        const noResultsCell = document.createElement('td');
+        noResultsCell.setAttribute('colspan', '4');
+        noResultsCell.textContent = 'Aucun résultat trouvé';
+        noResultsRow.appendChild(noResultsCell);
+        
         tbody.innerHTML = '';
+        tbody.appendChild(noResultsRow);
     });
 });

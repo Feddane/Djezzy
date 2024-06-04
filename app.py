@@ -112,7 +112,7 @@ def historique():
     if 'username' not in session:
         return redirect(url_for('login'))
 
-    # Vérifier si des paramètres de recherche ont été passés dans la requête
+    
     if request.args.get('categorie') or request.args.get('date') or request.args.get('status'):
         categorie = request.args.get('categorie')
         date = request.args.get('date')
