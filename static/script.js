@@ -169,13 +169,34 @@ document.addEventListener('DOMContentLoaded', function() {
     const table = document.querySelector('table');
 
     table.addEventListener('dblclick', function() {
-        
         const newWindow = window.open('', '_blank');
-
-        
         const newDocument = newWindow.document.open();
-        
-        
+    
+        let rowsHtml = '';
+        table.querySelectorAll('tbody tr').forEach(row => {
+            const id = row.cells[0].textContent;
+            const categorie = row.cells[1].textContent;
+            const date = row.cells[2].textContent;
+            const status = row.cells[3].textContent;
+    
+            rowsHtml += `
+                <tr>
+                    <td>${id}</td>
+                    <td>${categorie}</td>
+                    <td>${date}</td>
+                    <td>
+                        <span class="status-text">${status}</span>
+                        <button class="edit-button" data-id="${id}" data-status="${status}">Modifier</button>
+                        <form class="edit-form" action="/update_status" method="post" style="display: none;">
+                            <input type="hidden" name="recordId" value="${id}">
+                            <input type="text" name="newStatus" value="${status}">
+                            <button type="submit">Mettre à jour</button>
+                        </form>
+                    </td>
+                </tr>
+            `;
+        });
+    
         const htmlContent = `
             <!DOCTYPE html>
             <html lang="fr">
@@ -186,16 +207,35 @@ document.addEventListener('DOMContentLoaded', function() {
                 <link rel="stylesheet" href="/static/style.css">
             </head>
             <body>
-                ${table.outerHTML}
-               
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Catégorie</th>
+                            <th>Date</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${rowsHtml}
+                    </tbody>
+                </table>
             </body>
             </html>
         `;
-        
-
+    
         newDocument.write(htmlContent);
-        
         newDocument.close();
+    
+        newDocument.querySelectorAll('.edit-button').forEach(button => {
+            button.addEventListener('click', function() {
+                const form = this.nextElementSibling;
+                form.style.display = 'block';
+                this.style.display = 'none';
+            });
+        });
     });
+    
+    
 
 });

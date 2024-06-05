@@ -143,6 +143,24 @@ def historique():
         return render_template('historique.html', results=None)
 
 
+@app.route('/update_status', methods=['POST'])
+def update_status():
+    if 'username' not in session:
+        return redirect(url_for('login'))
+
+    record_id = request.form.get('recordId')
+    new_status = request.form.get('newStatus')
+
+    if record_id and new_status:
+        cursor = mysql.connection.cursor()
+        cursor.execute('UPDATE reclamation SET status = %s WHERE id = %s', (new_status, record_id))
+        mysql.connection.commit()
+        cursor.close()
+        flash('Statut mis à jour avec succès', 'success')
+
+    return redirect(url_for('historique'))
+
+
 @app.route('/logout')
 def logout():
     session.pop('username', None)
