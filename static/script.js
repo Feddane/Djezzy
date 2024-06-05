@@ -164,4 +164,38 @@ document.addEventListener('DOMContentLoaded', function() {
         tbody.innerHTML = '';
         tbody.appendChild(noResultsRow);
     });
+
+    /****************ouvre le tableau dans une nouvelle fenetre */
+    const table = document.querySelector('table');
+
+    table.addEventListener('dblclick', function() {
+        
+        const newWindow = window.open('', '_blank');
+
+        
+        const newDocument = newWindow.document.open();
+        
+        
+        const htmlContent = `
+            <!DOCTYPE html>
+            <html lang="fr">
+            <head>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title>Tableau</title>
+                <link rel="stylesheet" href="/static/style.css">
+            </head>
+            <body>
+                ${table.outerHTML}
+               
+            </body>
+            </html>
+        `;
+        
+
+        newDocument.write(htmlContent);
+        
+        newDocument.close();
+    });
+
 });
