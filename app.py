@@ -156,7 +156,7 @@ def update_status():
         cursor.execute('UPDATE reclamation SET status = %s WHERE id = %s', (new_status, record_id))
         mysql.connection.commit()
         cursor.close()
-        flash('Statut mis à jour avec succès', 'success')
+        flash('Status mis à jour avec succès', 'success')
 
     return redirect(url_for('historique'))
 

@@ -62,6 +62,15 @@
             <img src="{{ url_for('static', filename='image/logo_Djezzy.png') }}" alt="Djezzy Logo">
         </div>
     </div>
+    <div class="flash-messages">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            {% for category, message in messages %}
+              <div class="flash {{ category }}">{{ message }}</div>
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
+      </div>
     <div class="form-and-table">
       <div class="form-container">
         <form action="{{ url_for('historique') }}" method="get">

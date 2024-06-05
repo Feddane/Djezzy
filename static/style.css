@@ -598,7 +598,7 @@ span a:hover{
 .form-and-table {
     display: flex;
     align-items: flex-start;
-    margin-top: 50px;
+    margin-top: 5px;
 }
 
 .form-container {
@@ -670,3 +670,25 @@ th {
     top: 0;
     z-index: 1;
 }
+
+.flash-messages {
+    margin-top: 20px;
+    padding: 10px;
+  }
+
+.flash {
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid transparent;
+    border-radius: 4px;
+  }
+  .flash.success {
+    color: #3c763d;
+    background-color: #dff0d8;
+    border-color: #d6e9c6;
+  }
+  .flash.error {
+    color: #a94442;
+    background-color: #f2dede;
+    border-color: #ebccd1;
+  }
