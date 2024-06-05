@@ -692,3 +692,25 @@ th {
     background-color: #f2dede;
     border-color: #ebccd1;
   }
+
+
+/* Style du bouton d'édition */
+.edit-button {
+    background-color: red;
+    color: white;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-left: 30px;
+}
+
+
+.edit-form button[type="submit"] {
+    background-color: red;
+    color: white;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
