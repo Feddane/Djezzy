@@ -165,6 +165,33 @@ document.addEventListener('DOMContentLoaded', function() {
         tbody.appendChild(noResultsRow);
     });
 
+    // Ajoutez ceci dans la fonction updateFileName() sous la section /****************refresh button */
+
+    $(".modifier-btn").on("click", function() {
+        const row = $(this).closest("tr");
+        const id = row.find("td:first").text();
+        const nouveauStatus = prompt("Entrez le nouveau statut :");
+        if (nouveauStatus !== null) {
+            $.ajax({
+                url: '/modifier_status',
+                type: 'POST',
+                data: {
+                    id: id,
+                    nouveauStatus: nouveauStatus
+                },
+                success: function(response) {
+                    alert(response.message);
+                    window.location.reload(); // Rafraîchit la vue dans la nouvelle fenêtre
+                },
+                error: function(xhr) {
+                    alert("Erreur lors de la modification du statut.");
+                    console.error(xhr);
+                }
+            });
+        }
+    });
+
+
     /****************ouvre le tableau dans une nouvelle fenetre */
     const table = document.querySelector('table');
 

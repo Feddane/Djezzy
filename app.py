@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, session, flash
+from flask import Flask, render_template, request, redirect, url_for, session, flash, jsonify
 from flask_mysqldb import MySQL
 import os
 
@@ -142,6 +142,20 @@ def historique():
         
         return render_template('historique.html', results=None)
 
+@app.route('/modifier_status', methods=['POST'])
+def modifier_status():
+    if 'username' not in session:
+        return jsonify({'message': 'Vous devez être connecté pour effectuer cette action.'}), 401
+
+    id = request.form['id']
+    nouveau_status = request.form['nouveauStatus']
+
+    cursor = mysql.connection.cursor()
+    cursor.execute('UPDATE reclamation SET status = %s WHERE id = %s', (nouveau_status, id))
+    mysql.connection.commit()
+    cursor.close()
+
+    return jsonify({'message': 'Statut modifié avec succès.'}), 200
 
 @app.route('/logout')
 def logout():
