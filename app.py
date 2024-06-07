@@ -214,6 +214,7 @@ def export():
         return redirect(url_for('historique', categorie=categorie, date=date, status=status))
 
 
+
 @app.route('/logout')
 def logout():
     session.pop('username', None)
