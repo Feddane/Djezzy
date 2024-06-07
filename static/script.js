@@ -2,9 +2,15 @@ document.addEventListener('DOMContentLoaded', function() {
     function updateFileName() {
         var input = document.getElementById('fileUpload');
         var fileName = input.files.length > 0 ? input.files[0].name : "Aucun fichier disponible";
+        var maxLength = 20;  // Longueur maximale pour le nom de fichier affiché
+    
+        if (fileName.length > maxLength) {
+            fileName = fileName.substring(0, maxLength) + "...";
+        }
+    
         document.getElementById('fileName').textContent = fileName;
     }
-
+    
     const fileLabelElement = document.querySelector('.file-label');
     if (fileLabelElement) {
         fileLabelElement.addEventListener('click', function(event) {
@@ -12,11 +18,12 @@ document.addEventListener('DOMContentLoaded', function() {
             document.getElementById('fileUpload').click();
         });
     }
-
+    
     const fileUploadElement = document.getElementById('fileUpload');
     if (fileUploadElement) {
         fileUploadElement.addEventListener('change', updateFileName);
     }
+    
 
     const categorieSelect = document.getElementById('categorie');
     const familleSelect = document.getElementById('famille');
