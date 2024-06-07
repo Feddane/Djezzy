@@ -86,12 +86,12 @@ def reclamation():
         commentaire = request.form.get('commentaire')
         fichier = request.files.get('fileUpload')
 
-        fichier_nom = None  # Initialize fichier_nom with a default value
+        fichier_nom = None
 
         if fichier:
             fichier_nom = fichier.filename
         else:
-            fichier_nom = ''  # Set fichier_nom to an empty string or any other default value
+            fichier_nom = ''
 
         cursor = mysql.connection.cursor()
 
