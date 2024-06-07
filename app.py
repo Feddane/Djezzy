@@ -195,11 +195,24 @@ def export():
         output = BytesIO()
         with pd.ExcelWriter(output, engine='openpyxl') as writer:
             df.to_excel(writer, index=False, sheet_name='Reclamations')
+            worksheet = writer.sheets['Reclamations']
+            for col in worksheet.columns:
+                max_length = 0
+                column = col[0].column_letter
+                for cell in col:
+                    try:
+                        if len(str(cell.value)) > max_length:
+                            max_length = len(str(cell.value))
+                    except:
+                        pass
+                adjusted_width = (max_length + 2)
+                worksheet.column_dimensions[column].width = adjusted_width
         output.seek(0)
         return send_file(output, download_name='reclamations.xlsx', as_attachment=True)
     else:
         flash('Aucun résultat trouvé pour exporter', 'error')
         return redirect(url_for('historique', categorie=categorie, date=date, status=status))
+
 
 @app.route('/logout')
 def logout():
