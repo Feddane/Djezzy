@@ -51,26 +51,31 @@
 
   <main class="main-content">
     <div class="page-header">
-        <div class="header-content">
-            <h1>Historique des requêtes</h1>
+      <div class="header-content">
+        <h1>Historique des requêtes</h1>
+      </div>
+      <div class="header-actions">
+        <div>
+          <form id="exportForm" action="{{ url_for('export') }}" method="get" style="display: inline;">
+            <input type="hidden" name="categorie" value="{{ request.args.get('categorie', '') }}">
+            <input type="hidden" name="date" value="{{ request.args.get('date', '') }}">
+            <input type="hidden" name="status" value="{{ request.args.get('status', '') }}">
+            <button class="export" type="submit"><i class="las la-file-excel"></i>Export</button>
+          </form>
+          <button id="refreshButton" class="refresh"><i class="las la-sync"></i>Refresh</button>
         </div>
-        <div class="header-actions">
-            <div>
-                <button class="export"><i class="las la-file-excel"></i>Export</button>
-                <button id="refreshButton" class="refresh"><i class="las la-sync"></i>Refresh</button>
-            </div>
-            <img src="{{ url_for('static', filename='image/logo_Djezzy.png') }}" alt="Djezzy Logo">
-        </div>
+        <img src="{{ url_for('static', filename='image/logo_Djezzy.png') }}" alt="Djezzy Logo">
+      </div>
     </div>
     <div class="flash-messages">
-        {% with messages = get_flashed_messages(with_categories=true) %}
-          {% if messages %}
-            {% for category, message in messages %}
-              <div class="flash {{ category }}">{{ message }}</div>
-            {% endfor %}
-          {% endif %}
-        {% endwith %}
-      </div>
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          {% for category, message in messages %}
+            <div class="flash {{ category }}">{{ message }}</div>
+          {% endfor %}
+        {% endif %}
+      {% endwith %}
+    </div>
     <div class="form-and-table">
       <div class="form-container">
         <form action="{{ url_for('historique') }}" method="get">
@@ -85,7 +90,6 @@
           
           <button type="submit">Rechercher</button>
       </form>
-          
       </div>
       <div class="table-container">
         <table>
@@ -112,10 +116,9 @@
                         <td colspan="4">Aucun résultat trouvé</td>
                     </tr>
                 {% endif %}
-            </tbody>
+            </tbody>            
         </table>
     </div>
-    
     </div>
   </main>
 </body>

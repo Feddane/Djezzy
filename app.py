@@ -1,5 +1,7 @@
-from flask import Flask, render_template, request, redirect, url_for, session, flash
+from flask import Flask, render_template, request, redirect, url_for, session, flash, send_file
 from flask_mysqldb import MySQL
+import pandas as pd
+from io import BytesIO
 import os
 
 app = Flask(__name__)
@@ -160,6 +162,44 @@ def update_status():
 
     return redirect(url_for('historique'))
 
+
+@app.route('/export', methods=['GET'])
+def export():
+    if 'username' not in session:
+        return redirect(url_for('login'))
+
+    categorie = request.args.get('categorie')
+    date = request.args.get('date')
+    status = request.args.get('status')
+
+    query = "SELECT id, categorie, date_ouverture, status FROM reclamation WHERE 1=1"
+    params = []
+
+    if categorie:
+        query += " AND categorie LIKE %s"
+        params.append(f"%{categorie}%")
+    if date:
+        query += " AND date_ouverture = %s"
+        params.append(date)
+    if status:
+        query += " AND status LIKE %s"
+        params.append(f"%{status}%")
+
+    cursor = mysql.connection.cursor()
+    cursor.execute(query, params)
+    results = cursor.fetchall()
+    cursor.close()
+
+    if results:
+        df = pd.DataFrame(results, columns=['ID', 'Catégorie', 'Date', 'Status'])
+        output = BytesIO()
+        with pd.ExcelWriter(output, engine='openpyxl') as writer:
+            df.to_excel(writer, index=False, sheet_name='Reclamations')
+        output.seek(0)
+        return send_file(output, download_name='reclamations.xlsx', as_attachment=True)
+    else:
+        flash('Aucun résultat trouvé pour exporter', 'error')
+        return redirect(url_for('historique', categorie=categorie, date=date, status=status))
 
 @app.route('/logout')
 def logout():
