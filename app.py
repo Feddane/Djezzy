@@ -87,8 +87,7 @@ def reclamation():
         fichier = request.files.get('fileUpload')
 
         if fichier:
-            fichier_path = os.path.join(upload_dir, fichier.filename)
-            fichier.save(fichier_path)
+            fichier_nom = fichier.filename
         else:
             fichier_path = None
 
@@ -101,7 +100,7 @@ def reclamation():
 
         cursor.execute('''INSERT INTO reclamation (titre, sites, action_entreprise, date_ouverture, date_fin, operateur, echeance, etages, affecte_a, priorite, acces, ouvert_par, description, status, categorie, famille, commentaire, fichier) 
                           VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)''',
-                       (titre, sites, action_entreprise, date_ouverture, date_fin, operateur, echeance, etages, affecte_a, priorite, acces, ouvert_par, description, status, categorie, famille, commentaire, fichier_path))
+                       (titre, sites, action_entreprise, date_ouverture, date_fin, operateur, echeance, etages, affecte_a, priorite, acces, ouvert_par, description, status, categorie, famille, commentaire, fichier_nom))
         mysql.connection.commit()
         cursor.close()
 
