@@ -190,7 +190,11 @@ def export():
     results = cursor.fetchall()
     cursor.close()
 
-    if results:
+    if not results:
+        flash("Le tableau est vide, vous ne pouvez pas exporter de données.", "error")
+        return redirect(url_for('historique', categorie=categorie, date=date, status=status))
+
+    else:
         df = pd.DataFrame(results, columns=['ID', 'Catégorie', 'Date', 'Status'])
         output = BytesIO()
         with pd.ExcelWriter(output, engine='openpyxl') as writer:
@@ -209,9 +213,8 @@ def export():
                 worksheet.column_dimensions[column].width = adjusted_width
         output.seek(0)
         return send_file(output, download_name='reclamations.xlsx', as_attachment=True)
-    else:
-        flash('Aucun résultat trouvé pour exporter', 'error')
-        return redirect(url_for('historique', categorie=categorie, date=date, status=status))
+
+
 
 
 
