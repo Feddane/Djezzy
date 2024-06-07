@@ -86,10 +86,12 @@ def reclamation():
         commentaire = request.form.get('commentaire')
         fichier = request.files.get('fileUpload')
 
+        fichier_nom = None  # Initialize fichier_nom with a default value
+
         if fichier:
             fichier_nom = fichier.filename
         else:
-            fichier_path = None
+            fichier_nom = ''  # Set fichier_nom to an empty string or any other default value
 
         cursor = mysql.connection.cursor()
 
@@ -107,6 +109,7 @@ def reclamation():
         return redirect(url_for('reclamation'))
 
     return render_template('reclamation.html')
+
 
 @app.route('/historique', methods=['GET'])
 def historique():
