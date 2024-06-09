@@ -367,8 +367,8 @@ span a:hover{
     width: 62%;
 }
 
-.field .action-entreprise{
-    width: 50px !important;
+.field.action-entreprise input[type="text"]{
+    width: 81%;
 }
 
 .additional-fields .field.etages select,
