@@ -77,11 +77,6 @@
         <!-- Ajout des nouveaux éléments -->
         <div class="additional-fields">
             <div class="field-group">
-                <!-- Action entreprise -->
-                <div class="field action-entreprise">
-                    <label for="action">Action entreprise</label>
-                    <input type="text" id="action" name="action_entreprise">
-                </div>
                 <!-- Date Ouverture -->
                 <div class="field date-ouverture">
                     <label for="date-ouverture">Date Ouverture*</label>
@@ -94,6 +89,19 @@
                     <label for="date-fin">Date fin*</label>
                     <div class="datepicker">
                         <input type="date" id="date-fin" name="date-fin" required>
+                    </div>
+                </div>
+                <div class="field etages">
+                    <label for="etages">Étages</label>
+                    <div class="select-wrapper">
+                        <select id="etages" name="etages">
+                            <option value="" hidden disabled selected></option>
+                            <option value="B1">B1</option>
+                            <option value="B2">B2</option>
+                            <option value="B3">B3</option>
+                            <option value="B4">B4</option>
+                            <option value="B6">B6</option>
+                        </select>
                     </div>
                 </div>
             </div>
@@ -115,16 +123,13 @@
                     </div>
                 </div>
                 <!-- Etages -->
-                <div class="field etages">
-                    <label for="etages">Étages</label>
+                <div class="field acces">
+                    <label for="acces">Accès</label>
                     <div class="select-wrapper">
-                        <select id="etages" name="etages">
+                        <select id="acces" name="acces">
                             <option value="" hidden disabled selected></option>
-                            <option value="B1">B1</option>
-                            <option value="B2">B2</option>
-                            <option value="B3">B3</option>
-                            <option value="B4">B4</option>
-                            <option value="B6">B6</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
                         </select>
                     </div>
                 </div>
@@ -151,16 +156,10 @@
                         </select>
                     </div>
                 </div>
-                <!-- Accès -->
-                <div class="field acces">
-                    <label for="acces">Accès</label>
-                    <div class="select-wrapper">
-                        <select id="acces" name="acces">
-                            <option value="" hidden disabled selected></option>
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                        </select>
-                    </div>
+                <!-- Action entreprise -->
+                <div class="field action-entreprise">
+                    <label for="action">Action entreprise</label>
+                    <input type="text" id="action" name="action_entreprise">
                 </div>
             </div>
         </div>

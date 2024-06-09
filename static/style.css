@@ -345,7 +345,7 @@ span a:hover{
     width: 80%;
 }
 
-.additional-fields .field.date-ouverture input[type="date"],
+.additional-fields .field.date-fin input[type="date"],
 .additional-fields .field.echeance input[type="date"]{
     width: 58%;
     height: 25px;
@@ -354,16 +354,21 @@ span a:hover{
     padding: 8px;
 }
 
-.additional-fields .field.date-fin input[type="date"]{
-    width: 75%;
+.additional-fields .field.date-ouverture input[type="date"]{
+    width: 64%;
     height: 25px;
     border-radius: 5px;
     border: 1px solid #ccc;
     padding: 8px;
 }
 
+
 .additional-fields .field.priorite select{
     width: 62%;
+}
+
+.field .action-entreprise{
+    width: 50px !important;
 }
 
 .additional-fields .field.etages select,
@@ -491,6 +496,7 @@ span a:hover{
 .vertical-div .famille select option{
     background-color: white;
 }
+
 
 .vertical-div .commentaire input[type="text"] {
     width: 320px;
