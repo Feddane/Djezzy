@@ -183,7 +183,11 @@ def export():
     date = request.args.get('date')
     status = request.args.get('status')
 
-    query = "SELECT id, categorie, date_ouverture, status FROM reclamation WHERE 1=1"
+    query = """
+    SELECT id, titre, sites, action_entreprise, date_ouverture, date_fin, operateur, echeance, etages, affecte_a,
+           priorite, acces, ouvert_par, description, status, categorie, famille, commentaire, fichier
+    FROM reclamation WHERE 1=1
+    """
     params = []
 
     if categorie:
@@ -206,7 +210,11 @@ def export():
         return redirect(url_for('historique', categorie=categorie, date=date, status=status))
 
     else:
-        df = pd.DataFrame(results, columns=['ID', 'Catégorie', 'Date', 'Status'])
+        # Mise à jour des colonnes du DataFrame
+        columns = ['ID', 'Titre', 'Sites', 'Action Entreprise', 'Date Ouverture', 'Date Fin', 'Opérateur', 'Échéance', 
+                   'Étages', 'Affecté À', 'Priorité', 'Accès', 'Ouvert Par', 'Description', 'Status', 'Catégorie', 
+                   'Famille', 'Commentaire', 'Fichier']
+        df = pd.DataFrame(results, columns=columns)
         output = BytesIO()
         with pd.ExcelWriter(output, engine='openpyxl') as writer:
             df.to_excel(writer, index=False, sheet_name='Reclamations')
@@ -224,6 +232,7 @@ def export():
                 worksheet.column_dimensions[column].width = adjusted_width
         output.seek(0)
         return send_file(output, download_name='reclamations.xlsx', as_attachment=True)
+
 
 
 @app.route('/all_reclamations', methods=['GET'])
