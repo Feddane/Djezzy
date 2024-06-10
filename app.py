@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, session, flash, send_file
+from flask import Flask, render_template, request, redirect, url_for, session, flash, send_file, jsonify
 from flask_mysqldb import MySQL
 import pandas as pd
 from io import BytesIO
@@ -219,6 +219,13 @@ def export():
         return send_file(output, download_name='reclamations.xlsx', as_attachment=True)
 
 
+@app.route('/all_reclamations', methods=['GET'])
+def all_reclamations():
+    cursor = mysql.connection.cursor()
+    cursor.execute("SELECT * FROM reclamation")
+    results = cursor.fetchall()
+    cursor.close()
+    return jsonify(results)
 
 
 

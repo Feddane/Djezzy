@@ -161,16 +161,39 @@ document.addEventListener('DOMContentLoaded', function() {
     const refreshButton = document.getElementById('refreshButton');
 
     refreshButton.addEventListener('click', function() {
-        const tbody = document.querySelector('tbody');
-        const noResultsRow = document.createElement('tr');
-        const noResultsCell = document.createElement('td');
-        noResultsCell.setAttribute('colspan', '4');
-        noResultsCell.textContent = 'Aucun résultat trouvé';
-        noResultsRow.appendChild(noResultsCell);
-        
-        tbody.innerHTML = '';
-        tbody.appendChild(noResultsRow);
-    });
+        fetch('/all_reclamations')
+            .then(response => response.json())
+            .then(data => {
+                const tbody = document.querySelector('tbody');
+                tbody.innerHTML = '';
+                if (data.length > 0) {
+                    data.forEach(row => {
+                        const tr = document.createElement('tr');
+                        Object.values(row).forEach((value, index) => {
+                            const td = document.createElement('td');
+                            if (index === 4 || index === 5 || index === 7) {
+                                const date = new Date(value);
+                                const formattedDate = date.toISOString().slice(0, 10);
+                                td.textContent = formattedDate;
+                            } else {
+                                td.textContent = value;
+                            }
+                            tr.appendChild(td);
+                        });
+                        tbody.appendChild(tr);
+                    });
+                } else {
+                    const noResultsRow = document.createElement('tr');
+                    const noResultsCell = document.createElement('td');
+                    noResultsCell.setAttribute('colspan', '19');
+                    noResultsCell.textContent = 'Aucun résultat trouvé';
+                    noResultsRow.appendChild(noResultsCell);
+                    tbody.appendChild(noResultsRow);
+                }
+            })
+            .catch(error => console.error('Error fetching data:', error));
+    });    
+    
 
     /****************ouvre le tableau dans une nouvelle fenetre */
     const table = document.querySelector('table');
