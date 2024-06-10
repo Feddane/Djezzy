@@ -266,13 +266,15 @@ document.addEventListener('DOMContentLoaded', function() {
                         <td>${commentaire}</td>
                         <td>${fichier}</td>
                         <td>
-                            <button class="edit-button" data-id="${id}" data-status="${status}">Modifier</button>
+                            <button class="edit-button" data-id="${id}" data-status="${status}" data-current-status="${status}">Modifier</button>
                             <form class="edit-form" action="/update_status" method="post" style="display: none;">
                                 <input type="hidden" name="recordId" value="${id}">
                                 <input type="text" name="newStatus" value="${status}">
+                                <input type="hidden" name="currentStatus" value="${status}">
                                 <button type="submit">Mettre à jour</button>
                             </form>
                         </td>
+
                     </tr>
                 `;
             });

@@ -156,15 +156,22 @@ def update_status():
 
     record_id = request.form.get('recordId')
     new_status = request.form.get('newStatus')
+    current_status = request.form.get('currentStatus')
 
-    if record_id and new_status:
-        cursor = mysql.connection.cursor()
-        cursor.execute('UPDATE reclamation SET status = %s WHERE id = %s', (new_status, record_id))
-        mysql.connection.commit()
-        cursor.close()
-        flash('Status mis à jour avec succès', 'success')
+    if record_id and new_status and current_status:
+        current_status_lower = current_status.lower()
+        new_status_lower = new_status.lower()
+        if not (current_status_lower == 'inactif' and new_status_lower == 'actif'):
+            cursor = mysql.connection.cursor()
+            cursor.execute('UPDATE reclamation SET status = %s WHERE id = %s', (new_status, record_id))
+            mysql.connection.commit()
+            cursor.close()
+            flash('Statut mis à jour avec succès', 'success')
+        else:
+            flash('Impossible de changer le statut de Inactif à Actif.', 'error')
 
     return redirect(url_for('historique'))
+
 
 
 @app.route('/export', methods=['GET'])
