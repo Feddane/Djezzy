@@ -173,6 +173,24 @@ def update_status():
     return redirect(url_for('historique'))
 
 
+@app.route('/update_date_fin', methods=['POST'])
+def update_date_fin():
+    if 'username' not in session:
+        return redirect(url_for('login'))
+
+    record_id = request.form.get('recordId')
+    new_date_fin = request.form.get('newDateFin')
+
+    if record_id and new_date_fin:
+        cursor = mysql.connection.cursor()
+        cursor.execute('UPDATE reclamation SET date_fin = %s WHERE id = %s', (new_date_fin, record_id))
+        mysql.connection.commit()
+        cursor.close()
+        flash('Date de fin mise à jour avec succès', 'success')
+
+    return redirect(url_for('historique'))
+
+
 
 @app.route('/export', methods=['GET'])
 def export():
@@ -210,7 +228,6 @@ def export():
         return redirect(url_for('historique', categorie=categorie, date=date, status=status))
 
     else:
-        # Mise à jour des colonnes du DataFrame
         columns = ['ID', 'Titre', 'Sites', 'Action Entreprise', 'Date Ouverture', 'Date Fin', 'Opérateur', 'Échéance', 
                    'Étages', 'Affecté À', 'Priorité', 'Accès', 'Ouvert Par', 'Description', 'Status', 'Catégorie', 
                    'Famille', 'Commentaire', 'Fichier']

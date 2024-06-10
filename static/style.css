@@ -702,7 +702,8 @@ th {
 
 
 /* Style du bouton d'édition */
-.edit-button {
+.edit-button,
+.edit-date-fin-button {
     background-color: red;
     color: white;
     padding: 5px 10px;
@@ -712,8 +713,8 @@ th {
     margin-left: 30px;
 }
 
-
-.edit-form button[type="submit"] {
+.edit-form button[type="submit"],
+.edit-date-fin-form button[type="submit"] {
     background-color: red;
     color: white;
     padding: 5px 10px;

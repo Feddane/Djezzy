@@ -252,6 +252,14 @@ document.addEventListener('DOMContentLoaded', function() {
                         <td>${actionEntreprise}</td>
                         <td>${dateOuverture}</td>
                         <td>${dateFin}</td>
+                          <td>
+                            <button class="edit-date-fin-button">Modifier</button>
+                            <form class="edit-date-fin-form" action="/update_date_fin" method="post" style="display: none;">
+                                <input type="hidden" name="recordId" value="${id}">
+                                <input type="date" name="newDateFin" value="${dateFin}">
+                                <button type="submit">Mettre à jour</button>
+                            </form>
+                        </td>
                         <td>${operateur}</td>
                         <td>${echeance}</td>
                         <td>${etages}</td>
@@ -301,6 +309,7 @@ document.addEventListener('DOMContentLoaded', function() {
                                 <th>Action Entreprise</th>
                                 <th>Date Ouverture</th>
                                 <th>Date Fin</th>
+                                <th>Modifier Date Fin</th>
                                 <th>Opérateur</th>
                                 <th>Échéance</th>
                                 <th>Étages</th>
@@ -322,6 +331,14 @@ document.addEventListener('DOMContentLoaded', function() {
                         </tbody>
                     </table>
                     <script>
+                        document.querySelectorAll('.edit-date-fin-button').forEach(button => {
+                            button.addEventListener('click', function() {
+                                const form = this.nextElementSibling;
+                                form.style.display = 'block';
+                                this.style.display = 'none';
+                            });
+                        });
+
                         document.querySelectorAll('.edit-button').forEach(button => {
                             button.addEventListener('click', function() {
                                 const form = this.nextElementSibling;
