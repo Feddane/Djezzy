@@ -116,35 +116,37 @@ def historique():
     if 'username' not in session:
         return redirect(url_for('login'))
 
-    
-    if request.args.get('categorie') or request.args.get('date') or request.args.get('status'):
-        categorie = request.args.get('categorie')
-        date = request.args.get('date')
-        status = request.args.get('status')
-        
-        cursor = mysql.connection.cursor()
-        
-        query = "SELECT id, categorie, date_ouverture, status FROM reclamation WHERE 1=1"
-        params = []
+    categorie = request.args.get('categorie')
+    date = request.args.get('date')
+    status = request.args.get('status')
 
-        if categorie:
-            query += " AND categorie LIKE %s"
-            params.append(f"%{categorie}%")
-        if date:
-            query += " AND date_ouverture = %s"
-            params.append(date)
-        if status:
-            query += " AND status LIKE %s"
-            params.append(f"%{status}%")
-        
-        cursor.execute(query, params)
+    cursor = mysql.connection.cursor()
+
+    query = "SELECT id, categorie, date_ouverture, status FROM reclamation WHERE 1=1"
+    params = []
+
+    if categorie:
+        query += " AND categorie LIKE %s"
+        params.append(f"%{categorie}%")
+    if date:
+        query += " AND date_ouverture = %s"
+        params.append(date)
+    if status:
+        query += " AND status LIKE %s"
+        params.append(f"%{status}%")
+
+    cursor.execute(query, params)
+    results = cursor.fetchall()
+    cursor.close()
+
+    if not results:
+        cursor = mysql.connection.cursor()
+        cursor.execute("SELECT id, categorie, date_ouverture, status FROM reclamation")
         results = cursor.fetchall()
         cursor.close()
 
-        return render_template('historique.html', results=results)
-    else:
-        
-        return render_template('historique.html', results=None)
+    return render_template('historique.html', results=results)
+
 
 
 @app.route('/update_status', methods=['POST'])
