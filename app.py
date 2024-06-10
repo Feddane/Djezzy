@@ -117,7 +117,8 @@ def historique():
         return redirect(url_for('login'))
 
     categorie = request.args.get('categorie')
-    date = request.args.get('date')
+    date_debut = request.args.get('date_debut')
+    date_fin = request.args.get('date_fin')
     status = request.args.get('status')
 
     cursor = mysql.connection.cursor()
@@ -128,9 +129,10 @@ def historique():
     if categorie:
         query += " AND categorie LIKE %s"
         params.append(f"%{categorie}%")
-    if date:
-        query += " AND date_ouverture = %s"
-        params.append(date)
+    if date_debut and date_fin:
+        query += " AND date_ouverture BETWEEN %s AND %s"
+        params.append(date_debut)
+        params.append(date_fin)
     if status:
         query += " AND status LIKE %s"
         params.append(f"%{status}%")
@@ -146,6 +148,7 @@ def historique():
         cursor.close()
 
     return render_template('historique.html', results=results)
+
 
 
 

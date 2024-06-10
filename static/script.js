@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', function() {
     function updateFileName() {
         var input = document.getElementById('fileUpload');
         var fileName = input.files.length > 0 ? input.files[0].name : "Aucun fichier disponible";
-        var maxLength = 20;  // Longueur maximale pour le nom de fichier affiché
+        var maxLength = 20;
     
         if (fileName.length > maxLength) {
             fileName = fileName.substring(0, maxLength) + "...";
