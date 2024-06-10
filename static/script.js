@@ -37,7 +37,9 @@ document.addEventListener('DOMContentLoaded', function() {
         "Travaux": ["Nettoyage", "Intervention IT", "Préparation d'évènements"],
         "Accident": ["Chutes", "Intérieur d'OTA", "Extérieur d'OTA"],
         "Incident": ["Alarme CDS", "DG(B1)", "Alarme MSC", "Werehouse"],
-        "Demande de sécurisation": ["Véhicules employé en mission", "Véhicules OTA", "Matériel OTA"]
+        "Demande de sécurisation": ["Véhicules employé en mission", "Véhicules OTA", "Matériel OTA"],
+        "Panne technique system": ["CCTV", "ATS8600", "SSM", "TRUVISION", "Netvu observer", "Continuum", "Tournique"],
+        "Autres": [""]
     };
 
     function mettreAJourFamilleOptions() {
