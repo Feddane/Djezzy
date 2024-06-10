@@ -265,6 +265,14 @@ document.addEventListener('DOMContentLoaded', function() {
                         <td>${famille}</td>
                         <td>${commentaire}</td>
                         <td>${fichier}</td>
+                        <td>
+                            <button class="edit-button" data-id="${id}" data-status="${status}">Modifier</button>
+                            <form class="edit-form" action="/update_status" method="post" style="display: none;">
+                                <input type="hidden" name="recordId" value="${id}">
+                                <input type="text" name="newStatus" value="${status}">
+                                <button type="submit">Mettre à jour</button>
+                            </form>
+                        </td>
                     </tr>
                 `;
             });
@@ -304,12 +312,22 @@ document.addEventListener('DOMContentLoaded', function() {
                                 <th>Famille</th>
                                 <th>Commentaire</th>
                                 <th>Fichier</th>
+                                <th>Modifier Status</th>
                             </tr>
                         </thead>
                         <tbody>
                             ${rowsHtml}
                         </tbody>
                     </table>
+                    <script>
+                        document.querySelectorAll('.edit-button').forEach(button => {
+                            button.addEventListener('click', function() {
+                                const form = this.nextElementSibling;
+                                form.style.display = 'block';
+                                this.style.display = 'none';
+                            });
+                        });
+                    </script>
                 </body>
                 </html>
             `;
@@ -318,6 +336,7 @@ document.addEventListener('DOMContentLoaded', function() {
             newDocument.close();
         }
     });
+
 
 
 });
