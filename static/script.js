@@ -157,7 +157,7 @@ document.addEventListener('DOMContentLoaded', function() {
         $(this).addClass("selected");
     });
 
-    /****************refresh button */
+    /****************refresh button *******************************/
     const refreshButton = document.getElementById('refreshButton');
 
     refreshButton.addEventListener('click', function() {
@@ -203,7 +203,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (tbody.children.length === 0 || tbody.children[0].children[0].textContent === 'Aucun résultat trouvé') {
             const newWindow = window.open('', '_blank');
             const newDocument = newWindow.document.open();
-    
+
             const htmlContent = `
                 <!DOCTYPE html>
                 <html lang="fr">
@@ -218,38 +218,60 @@ document.addEventListener('DOMContentLoaded', function() {
                 </body>
                 </html>
             `;
-    
+
             newDocument.write(htmlContent);
             newDocument.close();
         } else {
             let rowsHtml = '';
             table.querySelectorAll('tbody tr').forEach(row => {
                 const id = row.cells[0].textContent;
-                const categorie = row.cells[1].textContent;
-                const date = row.cells[2].textContent;
-                const status = row.cells[3].textContent;
-    
+                const titre = row.cells[1].textContent;
+                const sites = row.cells[2].textContent;
+                const actionEntreprise = row.cells[3].textContent;
+                const dateOuverture = row.cells[4].textContent;
+                const dateFin = row.cells[5].textContent;
+                const operateur = row.cells[6].textContent;
+                const echeance = row.cells[7].textContent;
+                const etages = row.cells[8].textContent;
+                const affecteA = row.cells[9].textContent;
+                const priorite = row.cells[10].textContent;
+                const acces = row.cells[11].textContent;
+                const ouvertPar = row.cells[12].textContent;
+                const description = row.cells[13].textContent;
+                const status = row.cells[14].textContent;
+                const categorie = row.cells[15].textContent;
+                const famille = row.cells[16].textContent;
+                const commentaire = row.cells[17].textContent;
+                const fichier = row.cells[18].textContent;
+
                 rowsHtml += `
                     <tr>
                         <td>${id}</td>
+                        <td>${titre}</td>
+                        <td>${sites}</td>
+                        <td>${actionEntreprise}</td>
+                        <td>${dateOuverture}</td>
+                        <td>${dateFin}</td>
+                        <td>${operateur}</td>
+                        <td>${echeance}</td>
+                        <td>${etages}</td>
+                        <td>${affecteA}</td>
+                        <td>${priorite}</td>
+                        <td>${acces}</td>
+                        <td>${ouvertPar}</td>
+                        <td>${description}</td>
+                        <td>${status}</td>
                         <td>${categorie}</td>
-                        <td>${date}</td>
-                        <td>
-                            <span class="status-text">${status}</span>
-                            <button class="edit-button" data-id="${id}" data-status="${status}">Modifier</button>
-                            <form class="edit-form" action="/update_status" method="post" style="display: none;">
-                                <input type="hidden" name="recordId" value="${id}">
-                                <input type="text" name="newStatus" value="${status}">
-                                <button type="submit">Mettre à jour</button>
-                            </form>
-                        </td>
+                        <td>${famille}</td>
+                        <td>${commentaire}</td>
+                        <td>${fichier}</td>
                     </tr>
                 `;
             });
-    
+
             const newWindow = window.open('', '_blank');
             const newDocument = newWindow.document.open();
-    
+
             const htmlContent = `
                 <!DOCTYPE html>
                 <html lang="fr">
@@ -264,9 +286,24 @@ document.addEventListener('DOMContentLoaded', function() {
                         <thead>
                             <tr>
                                 <th>ID</th>
-                                <th>Catégorie</th>
-                                <th>Date</th>
+                                <th>Titre</th>
+                                <th>Sites</th>
+                                <th>Action Entreprise</th>
+                                <th>Date Ouverture</th>
+                                <th>Date Fin</th>
+                                <th>Opérateur</th>
+                                <th>Échéance</th>
+                                <th>Étages</th>
+                                <th>Affecté À</th>
+                                <th>Priorité</th>
+                                <th>Accès</th>
+                                <th>Ouvert Par</th>
+                                <th>Description</th>
                                 <th>Status</th>
+                                <th>Catégorie</th>
+                                <th>Famille</th>
+                                <th>Commentaire</th>
+                                <th>Fichier</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -276,18 +313,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 </body>
                 </html>
             `;
-    
+
             newDocument.write(htmlContent);
             newDocument.close();
-    
-            newDocument.querySelectorAll('.edit-button').forEach(button => {
-                button.addEventListener('click', function() {
-                    const form = this.nextElementSibling;
-                    form.style.display = 'block';
-                    this.style.display = 'none';
-                });
-            });
         }
     });
+
 
 });
