@@ -261,11 +261,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         <td>${ouvertPar}</td>
                         <td>${description}</td>
                         <td>${status}</td>
-                        <td>${categorie}</td>
-                        <td>${famille}</td>
-                        <td>${commentaire}</td>
-                        <td>${fichier}</td>
-                        <td>
+                         <td>
                             <button class="edit-button" data-id="${id}" data-status="${status}" data-current-status="${status}">Modifier</button>
                             <form class="edit-form" action="/update_status" method="post" style="display: none;">
                                 <input type="hidden" name="recordId" value="${id}">
@@ -274,6 +270,10 @@ document.addEventListener('DOMContentLoaded', function() {
                                 <button type="submit">Mettre à jour</button>
                             </form>
                         </td>
+                        <td>${categorie}</td>
+                        <td>${famille}</td>
+                        <td>${commentaire}</td>
+                        <td>${fichier}</td>
 
                     </tr>
                 `;
@@ -310,11 +310,11 @@ document.addEventListener('DOMContentLoaded', function() {
                                 <th>Ouvert Par</th>
                                 <th>Description</th>
                                 <th>Status</th>
+                                <th>Modifier Status</th>
                                 <th>Catégorie</th>
                                 <th>Famille</th>
                                 <th>Commentaire</th>
                                 <th>Fichier</th>
-                                <th>Modifier Status</th>
                             </tr>
                         </thead>
                         <tbody>
