@@ -96,27 +96,58 @@
             <thead>
                 <tr>
                     <th>ID</th>
-                    <th>Catégorie</th>
-                    <th>Date</th>
+                    <th>Titre</th>
+                    <th>Sites</th>
+                    <th>Action Entreprise</th>
+                    <th>Date Ouverture</th>
+                    <th>Date Fin</th>
+                    <th>Opérateur</th>
+                    <th>Échéance</th>
+                    <th>Étages</th>
+                    <th>Affecté À</th>
+                    <th>Priorité</th>
+                    <th>Accès</th>
+                    <th>Ouvert Par</th>
+                    <th>Description</th>
                     <th>Status</th>
+                    <th>Catégorie</th>
+                    <th>Famille</th>
+                    <th>Commentaire</th>
+                    <th>Fichier</th>
                 </tr>
             </thead>
             <tbody>
-                {% if results %}
-                    {% for row in results %}
-                        <tr>
-                            <td>{{ row[0] }}</td>
-                            <td>{{ row[1] }}</td>
-                            <td>{{ row[2] }}</td>
-                            <td>{{ row[3] }}</td>
-                        </tr>
-                    {% endfor %}
-                {% else %}
-                    <tr>
-                        <td colspan="4">Aucun résultat trouvé</td>
-                    </tr>
-                {% endif %}
-            </tbody>            
+              {% if results %}
+                  {% for row in results %}
+                      <tr>
+                          <td>{{ row[0] }}</td>
+                          <td>{{ row[1] }}</td>
+                          <td>{{ row[2] }}</td>
+                          <td>{{ row[3] }}</td>
+                          <td>{{ row[4] }}</td>
+                          <td>{{ row[5] }}</td>
+                          <td>{{ row[6] }}</td>
+                          <td>{{ row[7] }}</td>
+                          <td>{{ row[8] }}</td>
+                          <td>{{ row[9] }}</td>
+                          <td>{{ row[10] }}</td>
+                          <td>{{ row[11] }}</td>
+                          <td>{{ row[12] }}</td>
+                          <td>{{ row[13] }}</td>
+                          <td>{{ row[14] }}</td>
+                          <td>{{ row[15] }}</td>
+                          <td>{{ row[16] }}</td>
+                          <td>{{ row[17] }}</td>
+                          <td>{{ row[18] }}</td>
+                      </tr>
+                  {% endfor %}
+              {% else %}
+                  <tr>
+                      <td colspan="19">Aucun résultat trouvé</td>
+                  </tr>
+              {% endif %}
+          </tbody>
+          
         </table>
     </div>
     </div>

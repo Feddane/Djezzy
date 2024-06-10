@@ -122,7 +122,7 @@ def historique():
 
     cursor = mysql.connection.cursor()
 
-    query = "SELECT id, categorie, date_ouverture, status FROM reclamation WHERE 1=1"
+    query = "SELECT * FROM reclamation WHERE 1=1"
     params = []
 
     if categorie:
@@ -141,7 +141,7 @@ def historique():
 
     if not results:
         cursor = mysql.connection.cursor()
-        cursor.execute("SELECT id, categorie, date_ouverture, status FROM reclamation")
+        cursor.execute("SELECT * FROM reclamation")
         results = cursor.fetchall()
         cursor.close()
 
