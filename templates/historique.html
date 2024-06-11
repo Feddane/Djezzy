@@ -124,25 +124,25 @@
               {% if results %}
                   {% for row in results %}
                       <tr>
-                          <td>{{ row[0] }}</td>
-                          <td>{{ row[1] }}</td>
-                          <td>{{ row[2] }}</td>
-                          <td>{{ row[3] }}</td>
-                          <td>{{ row[4] }}</td>
-                          <td>{{ row[5] }}</td>
-                          <td>{{ row[6] }}</td>
-                          <td>{{ row[7] }}</td>
-                          <td>{{ row[8] }}</td>
-                          <td>{{ row[9] }}</td>
-                          <td>{{ row[10] }}</td>
-                          <td>{{ row[11] }}</td>
-                          <td>{{ row[12] }}</td>
-                          <td>{{ row[13] }}</td>
-                          <td>{{ row[14] }}</td>
-                          <td>{{ row[15] }}</td>
-                          <td>{{ row[16] }}</td>
-                          <td>{{ row[17] }}</td>
-                          <td>{{ row[18] }}</td>
+                          <td>{{ row.id }}</td>
+                          <td>{{ row.titre }}</td>
+                          <td>{{ row.sites }}</td>
+                          <td>{{ row.action_entreprise }}</td>
+                          <td>{{ row.date_ouverture }}</td>
+                          <td>{{ row.date_fin }}</td>
+                          <td>{{ row.operateur }}</td>
+                          <td>{{ row.echeance }}</td>
+                          <td>{{ row.etages }}</td>
+                          <td>{{ row.affecte_a }}</td>
+                          <td>{{ row.priorite }}</td>
+                          <td>{{ row.acces }}</td>
+                          <td>{{ row.ouvert_par }}</td>
+                          <td>{{ row.description }}</td>
+                          <td>{{ row.status }}</td>
+                          <td>{{ row.categorie }}</td>
+                          <td>{{ row.famille }}</td>
+                          <td>{{ row.commentaire }}</td>
+                          <td>{{ row.fichier }}</td>
                       </tr>
                   {% endfor %}
               {% else %}
