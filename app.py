@@ -53,7 +53,7 @@ class User(db.Model):
     password = db.Column(db.String(150), nullable=False)
 
 @app.route('/', methods=['GET', 'POST'])
-def login():
+def login_admin():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
@@ -66,7 +66,7 @@ def login():
         else:
             flash('Nom d\'utilisateur ou mot de passe incorrect', 'error')
 
-    return render_template('login.html')
+    return render_template('admin_dashboard.html')
 
 @app.route('/changer_mdp', methods=['GET', 'POST'])
 def changer_mdp():
@@ -82,7 +82,7 @@ def changer_mdp():
                 user.password = new_password
                 db.session.commit()
                 flash('Mot de passe changé avec succès', 'success')
-                return redirect(url_for('login'))
+                return redirect(url_for('login_admin'))
             else:
                 flash('Ancien mot de passe incorrect', 'error')
         else:
@@ -93,7 +93,7 @@ def changer_mdp():
 @app.route('/reclamation', methods=['GET', 'POST'])
 def reclamation():
     if 'username' not in session:
-        return redirect(url_for('login'))
+        return redirect(url_for('login_admin'))
 
     if request.method == 'POST':
         titre = request.form.get('titre')
@@ -151,7 +151,7 @@ def reclamation():
 @app.route('/historique', methods=['GET'])
 def historique():
     if 'username' not in session:
-        return redirect(url_for('login'))
+        return redirect(url_for('login_admin'))
 
     categorie = request.args.get('categorie')
     date_debut = request.args.get('date_debut')
@@ -178,7 +178,7 @@ def historique():
 @app.route('/update_status', methods=['POST'])
 def update_status():
     if 'username' not in session:
-        return redirect(url_for('login'))
+        return redirect(url_for('login_admin'))
 
     record_id = request.form.get('recordId')
     new_status = request.form.get('newStatus')
@@ -200,7 +200,7 @@ def update_status():
 @app.route('/update_date_fin', methods=['POST'])
 def update_date_fin():
     if 'username' not in session:
-        return redirect(url_for('login'))
+        return redirect(url_for('login_admin'))
 
     record_id = request.form.get('recordId')
     new_date_fin = request.form.get('newDateFin')
@@ -216,7 +216,7 @@ def update_date_fin():
 @app.route('/export', methods=['GET'])
 def export():
     if 'username' not in session:
-        return redirect(url_for('login'))
+        return redirect(url_for('login_admin'))
 
     categorie = request.args.get('categorie')
     date = request.args.get('date')
@@ -319,7 +319,7 @@ def creer_user():
 @app.route('/logout')
 def logout():
     session.pop('username', None)
-    return redirect(url_for('login'))
+    return redirect(url_for('login_admin'))
 
 if __name__ == '__main__':
     app.run(debug=True)
