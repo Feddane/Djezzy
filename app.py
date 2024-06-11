@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for, session, flash, send_file, jsonify
-from flask_mysqldb import MySQL
+from flask_sqlalchemy import SQLAlchemy
 import pandas as pd
 from io import BytesIO
 import os
@@ -7,15 +7,42 @@ import os
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secret-key'
 
-app.config['MYSQL_HOST'] = 'localhost'
-app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_PASSWORD'] = ''
-app.config['MYSQL_DB'] = 'users'
+# Configuration pour PostgreSQL
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:root@localhost/users'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-mysql = MySQL(app)
+db = SQLAlchemy(app)
 
 upload_dir = 'static/uploads'
 os.makedirs(upload_dir, exist_ok=True)
+
+class Admin(db.Model):
+    __tablename__ = 'table_admins'
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(150), nullable=False)
+    password = db.Column(db.String(150), nullable=False)
+
+class Reclamation(db.Model):
+    __tablename__ = 'reclamation'
+    id = db.Column(db.Integer, primary_key=True)
+    titre = db.Column(db.String(200))
+    sites = db.Column(db.String(200))
+    action_entreprise = db.Column(db.String(200))
+    date_ouverture = db.Column(db.Date)
+    date_fin = db.Column(db.Date)
+    operateur = db.Column(db.String(200))
+    echeance = db.Column(db.Date)
+    etages = db.Column(db.String(200))
+    affecte_a = db.Column(db.String(200))
+    priorite = db.Column(db.String(200))
+    acces = db.Column(db.String(200))
+    ouvert_par = db.Column(db.String(200))
+    description = db.Column(db.Text)
+    status = db.Column(db.String(200))
+    categorie = db.Column(db.String(200))
+    famille = db.Column(db.String(200))
+    commentaire = db.Column(db.Text)
+    fichier = db.Column(db.String(200))
 
 @app.route('/', methods=['GET', 'POST'])
 def login():
@@ -23,10 +50,7 @@ def login():
         username = request.form['username']
         password = request.form['password']
 
-        cursor = mysql.connection.cursor()
-        cursor.execute('SELECT * FROM table_users WHERE username = %s AND password = %s', (username, password))
-        user = cursor.fetchone()
-        cursor.close()
+        user = Admin.query.filter_by(username=username, password=password).first()
 
         if user:
             session['username'] = username
@@ -44,14 +68,11 @@ def changer_mdp():
         username = session.get('username')
 
         if username:
-            cursor = mysql.connection.cursor()
-            cursor.execute('SELECT * FROM table_users WHERE username = %s AND password = %s', (username, old_password))
-            user = cursor.fetchone()
+            user = Admin.query.filter_by(username=username, password=old_password).first()
 
             if user:
-                cursor.execute('UPDATE table_users SET password = %s WHERE username = %s', (new_password, username))
-                mysql.connection.commit()
-                cursor.close()
+                user.password = new_password
+                db.session.commit()
                 flash('Mot de passe changé avec succès', 'success')
                 return redirect(url_for('login'))
             else:
@@ -71,10 +92,10 @@ def reclamation():
         sites = request.form.get('sites')
         action_entreprise = request.form.get('action_entreprise')
         date_ouverture = request.form.get('date_ouverture')
-        date_fin = request.form.get('date-fin')
+        date_fin = request.form.get('date_fin')
         operateur = request.form.get('operateur')
         echeance = request.form.get('echeance')
-        etages = request.form.get('etages') 
+        etages = request.form.get('etages')
         affecte_a = request.form.get('affecte_a')
         priorite = request.form.get('priorite')
         acces = request.form.get('acces')
@@ -90,26 +111,34 @@ def reclamation():
 
         if fichier:
             fichier_nom = fichier.filename
-        else:
-            fichier_nom = ''
 
-        cursor = mysql.connection.cursor()
+        nouvelle_reclamation = Reclamation(
+            titre=titre,
+            sites=sites,
+            action_entreprise=action_entreprise,
+            date_ouverture=date_ouverture,
+            date_fin=date_fin,
+            operateur=operateur,
+            echeance=echeance,
+            etages=etages,
+            affecte_a=affecte_a,
+            priorite=priorite,
+            acces=acces,
+            ouvert_par=ouvert_par,
+            description=description,
+            status=status,
+            categorie=categorie,
+            famille=famille,
+            commentaire=commentaire,
+            fichier=fichier_nom
+        )
 
-        cursor.execute('SELECT COUNT(*) FROM reclamation')
-        result = cursor.fetchone()
-        if result[0] == 0:
-            cursor.execute('ALTER TABLE reclamation AUTO_INCREMENT = 1')
-
-        cursor.execute('''INSERT INTO reclamation (titre, sites, action_entreprise, date_ouverture, date_fin, operateur, echeance, etages, affecte_a, priorite, acces, ouvert_par, description, status, categorie, famille, commentaire, fichier) 
-                          VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)''',
-                       (titre, sites, action_entreprise, date_ouverture, date_fin, operateur, echeance, etages, affecte_a, priorite, acces, ouvert_par, description, status, categorie, famille, commentaire, fichier_nom))
-        mysql.connection.commit()
-        cursor.close()
+        db.session.add(nouvelle_reclamation)
+        db.session.commit()
 
         return redirect(url_for('reclamation'))
 
     return render_template('reclamation.html')
-
 
 @app.route('/historique', methods=['GET'])
 def historique():
@@ -121,35 +150,21 @@ def historique():
     date_fin = request.args.get('date_fin')
     status = request.args.get('status')
 
-    cursor = mysql.connection.cursor()
-
-    query = "SELECT * FROM reclamation WHERE 1=1"
-    params = []
+    query = Reclamation.query
 
     if categorie:
-        query += " AND categorie LIKE %s"
-        params.append(f"%{categorie}%")
+        query = query.filter(Reclamation.categorie.like(f"%{categorie}%"))
     if date_debut and date_fin:
-        query += " AND date_ouverture BETWEEN %s AND %s"
-        params.append(date_debut)
-        params.append(date_fin)
+        query = query.filter(Reclamation.date_ouverture.between(date_debut, date_fin))
     if status:
-        query += " AND status LIKE %s"
-        params.append(f"%{status}%")
+        query = query.filter(Reclamation.status.like(f"%{status}%"))
 
-    cursor.execute(query, params)
-    results = cursor.fetchall()
-    cursor.close()
+    # Debugging: print the generated SQL query
+    print(str(query.statement.compile(compile_kwargs={"literal_binds": True})))
 
-    if not results:
-        cursor = mysql.connection.cursor()
-        cursor.execute("SELECT * FROM reclamation")
-        results = cursor.fetchall()
-        cursor.close()
+    results = query.all()
 
     return render_template('historique.html', results=results)
-
-
 
 
 @app.route('/update_status', methods=['POST'])
@@ -165,16 +180,14 @@ def update_status():
         current_status_lower = current_status.lower()
         new_status_lower = new_status.lower()
         if not (current_status_lower == 'inactif' and new_status_lower == 'actif'):
-            cursor = mysql.connection.cursor()
-            cursor.execute('UPDATE reclamation SET status = %s WHERE id = %s', (new_status, record_id))
-            mysql.connection.commit()
-            cursor.close()
+            reclamation = Reclamation.query.get(record_id)
+            reclamation.status = new_status
+            db.session.commit()
             flash('Statut mis à jour avec succès', 'success')
         else:
             flash('Impossible de changer le statut de Inactif à Actif.', 'error')
 
     return redirect(url_for('historique'))
-
 
 @app.route('/update_date_fin', methods=['POST'])
 def update_date_fin():
@@ -185,15 +198,12 @@ def update_date_fin():
     new_date_fin = request.form.get('newDateFin')
 
     if record_id and new_date_fin:
-        cursor = mysql.connection.cursor()
-        cursor.execute('UPDATE reclamation SET date_fin = %s WHERE id = %s', (new_date_fin, record_id))
-        mysql.connection.commit()
-        cursor.close()
+        reclamation = Reclamation.query.get(record_id)
+        reclamation.date_fin = new_date_fin
+        db.session.commit()
         flash('Date de fin mise à jour avec succès', 'success')
 
     return redirect(url_for('historique'))
-
-
 
 @app.route('/export', methods=['GET'])
 def export():
@@ -204,27 +214,16 @@ def export():
     date = request.args.get('date')
     status = request.args.get('status')
 
-    query = """
-    SELECT id, titre, sites, action_entreprise, date_ouverture, date_fin, operateur, echeance, etages, affecte_a,
-           priorite, acces, ouvert_par, description, status, categorie, famille, commentaire, fichier
-    FROM reclamation WHERE 1=1
-    """
-    params = []
+    query = Reclamation.query
 
     if categorie:
-        query += " AND categorie LIKE %s"
-        params.append(f"%{categorie}%")
+        query = query.filter(Reclamation.categorie.like(f"%{categorie}%"))
     if date:
-        query += " AND date_ouverture = %s"
-        params.append(date)
+        query = query.filter(Reclamation.date_ouverture == date)
     if status:
-        query += " AND status LIKE %s"
-        params.append(f"%{status}%")
+        query = query.filter(Reclamation.status.like(f"%{status}%"))
 
-    cursor = mysql.connection.cursor()
-    cursor.execute(query, params)
-    results = cursor.fetchall()
-    cursor.close()
+    results = query.all()
 
     if not results:
         flash("Le tableau est vide, vous ne pouvez pas exporter de données.", "error")
@@ -234,7 +233,9 @@ def export():
         columns = ['ID', 'Titre', 'Sites', 'Action Entreprise', 'Date Ouverture', 'Date Fin', 'Opérateur', 'Échéance', 
                    'Étages', 'Affecté À', 'Priorité', 'Accès', 'Ouvert Par', 'Description', 'Status', 'Catégorie', 
                    'Famille', 'Commentaire', 'Fichier']
-        df = pd.DataFrame(results, columns=columns)
+        df = pd.DataFrame([(r.id, r.titre, r.sites, r.action_entreprise, r.date_ouverture, r.date_fin, r.operateur, r.echeance, 
+                            r.etages, r.affecte_a, r.priorite, r.acces, r.ouvert_par, r.description, r.status, r.categorie, 
+                            r.famille, r.commentaire, r.fichier) for r in results], columns=columns)
         output = BytesIO()
         with pd.ExcelWriter(output, engine='openpyxl') as writer:
             df.to_excel(writer, index=False, sheet_name='Reclamations')
@@ -253,17 +254,31 @@ def export():
         output.seek(0)
         return send_file(output, download_name='reclamations.xlsx', as_attachment=True)
 
-
-
 @app.route('/all_reclamations', methods=['GET'])
 def all_reclamations():
-    cursor = mysql.connection.cursor()
-    cursor.execute("SELECT * FROM reclamation")
-    results = cursor.fetchall()
-    cursor.close()
+    reclamations = Reclamation.query.all()
+    results = [{
+        'id': r.id,
+        'titre': r.titre,
+        'sites': r.sites,
+        'action_entreprise': r.action_entreprise,
+        'date_ouverture': r.date_ouverture,
+        'date_fin': r.date_fin,
+        'operateur': r.operateur,
+        'echeance': r.echeance,
+        'etages': r.etages,
+        'affecte_a': r.affecte_a,
+        'priorite': r.priorite,
+        'acces': r.acces,
+        'ouvert_par': r.ouvert_par,
+        'description': r.description,
+        'status': r.status,
+        'categorie': r.categorie,
+        'famille': r.famille,
+        'commentaire': r.commentaire,
+        'fichier': r.fichier
+    } for r in reclamations]
     return jsonify(results)
-
-
 
 @app.route('/logout')
 def logout():
