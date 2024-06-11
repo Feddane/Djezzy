@@ -44,6 +44,14 @@ class Reclamation(db.Model):
     commentaire = db.Column(db.Text)
     fichier = db.Column(db.String(200))
 
+class User(db.Model):
+    __tablename__ = 'table_users'
+    id = db.Column(db.Integer, primary_key=True)
+    first_name = db.Column(db.String(150), nullable=False)
+    last_name = db.Column(db.String(150), nullable=False)
+    email = db.Column(db.String(150), unique=True, nullable=False)
+    password = db.Column(db.String(150), nullable=False)
+
 @app.route('/', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
@@ -282,6 +290,31 @@ def all_reclamations():
         'fichier': r.fichier
     } for r in reclamations]
     return jsonify(results)
+
+
+@app.route('/creer_user', methods=['GET', 'POST'])
+def creer_user():
+    if request.method == 'POST':
+        first_name = request.form['first_name']
+        last_name = request.form['last_name']
+        email = request.form['email']
+        password = request.form['password']
+
+
+        new_user = User(first_name=first_name, last_name=last_name, email=email, password=password)
+
+        try:
+            db.session.add(new_user)
+            db.session.commit()
+            flash('Utilisateur créé avec succès!', 'success')
+        except Exception as e:
+            db.session.rollback()
+            flash('Erreur lors de la création de l\'utilisateur. Veuillez réessayer.', 'danger')
+
+        return redirect(url_for('creer_user'))
+
+    return render_template('creer_user.html')
+
 
 @app.route('/logout')
 def logout():
