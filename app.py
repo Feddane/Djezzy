@@ -159,8 +159,8 @@ def historique():
     if status:
         query = query.filter(Reclamation.status.like(f"%{status}%"))
 
-    # Debugging: print the generated SQL query
-    print(str(query.statement.compile(compile_kwargs={"literal_binds": True})))
+    # Tri par ID
+    query = query.order_by(Reclamation.id)
 
     results = query.all()
 
@@ -256,16 +256,19 @@ def export():
 
 @app.route('/all_reclamations', methods=['GET'])
 def all_reclamations():
-    reclamations = Reclamation.query.all()
+    if 'username' not in session:
+        return jsonify({'error': 'Unauthorized'}), 401
+
+    reclamations = Reclamation.query.order_by(Reclamation.id).all()
     results = [{
         'id': r.id,
         'titre': r.titre,
         'sites': r.sites,
         'action_entreprise': r.action_entreprise,
-        'date_ouverture': r.date_ouverture,
-        'date_fin': r.date_fin,
+        'date_ouverture': r.date_ouverture.strftime('%Y-%m-%d'),
+        'date_fin': r.date_fin.strftime('%Y-%m-%d'),
         'operateur': r.operateur,
-        'echeance': r.echeance,
+        'echeance': r.echeance.strftime('%Y-%m-%d'),
         'etages': r.etages,
         'affecte_a': r.affecte_a,
         'priorite': r.priorite,

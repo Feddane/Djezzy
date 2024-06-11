@@ -160,42 +160,47 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     /****************refresh button *******************************/
-    const refreshButton = document.getElementById('refreshButton');
-
-    refreshButton.addEventListener('click', function() {
+    document.getElementById('refreshButton').addEventListener('click', function() {
         fetch('/all_reclamations')
             .then(response => response.json())
             .then(data => {
-                const tbody = document.querySelector('tbody');
-                tbody.innerHTML = '';
-                if (data.length > 0) {
-                    data.forEach(row => {
-                        const tr = document.createElement('tr');
-                        Object.values(row).forEach((value, index) => {
-                            const td = document.createElement('td');
-                            if (index === 4 || index === 5 || index === 7) {
-                                const date = new Date(value);
-                                const formattedDate = date.toISOString().slice(0, 10);
-                                td.textContent = formattedDate;
-                            } else {
-                                td.textContent = value;
-                            }
-                            tr.appendChild(td);
-                        });
-                        tbody.appendChild(tr);
-                    });
-                } else {
-                    const noResultsRow = document.createElement('tr');
-                    const noResultsCell = document.createElement('td');
-                    noResultsCell.setAttribute('colspan', '19');
-                    noResultsCell.textContent = 'Aucun résultat trouvé';
-                    noResultsRow.appendChild(noResultsCell);
-                    tbody.appendChild(noResultsRow);
-                }
-            })
-            .catch(error => console.error('Error fetching data:', error));
-    });    
+                data.sort((a, b) => a.id - b.id);
     
+                let tbody = document.querySelector('table tbody');
+                
+                tbody.innerHTML = '';
+    
+                data.forEach(reclamation => {
+                    let newRow = document.createElement('tr');
+
+                    newRow.innerHTML = `
+                        <td>${reclamation.id}</td>
+                        <td>${reclamation.titre}</td>
+                        <td>${reclamation.sites}</td>
+                        <td>${reclamation.action_entreprise}</td>
+                        <td>${reclamation.date_ouverture}</td>
+                        <td>${reclamation.date_fin}</td>
+                        <td>${reclamation.operateur}</td>
+                        <td>${reclamation.echeance}</td>
+                        <td>${reclamation.etages}</td>
+                        <td>${reclamation.affecte_a}</td>
+                        <td>${reclamation.priorite}</td>
+                        <td>${reclamation.acces}</td>
+                        <td>${reclamation.ouvert_par}</td>
+                        <td>${reclamation.description}</td>
+                        <td>${reclamation.status}</td>
+                        <td>${reclamation.categorie}</td>
+                        <td>${reclamation.famille}</td>
+                        <td>${reclamation.commentaire}</td>
+                        <td>${reclamation.fichier}</td>
+                    `;
+
+                    tbody.appendChild(newRow);
+                });
+            })
+            .catch(error => console.error('Erreur lors du rafraîchissement des réclamations:', error));
+    });
+
 
     /****************ouvre le tableau dans une nouvelle fenetre */
     const table = document.querySelector('table');
