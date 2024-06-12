@@ -93,7 +93,7 @@ def select_role():
         flash('Rôle non valide', 'error')
         return redirect(url_for('home'))
 
-
+#all about USER
 @app.route('/login_user', methods=['GET', 'POST'])
 def login_user():
     if request.method == 'POST':
@@ -196,6 +196,88 @@ def historique_user():
 
     return render_template('historique_user.html', results=results)
 
+@app.route('/all_reclamations_user', methods=['GET'])
+def all_reclamations_user():
+    if 'username' not in session:
+        return jsonify({'error': 'Unauthorized'}), 401
+
+    reclamations = ReclamationUser.query.order_by(ReclamationUser.id).all()
+    results = [{
+        'id': r.id,
+        'titre': r.titre,
+        'sites': r.sites,
+        'action_entreprise': r.action_entreprise,
+        'date_ouverture': r.date_ouverture.strftime('%Y-%m-%d'),
+        'date_fin': r.date_fin.strftime('%Y-%m-%d'),
+        'operateur': r.operateur,
+        'echeance': r.echeance.strftime('%Y-%m-%d'),
+        'etages': r.etages,
+        'affecte_a': r.affecte_a,
+        'priorite': r.priorite,
+        'acces': r.acces,
+        'ouvert_par': r.ouvert_par,
+        'description': r.description,
+        'status': r.status,
+        'categorie': r.categorie,
+        'famille': r.famille,
+        'commentaire': r.commentaire,
+        'fichier': r.fichier
+    } for r in reclamations]
+    return jsonify(results)
+
+
+
+@app.route('/export_user', methods=['GET'])
+def export_user():
+    if 'username' not in session:
+        return redirect(url_for('login_user'))
+
+    categorie = request.args.get('categorie')
+    date = request.args.get('date')
+    status = request.args.get('status')
+
+    query = ReclamationUser.query
+
+    if categorie:
+        query = query.filter(ReclamationUser.categorie.like(f"%{categorie}%"))
+    if date:
+        query = query.filter(ReclamationUser.date_ouverture == date)
+    if status:
+        query = query.filter(ReclamationUser.status.like(f"%{status}%"))
+
+    results = query.all()
+
+    if not results:
+        flash("Le tableau est vide, vous ne pouvez pas exporter de données.", "error")
+        return redirect(url_for('historique_user', categorie=categorie, date=date, status=status))
+
+    else:
+        columns = ['ID', 'Titre', 'Sites', 'Action Entreprise', 'Date Ouverture', 'Date Fin', 'Opérateur', 'Échéance', 
+                   'Étages', 'Affecté À', 'Priorité', 'Accès', 'Ouvert Par', 'Description', 'Status', 'Catégorie', 
+                   'Famille', 'Commentaire', 'Fichier']
+        df = pd.DataFrame([(r.id, r.titre, r.sites, r.action_entreprise, r.date_ouverture, r.date_fin, r.operateur, r.echeance, 
+                            r.etages, r.affecte_a, r.priorite, r.acces, r.ouvert_par, r.description, r.status, r.categorie, 
+                            r.famille, r.commentaire, r.fichier) for r in results], columns=columns)
+        output = BytesIO()
+        with pd.ExcelWriter(output, engine='openpyxl') as writer:
+            df.to_excel(writer, index=False, sheet_name='Reclamations')
+            worksheet = writer.sheets['Reclamations']
+            for col in worksheet.columns:
+                max_length = 0
+                column = col[0].column_letter
+                for cell in col:
+                    try:
+                        if len(str(cell.value)) > max_length:
+                            max_length = len(str(cell.value))
+                    except:
+                        pass
+                adjusted_width = (max_length + 2)
+                worksheet.column_dimensions[column].width = adjusted_width
+        output.seek(0)
+        return send_file(output, download_name='reclamations.xlsx', as_attachment=True)
+
+
+#all about ADMIN
 @app.route('/login_admin', methods=['GET', 'POST'])
 def login_admin():
     if request.method == 'POST':
@@ -435,85 +517,6 @@ def all_reclamations():
     } for r in reclamations]
     return jsonify(results)
 
-@app.route('/all_reclamations_user', methods=['GET'])
-def all_reclamations_user():
-    if 'username' not in session:
-        return jsonify({'error': 'Unauthorized'}), 401
-
-    reclamations = ReclamationUser.query.order_by(ReclamationUser.id).all()
-    results = [{
-        'id': r.id,
-        'titre': r.titre,
-        'sites': r.sites,
-        'action_entreprise': r.action_entreprise,
-        'date_ouverture': r.date_ouverture.strftime('%Y-%m-%d'),
-        'date_fin': r.date_fin.strftime('%Y-%m-%d'),
-        'operateur': r.operateur,
-        'echeance': r.echeance.strftime('%Y-%m-%d'),
-        'etages': r.etages,
-        'affecte_a': r.affecte_a,
-        'priorite': r.priorite,
-        'acces': r.acces,
-        'ouvert_par': r.ouvert_par,
-        'description': r.description,
-        'status': r.status,
-        'categorie': r.categorie,
-        'famille': r.famille,
-        'commentaire': r.commentaire,
-        'fichier': r.fichier
-    } for r in reclamations]
-    return jsonify(results)
-
-
-
-@app.route('/export_user', methods=['GET'])
-def export_user():
-    if 'username' not in session:
-        return redirect(url_for('login_user'))
-
-    categorie = request.args.get('categorie')
-    date = request.args.get('date')
-    status = request.args.get('status')
-
-    query = ReclamationUser.query
-
-    if categorie:
-        query = query.filter(ReclamationUser.categorie.like(f"%{categorie}%"))
-    if date:
-        query = query.filter(ReclamationUser.date_ouverture == date)
-    if status:
-        query = query.filter(ReclamationUser.status.like(f"%{status}%"))
-
-    results = query.all()
-
-    if not results:
-        flash("Le tableau est vide, vous ne pouvez pas exporter de données.", "error")
-        return redirect(url_for('historique_user', categorie=categorie, date=date, status=status))
-
-    else:
-        columns = ['ID', 'Titre', 'Sites', 'Action Entreprise', 'Date Ouverture', 'Date Fin', 'Opérateur', 'Échéance', 
-                   'Étages', 'Affecté À', 'Priorité', 'Accès', 'Ouvert Par', 'Description', 'Status', 'Catégorie', 
-                   'Famille', 'Commentaire', 'Fichier']
-        df = pd.DataFrame([(r.id, r.titre, r.sites, r.action_entreprise, r.date_ouverture, r.date_fin, r.operateur, r.echeance, 
-                            r.etages, r.affecte_a, r.priorite, r.acces, r.ouvert_par, r.description, r.status, r.categorie, 
-                            r.famille, r.commentaire, r.fichier) for r in results], columns=columns)
-        output = BytesIO()
-        with pd.ExcelWriter(output, engine='openpyxl') as writer:
-            df.to_excel(writer, index=False, sheet_name='Reclamations')
-            worksheet = writer.sheets['Reclamations']
-            for col in worksheet.columns:
-                max_length = 0
-                column = col[0].column_letter
-                for cell in col:
-                    try:
-                        if len(str(cell.value)) > max_length:
-                            max_length = len(str(cell.value))
-                    except:
-                        pass
-                adjusted_width = (max_length + 2)
-                worksheet.column_dimensions[column].width = adjusted_width
-        output.seek(0)
-        return send_file(output, download_name='reclamations.xlsx', as_attachment=True)
 
 @app.route('/creer_user', methods=['GET', 'POST'])
 def creer_user():
