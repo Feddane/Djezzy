@@ -435,6 +435,36 @@ def all_reclamations():
     } for r in reclamations]
     return jsonify(results)
 
+@app.route('/all_reclamations_user', methods=['GET'])
+def all_reclamations_user():
+    if 'username' not in session:
+        return jsonify({'error': 'Unauthorized'}), 401
+
+    reclamations = ReclamationUser.query.order_by(ReclamationUser.id).all()
+    results = [{
+        'id': r.id,
+        'titre': r.titre,
+        'sites': r.sites,
+        'action_entreprise': r.action_entreprise,
+        'date_ouverture': r.date_ouverture.strftime('%Y-%m-%d'),
+        'date_fin': r.date_fin.strftime('%Y-%m-%d'),
+        'operateur': r.operateur,
+        'echeance': r.echeance.strftime('%Y-%m-%d'),
+        'etages': r.etages,
+        'affecte_a': r.affecte_a,
+        'priorite': r.priorite,
+        'acces': r.acces,
+        'ouvert_par': r.ouvert_par,
+        'description': r.description,
+        'status': r.status,
+        'categorie': r.categorie,
+        'famille': r.famille,
+        'commentaire': r.commentaire,
+        'fichier': r.fichier
+    } for r in reclamations]
+    return jsonify(results)
+
+
 
 @app.route('/export_user', methods=['GET'])
 def export_user():

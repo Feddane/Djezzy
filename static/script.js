@@ -202,6 +202,50 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
 
+    /************************Refresh button users *************/
+    document.getElementById('refreshButton').addEventListener('click', function() {
+        fetch('/all_reclamations_user')
+            .then(response => response.json())
+            .then(data => {
+                data.sort((a, b) => a.id - b.id);
+    
+                let tbody = document.querySelector('table tbody');
+                
+                tbody.innerHTML = '';
+    
+                data.forEach(reclamation => {
+                    let newRow = document.createElement('tr');
+    
+                    newRow.innerHTML = `
+                        <td>${reclamation.id}</td>
+                        <td>${reclamation.titre}</td>
+                        <td>${reclamation.sites}</td>
+                        <td>${reclamation.action_entreprise}</td>
+                        <td>${reclamation.date_ouverture}</td>
+                        <td>${reclamation.date_fin}</td>
+                        <td>${reclamation.operateur}</td>
+                        <td>${reclamation.echeance}</td>
+                        <td>${reclamation.etages}</td>
+                        <td>${reclamation.affecte_a}</td>
+                        <td>${reclamation.priorite}</td>
+                        <td>${reclamation.acces}</td>
+                        <td>${reclamation.ouvert_par}</td>
+                        <td>${reclamation.description}</td>
+                        <td>${reclamation.status}</td>
+                        <td>${reclamation.categorie}</td>
+                        <td>${reclamation.famille}</td>
+                        <td>${reclamation.commentaire}</td>
+                        <td>${reclamation.fichier}</td>
+                    `;
+    
+                    tbody.appendChild(newRow);
+                });
+            })
+            .catch(error => console.error('Erreur lors du rafraîchissement des réclamations:', error));
+    });
+    
+
+
     /****************ouvre le tableau dans une nouvelle fenetre */
     const table = document.querySelector('table');
 
