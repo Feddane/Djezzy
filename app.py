@@ -74,6 +74,12 @@ class ReclamationUser(db.Model):
     commentaire = db.Column(db.Text)
     fichier = db.Column(db.String(200))
 
+class Superviseur(db.Model):
+    __tablename__ = 'table_superviseur'
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(150), nullable=False)
+    password = db.Column(db.String(150), nullable=False)
+
 
 @app.route('/')
 def home():
@@ -105,7 +111,7 @@ def login_user():
         user = User.query.filter_by(first_name=first_name, last_name=last_name, email=email, password=password).first()
 
         if user:
-            
+
             session['username'] = user.first_name
             return redirect(url_for('reclamation_user'))
         else:
@@ -562,6 +568,27 @@ def creer_user():
         return redirect(url_for('creer_user'))
 
     return render_template('creer_user.html')
+
+
+@app.route('/creer_superviseur', methods=['GET', 'POST'])
+def creer_superviseur():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+
+        new_user = Superviseur(username=username, password=password)
+
+        try:
+            db.session.add(new_user)
+            db.session.commit()
+            flash('Superviseur créé avec succès!', 'success')
+        except Exception as e:
+            db.session.rollback()
+            flash('Erreur lors de la création de superviseur. Veuillez réessayer.', 'danger')
+
+        return redirect(url_for('creer_superviseur'))
+
+    return render_template('creer_superviseur.html')
 
 
 @app.route('/logout')
