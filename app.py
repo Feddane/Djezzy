@@ -192,7 +192,7 @@ def historique_user():
     if status:
         query = query.filter(ReclamationUser.status.like(f"%{status}%"))
 
-    # Tri par ID
+
     query = query.order_by(ReclamationUser.id)
 
     results = query.all()
@@ -278,44 +278,8 @@ def export_user():
                 worksheet.column_dimensions[column].width = adjusted_width
         output.seek(0)
         return send_file(output, download_name='reclamations.xlsx', as_attachment=True)
-    
-@app.route('/update_status_user', methods=['POST'])
-def update_status_user():
-    if 'username' not in session:
-        return redirect(url_for('login_user'))
 
-    record_id = request.form.get('recordId')
-    new_status = request.form.get('newStatus')
-    current_status = request.form.get('currentStatus')
 
-    if record_id and new_status and current_status:
-        current_status_lower = current_status.lower()
-        new_status_lower = new_status.lower()
-        if not (current_status_lower == 'inactif' and new_status_lower == 'actif'):
-            reclamation = ReclamationUser.query.get(record_id)
-            reclamation.status = new_status
-            db.session.commit()
-            flash('Statut mis à jour avec succès', 'success')
-        else:
-            flash('Impossible de changer le statut de Inactif à Actif.', 'error')
-
-    return redirect(url_for('historique_user'))
-
-@app.route('/update_date_fin_user', methods=['POST'])
-def update_date_fin_user():
-    if 'username' not in session:
-        return redirect(url_for('login_user'))
-
-    record_id = request.form.get('recordId')
-    new_date_fin = request.form.get('newDateFin')
-
-    if record_id and new_date_fin:
-        reclamation = ReclamationUser.query.get(record_id)
-        reclamation.date_fin = new_date_fin
-        db.session.commit()
-        flash('Date de fin mise à jour avec succès', 'success')
-
-    return redirect(url_for('historique_user'))
 
 
 #all about ADMIN
@@ -445,7 +409,7 @@ def historique():
 @app.route('/update_status', methods=['POST'])
 def update_status():
     if 'username' not in session:
-        return redirect(url_for('login_admin'))
+        return redirect(url_for('login'))
 
     record_id = request.form.get('recordId')
     new_status = request.form.get('newStatus')
@@ -455,30 +419,47 @@ def update_status():
         current_status_lower = current_status.lower()
         new_status_lower = new_status.lower()
         if not (current_status_lower == 'inactif' and new_status_lower == 'actif'):
-            reclamation = Reclamation.query.get(record_id)
+
+            if 'historique_user' in request.referrer:
+                reclamation = ReclamationUser.query.get(record_id)
+            else:
+                reclamation = Reclamation.query.get(record_id)
             reclamation.status = new_status
             db.session.commit()
             flash('Statut mis à jour avec succès', 'success')
         else:
             flash('Impossible de changer le statut de Inactif à Actif.', 'error')
 
-    return redirect(url_for('historique'))
+
+    if 'historique_user' in request.referrer:
+        return redirect(url_for('historique_user'))
+    else:
+        return redirect(url_for('historique'))
 
 @app.route('/update_date_fin', methods=['POST'])
 def update_date_fin():
     if 'username' not in session:
-        return redirect(url_for('login_admin'))
+        return redirect(url_for('login'))
 
     record_id = request.form.get('recordId')
     new_date_fin = request.form.get('newDateFin')
 
     if record_id and new_date_fin:
-        reclamation = Reclamation.query.get(record_id)
+
+        if 'historique_user' in request.referrer:
+            reclamation = ReclamationUser.query.get(record_id)
+        else:
+            reclamation = Reclamation.query.get(record_id)
         reclamation.date_fin = new_date_fin
         db.session.commit()
         flash('Date de fin mise à jour avec succès', 'success')
 
-    return redirect(url_for('historique'))
+
+    if 'historique_user' in request.referrer:
+        return redirect(url_for('historique_user'))
+    else:
+        return redirect(url_for('historique'))
+
 
 @app.route('/export', methods=['GET'])
 def export():

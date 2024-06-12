@@ -161,7 +161,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     /****************refresh button *******************************/
     document.getElementById('refreshButton').addEventListener('click', function() {
-        // Vérifier si vous êtes dans la page historique ou historique_users
+
         const currentPage = window.location.pathname;
 
         let fetchUrl;
