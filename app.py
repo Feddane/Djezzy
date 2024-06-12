@@ -105,11 +105,14 @@ def login_user():
         user = User.query.filter_by(first_name=first_name, last_name=last_name, email=email, password=password).first()
 
         if user:
+            
+            session['username'] = user.first_name
             return redirect(url_for('reclamation_user'))
         else:
             flash('Les coordonnées sont incorrectes. Veuillez réessayer.', 'danger')
 
     return render_template('user_dashboard.html')
+
 
 @app.route('/reclamation_user', methods=['GET', 'POST'])
 def reclamation_user():
@@ -275,6 +278,44 @@ def export_user():
                 worksheet.column_dimensions[column].width = adjusted_width
         output.seek(0)
         return send_file(output, download_name='reclamations.xlsx', as_attachment=True)
+    
+@app.route('/update_status_user', methods=['POST'])
+def update_status_user():
+    if 'username' not in session:
+        return redirect(url_for('login_user'))
+
+    record_id = request.form.get('recordId')
+    new_status = request.form.get('newStatus')
+    current_status = request.form.get('currentStatus')
+
+    if record_id and new_status and current_status:
+        current_status_lower = current_status.lower()
+        new_status_lower = new_status.lower()
+        if not (current_status_lower == 'inactif' and new_status_lower == 'actif'):
+            reclamation = ReclamationUser.query.get(record_id)
+            reclamation.status = new_status
+            db.session.commit()
+            flash('Statut mis à jour avec succès', 'success')
+        else:
+            flash('Impossible de changer le statut de Inactif à Actif.', 'error')
+
+    return redirect(url_for('historique_user'))
+
+@app.route('/update_date_fin_user', methods=['POST'])
+def update_date_fin_user():
+    if 'username' not in session:
+        return redirect(url_for('login_user'))
+
+    record_id = request.form.get('recordId')
+    new_date_fin = request.form.get('newDateFin')
+
+    if record_id and new_date_fin:
+        reclamation = ReclamationUser.query.get(record_id)
+        reclamation.date_fin = new_date_fin
+        db.session.commit()
+        flash('Date de fin mise à jour avec succès', 'success')
+
+    return redirect(url_for('historique_user'))
 
 
 #all about ADMIN
@@ -545,7 +586,7 @@ def creer_user():
 @app.route('/logout')
 def logout():
     session.pop('username', None)
-    return redirect(url_for('login_admin'))
+    return redirect(url_for('home'))
 
 if __name__ == '__main__':
     app.run(debug=True)
