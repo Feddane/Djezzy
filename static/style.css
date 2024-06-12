@@ -84,6 +84,7 @@ img{
     flex-direction: column;
     position: relative;
     padding: 0 10px 0 10px;
+    margin-bottom: 20px;
 }
 
 .input{
@@ -722,3 +723,18 @@ th {
     border-radius: 5px;
     cursor: pointer;
 }
+
+
+/*******************Dashboard****************/
+
+.input-box p{
+    font-size: 18px;
+    font-weight: bold;
+    text-align: center;
+    margin-top: 20px;
+}
+
+
+
+
+

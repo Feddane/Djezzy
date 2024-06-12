@@ -52,7 +52,28 @@ class User(db.Model):
     email = db.Column(db.String(150), unique=True, nullable=False)
     password = db.Column(db.String(150), nullable=False)
 
-@app.route('/', methods=['GET', 'POST'])
+
+@app.route('/')
+def home():
+    return render_template('dashboard.html')
+
+@app.route('/select_role', methods=['POST'])
+def select_role():
+    role = request.form.get('role')
+    if role == 'admin':
+        return redirect(url_for('login_admin'))
+    elif role == 'superviseur':
+        # Define what should happen for the superviseur role
+        pass
+    elif role == 'utilisateur':
+        # Define what should happen for the utilisateur role
+        pass
+    else:
+        flash('Rôle non valide', 'error')
+        return redirect(url_for('home'))
+
+
+@app.route('/login_admin', methods=['GET', 'POST'])
 def login_admin():
     if request.method == 'POST':
         username = request.form['username']
