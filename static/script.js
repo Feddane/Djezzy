@@ -165,7 +165,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const currentPage = window.location.pathname;
 
         let fetchUrl;
-        if (currentPage === '/historique') {
+        if (currentPage === '/historique' || currentPage === '/historique_supervisor') {
             fetchUrl = '/all_reclamations';
         } else if (currentPage === '/historique_user') {
             fetchUrl = '/all_reclamations_user';
