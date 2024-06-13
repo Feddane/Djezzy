@@ -184,11 +184,11 @@ def historique_supervisor():
     query = Reclamation.query
 
     if categorie:
-        query = query.filter(Reclamation.categorie.like(f"%{categorie}%"))
+        query = query.filter(Reclamation.categorie.ilike(f"%{categorie}%"))
     if date_debut and date_fin:
         query = query.filter(Reclamation.date_ouverture.between(date_debut, date_fin))
     if status:
-        query = query.filter(Reclamation.status.like(f"%{status}%"))
+        query = query.filter(Reclamation.status.ilike(f"%{status}%"))
 
 
     query = query.order_by(Reclamation.id)
@@ -292,11 +292,11 @@ def historique_user():
     query = ReclamationUser.query
 
     if categorie:
-        query = query.filter(ReclamationUser.categorie.like(f"%{categorie}%"))
+        query = query.filter(ReclamationUser.categorie.ilike(f"%{categorie}%"))
     if date_debut and date_fin:
         query = query.filter(ReclamationUser.date_ouverture.between(date_debut, date_fin))
     if status:
-        query = query.filter(ReclamationUser.status.like(f"%{status}%"))
+        query = query.filter(ReclamationUser.status.ilike(f"%{status}%"))
 
 
     query = query.order_by(ReclamationUser.id)
@@ -498,12 +498,11 @@ def historique():
     query = Reclamation.query
 
     if categorie:
-        query = query.filter(Reclamation.categorie.like(f"%{categorie}%"))
+        query = query.filter(Reclamation.categorie.ilike(f"%{categorie}%"))
     if date_debut and date_fin:
         query = query.filter(Reclamation.date_ouverture.between(date_debut, date_fin))
     if status:
-        query = query.filter(Reclamation.status.like(f"%{status}%"))
-
+        query = query.filter(Reclamation.status.ilike(f"%{status}%"))
 
     query = query.order_by(Reclamation.id)
 
