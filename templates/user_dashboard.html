@@ -24,7 +24,7 @@
                         <!-- Flash messages -->
                         {% with messages = get_flashed_messages(with_categories=true) %}
                             {% if messages %}
-                                <div class="alert alert-warning" role="alert">
+                                <div class="alert alert-warning" role="alert" style="padding: 8px; margin-bottom: 2px;">
                                     {% for category, message in messages %}
                                         <p class="{{ category }}">{{ message }}</p>
                                     {% endfor %}

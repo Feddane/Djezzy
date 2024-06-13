@@ -227,7 +227,7 @@ def login_user():
             session['username'] = user.first_name
             return redirect(url_for('reclamation_user'))
         else:
-            flash('Les coordonnées sont incorrectes. Veuillez réessayer.', 'danger')
+            flash('Coordonnées Incorrectes!', 'danger')
 
     return render_template('user_dashboard.html')
 
