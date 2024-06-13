@@ -197,6 +197,18 @@ def historique_supervisor():
 
     return render_template('historique_supervisor.html', results=results)
 
+@app.route('/statistique', methods=['GET'])
+def statistique():
+    if 'username' not in session:
+        return redirect(url_for('login_admin'))
+
+    # Exemple de récupération des statistiques
+    actifs_count = 10
+    incidents_count = 3751
+    categories_count = 16
+
+    return render_template('statistique.html', actifs_count=actifs_count, incidents_count=incidents_count, categories_count=categories_count)
+
 
 
 #all about USER

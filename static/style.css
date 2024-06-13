@@ -286,7 +286,7 @@ span a:hover{
 .header-actions {
     display: flex;
     margin-right: 110px;
-    margin-top: 50px;
+    margin-top: 30px;
 }
 
 .header-actions img {
@@ -728,8 +728,84 @@ th {
 /*******************Dashboard****************/
 
 
+/*******************statistiques****************/
+.stats-container {
+    margin-top: 50px;
+    display: flex;
+    justify-content: space-around;
+    padding: 20px;
+  }
+  
+  .stat {
+    display: flex;
+    align-items: center;
+    background: #f4f4f4;
+    padding: 20px;
+    border-radius: 8px;
+  }
+  
+  .stat span {
+    font-size: 40px;
+    margin-right: 10px;
+  }
+  
+  .stat div {
+    text-align: left;
+  }
+  
+  .stat h3 {
+    margin: 0;
+    font-size: 18px;
+  }
+  
+  .stat p {
+    margin: 0;
+    font-size: 24px;
+  }
+  
 
+  .additional-stats-container {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+  }
+  
+  .additional-stat {
+    flex: 1;
+    margin-right: 350px;
+    padding: 20px;
+  }
+  
+  .additional-stat:last-child {
+    margin-right: 0;
+  }
+  
+  .additional-stat h3 {
+    margin-bottom: 20px;
+    font-size: 1.2em;
+    color: #333;
+  }
+  
 
+  .header-actions .filters {
+    display: flex;
+    gap: 20px;
+    margin-right: auto;
+}
 
+.header-actions .filter {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.header-actions label {
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.header-actions select {
+    font-size: 1em;
+}
 
 
