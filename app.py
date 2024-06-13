@@ -98,7 +98,7 @@ def select_role():
     else:
         flash('Rôle non valide', 'error')
         return redirect(url_for('home'))
-    
+
 #all about SUPERVISOR
 @app.route('/login_supervisor', methods=['GET', 'POST'])
 def login_supervisor():
@@ -170,6 +170,33 @@ def reclamation_supervisor():
         return redirect(url_for('reclamation_supervisor'))
 
     return render_template('reclamation_supervisor.html')
+
+@app.route('/historique_supervisor', methods=['GET'])
+def historique_supervisor():
+    if 'username' not in session:
+        return redirect(url_for('login_supervisor'))
+
+    categorie = request.args.get('categorie')
+    date_debut = request.args.get('date_debut')
+    date_fin = request.args.get('date_fin')
+    status = request.args.get('status')
+
+    query = Reclamation.query
+
+    if categorie:
+        query = query.filter(Reclamation.categorie.like(f"%{categorie}%"))
+    if date_debut and date_fin:
+        query = query.filter(Reclamation.date_ouverture.between(date_debut, date_fin))
+    if status:
+        query = query.filter(Reclamation.status.like(f"%{status}%"))
+
+
+    query = query.order_by(Reclamation.id)
+
+    results = query.all()
+
+    return render_template('historique_supervisor.html', results=results)
+
 
 
 #all about USER
@@ -477,7 +504,7 @@ def historique():
     if status:
         query = query.filter(Reclamation.status.like(f"%{status}%"))
 
-    # Tri par ID
+
     query = query.order_by(Reclamation.id)
 
     results = query.all()
