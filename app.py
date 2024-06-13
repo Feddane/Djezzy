@@ -91,13 +91,28 @@ def select_role():
     if role == 'admin':
         return redirect(url_for('login_admin'))
     elif role == 'superviseur':
-        # Define what should happen for the superviseur role
+        return redirect(url_for('login_supervisor'))
         pass
     elif role == 'utilisateur':
         return redirect(url_for('login_user'))
     else:
         flash('Rôle non valide', 'error')
         return redirect(url_for('home'))
+    
+#all about SUPERVISOR
+@app.route('/login_supervisor', methods=['GET', 'POST'])
+def login_supervisor():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        supervisor = Superviseur.query.filter_by(username=username, password=password).first()
+        if supervisor:
+            session['username'] = username
+            return redirect(url_for('reclamation'))
+        else:
+            flash('Nom d\'utilisateur ou mot de passe incorrect', 'error')
+    return render_template('supervisor_dashboard.html')
+
 
 #all about USER
 @app.route('/login_user', methods=['GET', 'POST'])
