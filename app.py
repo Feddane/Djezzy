@@ -108,10 +108,68 @@ def login_supervisor():
         supervisor = Superviseur.query.filter_by(username=username, password=password).first()
         if supervisor:
             session['username'] = username
-            return redirect(url_for('reclamation'))
+            return redirect(url_for('reclamation_supervisor'))
         else:
             flash('Nom d\'utilisateur ou mot de passe incorrect', 'error')
     return render_template('supervisor_dashboard.html')
+
+@app.route('/reclamation_supervisor', methods=['GET', 'POST'])
+def reclamation_supervisor():
+    if 'username' not in session:
+        return redirect(url_for('login_supervisor'))
+
+    if request.method == 'POST':
+        titre = request.form.get('titre')
+        sites = request.form.get('sites')
+        action_entreprise = request.form.get('action_entreprise')
+        date_ouverture = request.form.get('date_ouverture')
+        date_fin = request.form.get('date_fin')
+        operateur = request.form.get('operateur')
+        echeance = request.form.get('echeance')
+        etages = request.form.get('etages')
+        affecte_a = request.form.get('affecte_a')
+        priorite = request.form.get('priorite')
+        acces = request.form.get('acces')
+        ouvert_par = request.form.get('ouvert_par')
+        description = request.form.get('description')
+        status = request.form.get('status')
+        categorie = request.form.get('categorie')
+        famille = request.form.get('famille')
+        commentaire = request.form.get('commentaire')
+        fichier = request.files.get('fileUpload')
+
+        fichier_nom = None
+
+        if fichier:
+            fichier_nom = fichier.filename
+
+        nouvelle_reclamation = Reclamation(
+            titre=titre,
+            sites=sites,
+            action_entreprise=action_entreprise,
+            date_ouverture=date_ouverture,
+            date_fin=date_fin,
+            operateur=operateur,
+            echeance=echeance,
+            etages=etages,
+            affecte_a=affecte_a,
+            priorite=priorite,
+            acces=acces,
+            ouvert_par=ouvert_par,
+            description=description,
+            status=status,
+            categorie=categorie,
+            famille=famille,
+            commentaire=commentaire,
+            fichier=fichier_nom
+        )
+
+        db.session.add(nouvelle_reclamation)
+        db.session.commit()
+
+        return redirect(url_for('reclamation_supervisor'))
+
+    return render_template('reclamation_supervisor.html')
 
 
 #all about USER
