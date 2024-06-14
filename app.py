@@ -200,9 +200,8 @@ def historique_supervisor():
 @app.route('/statistique', methods=['GET'])
 def statistique():
     if 'username' not in session:
-        return redirect(url_for('login_admin'))
+        return redirect(url_for('login_supervisor'))
 
-    # Exemple de récupération des statistiques
     actifs_count = 10
     incidents_count = 3751
     categories_count = 16
