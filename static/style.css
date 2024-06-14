@@ -4,6 +4,12 @@
 *{
     font-family: 'Poppins', sans-serif;
 }
+
+body, html {
+    overflow-x: hidden;
+}
+
+
 .wrapper{
     background: #ececec;
     padding: 0 20px 0 20px;
@@ -811,5 +817,45 @@ th {
 .header-actions select {
     font-size: 1em;
 }
+
+
+/*******************Tableau des réclamations****************/
+.custom-table-container {
+    height: 500px;
+    overflow-x: auto;
+    overflow-y: auto;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    width: 45%;
+    margin-left: 40px;
+    margin-top: 50px;
+}
+
+.custom-table-container table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.custom-table-container thead {
+    background-color: #f1f1f1;
+}
+
+.custom-table-container th,
+.custom-table-container td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+    min-width: 100px;
+}
+
+.custom-table-container th {
+    background-color: #f9f9f9;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+}
+
 
 

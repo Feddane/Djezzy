@@ -206,7 +206,10 @@ def statistique():
     incidents_count = 3751
     categories_count = 16
 
-    return render_template('statistique.html', actifs_count=actifs_count, incidents_count=incidents_count, categories_count=categories_count)
+    reclamations = Reclamation.query.order_by((Reclamation.id)).all()
+
+    return render_template('statistique.html', actifs_count=actifs_count, incidents_count=incidents_count, categories_count=categories_count, reclamations=reclamations)
+
 
 
 
