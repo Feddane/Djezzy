@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for, session, flash, send_file, jsonify
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import func
 import pandas as pd
 from io import BytesIO
 import os
@@ -202,8 +203,8 @@ def statistique():
     if 'username' not in session:
         return redirect(url_for('login_supervisor'))
 
-    actifs_count = 10
-    incidents_count = 3751
+    actifs_count = db.session.query(func.count(func.distinct(Reclamation.operateur))).scalar()
+    incidents_count = Reclamation.query.count()
     categories_count = 10
 
     reclamations = Reclamation.query.order_by((Reclamation.id)).all()
