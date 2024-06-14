@@ -783,7 +783,6 @@ th {
 
 
   .additional-stat {
-    
     flex: 1;
     margin-right: 350px;
     padding: 20px;
@@ -801,12 +800,16 @@ th {
   }
 
   .additional-stat-image {
-    width: 100px;
+    width: 100%;
     position: static;
-    top: auto;
-    left: auto;
+    height: auto;
 }
 
+.additional-stat-image2 {
+    width: 100%;
+    position: static;
+    height: 80%;
+}
 
   .header-actions .filters {
     display: flex;
