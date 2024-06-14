@@ -128,88 +128,14 @@
       <div class="additional-stats-container">
         <div class="additional-stat">
           <h3>Nombre d'incidents traités par employé</h3>
-          <!-- Ajoute ici le graphique -->
+          <img class="additional-stat-image" src="{{ url_for('static', filename='image/chart.png') }}" alt="Image 1">
         </div>
         <div class="additional-stat">
           <h3>Total d'incidents par famille</h3>
-          <!-- Ajoute ici le  graphique -->
+          <img class="additional-stat-image" src="{{ url_for('static', filename='image/chart.png') }}" alt="Image 2">
         </div>
       </div>
-
-      <div class="additional-stats-container">
-        <div class="additional-stat">
-          <h3>Nombre d'incidents par Catégorie</h3>
-          <div class="additional-stats-container">
-            <div class="additional-stat">
-                <h3>Détails</h3>
-                <div class="custom-table-container">
-                  <table id="reclamation-table">
-                      <thead>
-                          <tr>
-                              <th>ID</th>
-                              <th>Titre</th>
-                              <th>Sites</th>
-                              <th>Action Entreprise</th>
-                              <th>Date Ouverture</th>
-                              <th>Date Fin</th>
-                              <th>Opérateur</th>
-                              <th>Échéance</th>
-                              <th>Étages</th>
-                              <th>Affecté À</th>
-                              <th>Priorité</th>
-                              <th>Accès</th>
-                              <th>Ouvert Par</th>
-                              <th>Description</th>
-                              <th>Status</th>
-                              <th>Catégorie</th>
-                              <th>Famille</th>
-                              <th>Commentaire</th>
-                              <th>Fichier</th>
-                          </tr>
-                      </thead>
-                      <tbody>
-                          {% for reclamation in reclamations %}
-                          <tr>
-                              <td>{{ reclamation.id }}</td>
-                              <td>{{ reclamation.titre }}</td>
-                              <td>{{ reclamation.sites }}</td>
-                              <td>{{ reclamation.action_entreprise }}</td>
-                              <td>{{ reclamation.date_ouverture }}</td>
-                              <td>{{ reclamation.date_fin }}</td>
-                              <td>{{ reclamation.operateur }}</td>
-                              <td>{{ reclamation.echeance }}</td>
-                              <td>{{ reclamation.etages }}</td>
-                              <td>{{ reclamation.affecte_a }}</td>
-                              <td>{{ reclamation.priorite }}</td>
-                              <td>{{ reclamation.acces }}</td>
-                              <td>{{ reclamation.ouvert_par }}</td>
-                              <td>{{ reclamation.description }}</td>
-                              <td>{{ reclamation.status }}</td>
-                              <td>{{ reclamation.categorie }}</td>
-                              <td>{{ reclamation.famille }}</td>
-                              <td>{{ reclamation.commentaire }}</td>
-                              <td>{{ reclamation.fichier }}</td>
-                          </tr>
-                          {% endfor %}
-                      </tbody>
-                  </table>
-               </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-
-      <div class="additional-stats-container">
-        <div class="additional-stat">
-          <h3>Nombre d'incidents par mois</h3>
-          <!-- Ajoute ici le graphique -->
-        </div>
-        <div class="additional-stat">
-          <h3>Total d'incidents par priorité</h3>
-          <!-- Ajoute ici le  graphique -->
-        </div>
-      </div>
+       
 
   </main>
 </body>

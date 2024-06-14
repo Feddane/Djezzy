@@ -780,7 +780,10 @@ th {
     margin-top: 20px;
   }
   
+
+
   .additional-stat {
+    
     flex: 1;
     margin-right: 350px;
     padding: 20px;
@@ -790,12 +793,20 @@ th {
     margin-right: 0;
   }
   
+
   .additional-stat h3 {
     margin-bottom: 20px;
     font-size: 1.2em;
     color: #333;
   }
-  
+
+  .additional-stat-image {
+    width: 100px;
+    position: static;
+    top: auto;
+    left: auto;
+}
+
 
   .header-actions .filters {
     display: flex;
@@ -817,7 +828,6 @@ th {
 .header-actions select {
     font-size: 1em;
 }
-
 
 /*******************Tableau des réclamations****************/
 .custom-table-container {
@@ -856,6 +866,3 @@ th {
     top: 0;
     z-index: 1;
 }
-
-
-
