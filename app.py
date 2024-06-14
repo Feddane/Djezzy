@@ -204,7 +204,7 @@ def statistique():
 
     actifs_count = 10
     incidents_count = 3751
-    categories_count = 16
+    categories_count = 10
 
     reclamations = Reclamation.query.order_by((Reclamation.id)).all()
 
