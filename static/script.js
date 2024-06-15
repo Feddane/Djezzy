@@ -91,8 +91,37 @@ document.addEventListener('DOMContentLoaded', function() {
             .catch(error => console.error('Erreur lors du chargement des opérateurs:', error));
     }
     
+    function chargerAffectes() {
+        fetch('/static/affecte_a.txt')
+            .then(response => response.text())
+            .then(data => {
+                const affecteList = data.trim().split('\n');
+                const affecteUL = document.querySelector('.affecte ul');
+                affecteUL.innerHTML = '';
+    
+                affecteList.forEach(affecte => {
+                    const li = document.createElement('li');
+                    li.textContent = affecte.trim();
+                    affecteUL.appendChild(li);
+    
+                    li.addEventListener("click", function() {
+                        let input = document.querySelector('.affecte input');
+                        input.value = this.textContent.trim();
+                        input.blur();
+                        onSelect(this.textContent.trim(), input);
+                    });
+    
+                    li.addEventListener("mouseenter", function() {
+                        this.parentElement.querySelectorAll("li").forEach(item => item.classList.remove("selected"));
+                        this.classList.add("selected");
+                    });
+                });
+            })
+            .catch(error => console.error('Erreur lors du chargement des affectés à:', error));
+    }
 
     chargerOperateurs();
+    chargerAffectes();
 
     categorieSelect.addEventListener('change', mettreAJourFamilleOptions);
     mettreAJourFamilleOptions();
