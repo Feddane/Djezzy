@@ -203,7 +203,16 @@ def statistique():
     if 'username' not in session:
         return redirect(url_for('login_supervisor'))
 
-    actifs_count = db.session.query(func.count(func.distinct(Reclamation.operateur))).scalar()
+    operateur_file_path = os.path.join(app.static_folder, 'operateur.txt')
+    try:
+        with open(operateur_file_path, 'r', encoding='utf-8') as file:
+            operateur_list = file.read().strip().split('\n')
+    except FileNotFoundError:
+        operateur_list = []
+
+
+    actifs_count = len(set(operateur_list))
+
     incidents_count = Reclamation.query.count()
     categories_count = 10
 

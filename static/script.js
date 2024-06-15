@@ -62,6 +62,29 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
+    function chargerOperateurs() {
+        fetch('/static/operateur.txt')
+            .then(response => response.text())
+            .then(data => {
+                const operateurList = data.trim().split('\n');
+
+
+                const operateurUL = document.querySelector('.operateur ul');
+                operateurUL.innerHTML = '';
+
+
+                operateurList.forEach(operateur => {
+                    const li = document.createElement('li');
+                    li.textContent = operateur;
+                    operateurUL.appendChild(li);
+                });
+            })
+            .catch(error => console.error('Erreur lors du chargement des opérateurs:', error));
+    }
+
+
+    chargerOperateurs();
+
     categorieSelect.addEventListener('change', mettreAJourFamilleOptions);
     mettreAJourFamilleOptions();
 

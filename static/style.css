@@ -832,7 +832,7 @@ th {
     font-size: 1em;
 }
 
-/*******************Tableau des réclamations****************/
+/*******************Tableau des réclamations: stat****************/
 .custom-table-container {
     height: 500px;
     overflow-x: auto;
