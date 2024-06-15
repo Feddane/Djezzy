@@ -5,10 +5,6 @@
     font-family: 'Poppins', sans-serif;
 }
 
-body, html {
-    overflow-x: hidden;
-}
-
 
 .wrapper{
     background: #ececec;
@@ -266,6 +262,7 @@ span a:hover{
 
 .main-content {
     padding-left: 280px;
+    overflow-x: hidden;
 }
 
 .page-header {
