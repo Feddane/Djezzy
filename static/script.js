@@ -67,21 +67,30 @@ document.addEventListener('DOMContentLoaded', function() {
             .then(response => response.text())
             .then(data => {
                 const operateurList = data.trim().split('\n');
-
-
                 const operateurUL = document.querySelector('.operateur ul');
                 operateurUL.innerHTML = '';
-
-
+    
                 operateurList.forEach(operateur => {
                     const li = document.createElement('li');
-                    li.textContent = operateur;
+                    li.textContent = operateur.trim();
                     operateurUL.appendChild(li);
+    
+                    li.addEventListener("click", function() {
+                        let input = document.querySelector('.operateur input');
+                        input.value = this.textContent.trim();
+                        input.blur();
+                        onSelect(this.textContent.trim(), input);
+                    });
+    
+                    li.addEventListener("mouseenter", function() {
+                        this.parentElement.querySelectorAll("li").forEach(item => item.classList.remove("selected"));
+                        this.classList.add("selected");
+                    });
                 });
             })
             .catch(error => console.error('Erreur lors du chargement des opérateurs:', error));
     }
-
+    
 
     chargerOperateurs();
 
