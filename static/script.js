@@ -62,24 +62,24 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    function chargerOperateurs() {
-        fetch('/static/operateur.txt')
+    function chargerListeDepuisFichier(url, selectorInput, selectorUL, onSelectCallback) {
+        fetch(url)
             .then(response => response.text())
             .then(data => {
-                const operateurList = data.trim().split('\n');
-                const operateurUL = document.querySelector('.operateur ul');
-                operateurUL.innerHTML = '';
+                const listeItems = data.trim().split('\n');
+                const ulElement = document.querySelector(selectorUL);
+                ulElement.innerHTML = '';
     
-                operateurList.forEach(operateur => {
+                listeItems.forEach(item => {
                     const li = document.createElement('li');
-                    li.textContent = operateur.trim();
-                    operateurUL.appendChild(li);
+                    li.textContent = item.trim();
+                    ulElement.appendChild(li);
     
                     li.addEventListener("click", function() {
-                        let input = document.querySelector('.operateur input');
+                        let input = document.querySelector(selectorInput);
                         input.value = this.textContent.trim();
                         input.blur();
-                        onSelect(this.textContent.trim(), input);
+                        onSelectCallback(this.textContent.trim(), input);
                     });
     
                     li.addEventListener("mouseenter", function() {
@@ -88,40 +88,24 @@ document.addEventListener('DOMContentLoaded', function() {
                     });
                 });
             })
-            .catch(error => console.error('Erreur lors du chargement des opérateurs:', error));
+            .catch(error => console.error(`Erreur lors du chargement depuis ${url}:`, error));
+    }
+
+    function chargerOperateurs() {
+        chargerListeDepuisFichier('/static/operateur.txt', '.operateur input', '.operateur ul', onSelect);
     }
     
     function chargerAffectes() {
-        fetch('/static/affecte_a.txt')
-            .then(response => response.text())
-            .then(data => {
-                const affecteList = data.trim().split('\n');
-                const affecteUL = document.querySelector('.affecte ul');
-                affecteUL.innerHTML = '';
-    
-                affecteList.forEach(affecte => {
-                    const li = document.createElement('li');
-                    li.textContent = affecte.trim();
-                    affecteUL.appendChild(li);
-    
-                    li.addEventListener("click", function() {
-                        let input = document.querySelector('.affecte input');
-                        input.value = this.textContent.trim();
-                        input.blur();
-                        onSelect(this.textContent.trim(), input);
-                    });
-    
-                    li.addEventListener("mouseenter", function() {
-                        this.parentElement.querySelectorAll("li").forEach(item => item.classList.remove("selected"));
-                        this.classList.add("selected");
-                    });
-                });
-            })
-            .catch(error => console.error('Erreur lors du chargement des affectés à:', error));
+        chargerListeDepuisFichier('/static/affecte_a.txt', '.affecte input', '.affecte ul', onSelect);
     }
-
+    
+    function chargerOuvertPar() {
+        chargerListeDepuisFichier('/static/ouvert_par.txt', '.ouvert input', '.ouvert ul', onSelect);
+    }
+    
     chargerOperateurs();
     chargerAffectes();
+    chargerOuvertPar();
 
     categorieSelect.addEventListener('change', mettreAJourFamilleOptions);
     mettreAJourFamilleOptions();
