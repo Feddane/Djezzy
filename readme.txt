@@ -6,10 +6,12 @@ Veuillez suivre ces étapes pour assurer l'exécution du code :
 votre terminal pour installer Flask et les autres dépendances répertoriées dans le fichier requirements.txt :
             pip install -r requirements.txt
 
-3- Installer WampServer : Installez WampServer pour accéder à PhpMyAdmin (si ce n'est pas déjà fait).
-Ensuite, créez une table appelée "users". Copiez tout le code existant dans le fichier table_bdd.sql
-et collez-le dans le champ SQL de la table "users" que vous avez créée.
+3- Installer postgresql : Installez postgresql (si ce n'est pas déjà fait).
+Ensuite, créez DataBase appelée "users". puis executez: python create_table.py pour la creation des tables dans users.
 
-4-Lancer l'application : Enfin, exécutez la commande suivante dans votre terminal :
+4- Dans app.py: app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:root@localhost/users'
+changez : "postgres:root" par votre username et password.
+
+5-Lancer l'application : Enfin, exécutez la commande suivante dans votre terminal :
             python app.py
 Puis, accédez à http://127.0.0.1:5000 pour visualiser le site.
