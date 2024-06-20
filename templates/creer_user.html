@@ -24,13 +24,17 @@
                         <!-- Flash messages -->
                         {% with messages = get_flashed_messages(with_categories=true) %}
                             {% if messages %}
-                                <div class="alert alert-warning" role="alert">
+                                <div class="alert alert-warning" role="alert"
                                     {% for category, message in messages %}
                                         <p class="{{ category }}">{{ message }}</p>
                                     {% endfor %}
                                 </div>
                             {% endif %}
                         {% endwith %}
+                        <div class="input-field">
+                            <input type="text" class="input" name="username" id="username" required="" autocomplete="off">
+                            <label for="username">Utilisateur</label>
+                        </div>
                         <div class="input-field">
                             <input type="text" class="input" name="first_name" id="first_name" required="" autocomplete="off">
                             <label for="first_name">Prénom</label>

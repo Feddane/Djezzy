@@ -49,6 +49,7 @@ class Reclamation(db.Model):
 class User(db.Model):
     __tablename__ = 'table_users'
     id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(150), nullable=False)
     first_name = db.Column(db.String(150), nullable=False)
     last_name = db.Column(db.String(150), nullable=False)
     email = db.Column(db.String(150), unique=True, nullable=False)
@@ -680,13 +681,14 @@ def all_reclamations():
 @app.route('/creer_user', methods=['GET', 'POST'])
 def creer_user():
     if request.method == 'POST':
+        username = request.form['username']
         first_name = request.form['first_name']
         last_name = request.form['last_name']
         email = request.form['email']
         password = request.form['password']
 
 
-        new_user = User(first_name=first_name, last_name=last_name, email=email, password=password)
+        new_user = User(username=username, first_name=first_name, last_name=last_name, email=email, password=password)
 
         try:
             db.session.add(new_user)
@@ -694,7 +696,7 @@ def creer_user():
             flash('Utilisateur créé avec succès!', 'success')
         except Exception as e:
             db.session.rollback()
-            flash('Erreur lors de la création de l\'utilisateur. Veuillez réessayer.', 'danger')
+            flash('Erreur! Veuillez réessayer.', 'danger')
 
         return redirect(url_for('creer_user'))
 
