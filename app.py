@@ -236,12 +236,13 @@ def statistique():
 @app.route('/login_user', methods=['GET', 'POST'])
 def login_user():
     if request.method == 'POST':
+        username = request.form['username']
         first_name = request.form['first_name']
         last_name = request.form['last_name']
         email = request.form['email']
         password = request.form['password']
 
-        user = User.query.filter_by(first_name=first_name, last_name=last_name, email=email, password=password).first()
+        user = User.query.filter_by(username=username, first_name=first_name, last_name=last_name, email=email, password=password).first()
 
         if user:
 
