@@ -3,6 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import func
 import pandas as pd
 from io import BytesIO
+from graph import bubble, verticalBar, horizentalBar, plotmois
 import os
 
 app = Flask(__name__)
@@ -213,12 +214,19 @@ def statistique():
 
     actifs_count = len(set(operateur_list))
 
-    incidents_count = Reclamation.query.count()
+    incidents_count = ReclamationUser.query.count()
     categories_count = 10
 
-    reclamations = Reclamation.query.order_by((Reclamation.id)).all()
+    reclamations = ReclamationUser.query.order_by((ReclamationUser.id)).all()
 
-    return render_template('statistique.html', actifs_count=actifs_count, incidents_count=incidents_count, categories_count=categories_count, reclamations=reclamations)
+    img_categorie = verticalBar(db)
+    img_famille = bubble(db)
+    img_employe = horizentalBar(db)
+    img_priorite = bubble(db, property="priorite")
+    img_mois = plotmois(db)
+
+    return render_template('statistique.html', actifs_count=actifs_count, incidents_count=incidents_count, categories_count=categories_count, reclamations=reclamations, img_categorie=img_categorie, img_famille=img_famille, img_employe=img_employe, img_priorite=img_priorite, img_mois=img_mois)
+
 
 
 
