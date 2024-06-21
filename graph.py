@@ -10,7 +10,7 @@ def split_text(text, max_line_length):
     return '\n'.join(textwrap.wrap(text, max_line_length))
 
 def bubble(db_conn, property="famille", month=None):
-    engine = db_conn.engine  # Assuming db_conn is a SQLAlchemy engine or session
+    engine = db_conn.engine
 
     if not month:
         query = f"""
@@ -64,7 +64,7 @@ def bubble(db_conn, property="famille", month=None):
     return base64.b64encode(buf.getvalue()).decode('utf8')
 
 def horizentalBar(db_conn, month=None):
-    engine = db_conn.engine  # Assuming db_conn is a SQLAlchemy engine or session
+    engine = db_conn.engine
 
     if not month:
         query = """ 
@@ -98,7 +98,7 @@ def horizentalBar(db_conn, month=None):
     return base64.b64encode(buf.getvalue()).decode('utf8')
 
 def verticalBar(db_conn, month=None):
-    engine = db_conn.engine  # Assuming db_conn is a SQLAlchemy engine or session
+    engine = db_conn.engine
 
     if not month:
         query = """
