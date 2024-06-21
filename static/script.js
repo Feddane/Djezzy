@@ -62,6 +62,47 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
+    
+    const moisSelect = document.getElementById('mois');
+
+    if (moisSelect) {
+        moisSelect.addEventListener('change', function() {
+            const selectedMonth = this.value;
+            console.log('Selected month:', selectedMonth);
+
+
+            fetch(`/statistique?mois=${selectedMonth}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    updateImage('img_categorie', data.img_categorie);
+                    updateImage('img_famille', data.img_famille);
+                    updateImage('img_employe', data.img_employe);
+                    updateImage('img_priorite', data.img_priorite);
+                    updateImage('img_mois', data.img_mois);
+                })
+                .catch(error => {
+                    console.error('Error fetching data:', error);
+                });
+        });
+    } else {
+        console.error('Element with id "mois" not found.');
+    }
+
+
+    function updateImage(id, base64Data) {
+        const imgElement = document.getElementById(id);
+        if (imgElement) {
+            imgElement.src = `data:image/png;base64, ${base64Data}`;
+        } else {
+            console.error(`Element with id "${id}" not found.`);
+        }
+    }
+
     function chargerListeDepuisFichier(url, selectorInput, selectorUL, onSelectCallback) {
         fetch(url)
             .then(response => response.text())
@@ -423,6 +464,5 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-
-
+    
 });

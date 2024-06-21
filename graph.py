@@ -1,15 +1,17 @@
-from io import BytesIO
-from random import choice
 import pandas as pd
 import circlify as cr
 import matplotlib.pyplot as plt
 import textwrap
 import base64
+from io import BytesIO
+from random import choice
 
 def split_text(text, max_line_length):
     return '\n'.join(textwrap.wrap(text, max_line_length))
 
-def bubble(db, property="famille", month=None):
+def bubble(db_conn, property="famille", month=None):
+    engine = db_conn.engine  # Assuming db_conn is a SQLAlchemy engine or session
+
     if not month:
         query = f"""
             SELECT {property}, COUNT(*) as count
@@ -17,16 +19,18 @@ def bubble(db, property="famille", month=None):
             GROUP BY {property}
             ORDER BY count DESC;
         """
+        params = {}
     else:
         query = f"""
             SELECT {property}, COUNT(*) as count
             FROM reclamation_users
-            WHERE EXTRACT(YEAR from date_fin) = EXTRACT(YEAR from CURRENT_DATE) AND EXTRACT(MONTH from date_fin) = {month}
+            WHERE EXTRACT(YEAR from date_fin) = EXTRACT(YEAR from CURRENT_DATE) AND EXTRACT(MONTH from date_fin) = %(month)s
             GROUP BY {property}
             ORDER BY count DESC;
         """
+        params = {'month': month}
 
-    res = pd.read_sql_query(query, db.engine)
+    res = pd.read_sql_query(query, con=engine, params=params)
     circles = cr.circlify(res['count'].tolist(),
                             show_enclosure=False,
                             target_enclosure=cr.Circle(x=0, y=0, r=1))
@@ -37,12 +41,12 @@ def bubble(db, property="famille", month=None):
     ax.axis('off')
     ax.set_aspect('equal')  # show circles as circles, not as ellipses
 
-    lim = max(max(abs(circle.x) + circle.r, abs(circle.y) + circle.r, )
+    lim = max(max(abs(circle.x) + circle.r, abs(circle.y) + circle.r)
               for circle in circles)
     ax.set_xlim(-lim, lim)
     ax.set_ylim(-lim, lim)
 
-    labels = res[property] 
+    labels = res[property]
     colors = ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd', '#8c564b']
 
     for i, (circle, label) in enumerate(zip(circles, labels)):
@@ -59,24 +63,26 @@ def bubble(db, property="famille", month=None):
     buf.seek(0)
     return base64.b64encode(buf.getvalue()).decode('utf8')
 
-
-
-def horizentalBar(db, month=None):
+def horizentalBar(db_conn, month=None):
+    engine = db_conn.engine  # Assuming db_conn is a SQLAlchemy engine or session
 
     if not month:
         query = """ 
-            select operateur, count(*) as count
-            from reclamation_users
-            group by operateur;
+            SELECT operateur, COUNT(*) as count
+            FROM reclamation_users
+            GROUP BY operateur;
         """
+        params = {}
     else:
-        query = f""" 
-            select operateur, count(*) as count
-            from reclamation_users
-            WHERE EXTRACT(YEAR from date_fin) = EXTRACT(YEAR from CURRENT_DATE) AND EXTRACT(MONTH from date_fin) = {month}
-            group by operateur;
+        query = """ 
+            SELECT operateur, COUNT(*) as count
+            FROM reclamation_users
+            WHERE EXTRACT(YEAR from date_fin) = EXTRACT(YEAR from CURRENT_DATE) AND EXTRACT(MONTH from date_fin) = %(month)s
+            GROUP BY operateur;
         """
-    res = pd.read_sql_query(query, db.engine)
+        params = {'month': month}
+
+    res = pd.read_sql_query(query, con=engine, params=params)
     fig, ax = plt.subplots()
     plt.box(False)
 
@@ -91,24 +97,26 @@ def horizentalBar(db, month=None):
     buf.seek(0)
     return base64.b64encode(buf.getvalue()).decode('utf8')
 
+def verticalBar(db_conn, month=None):
+    engine = db_conn.engine  # Assuming db_conn is a SQLAlchemy engine or session
 
-def verticalBar(db, month=None):
-    plt.rcParams.update({'font.size':6})
     if not month:
         query = """
             SELECT categorie, COUNT(*) as count
             FROM reclamation_users
             GROUP BY categorie;
         """
+        params = {}
     else:
         query = """
             SELECT categorie, COUNT(*) as count
             FROM reclamation_users
-            WHERE EXTRACT(YEAR from date_fin) = EXTRACT(YEAR from CURRENT_DATE) AND EXTRACT(MONTH from date_fin) = {month}
+            WHERE EXTRACT(YEAR from date_fin) = EXTRACT(YEAR from CURRENT_DATE) AND EXTRACT(MONTH from date_fin) = %(month)s
             GROUP BY categorie;
         """
+        params = {'month': month}
 
-    res = pd.read_sql_query(query, db.engine)
+    res = pd.read_sql_query(query, con=engine, params=params)
     fig, ax = plt.subplots()
     plt.box(False)
     bar_container = ax.bar([split_text(text, 10) for text in res["categorie"].tolist()], res["count"].tolist(), color="#00BDAE")

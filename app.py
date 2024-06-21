@@ -205,6 +205,9 @@ def statistique():
     if 'username' not in session:
         return redirect(url_for('login_supervisor'))
 
+    mois = request.args.get('mois')
+    print('Mois sélectionné:', mois)
+
     operateur_file_path = os.path.join(app.static_folder, 'operateur.txt')
     try:
         with open(operateur_file_path, 'r', encoding='utf-8') as file:
@@ -212,21 +215,50 @@ def statistique():
     except FileNotFoundError:
         operateur_list = []
 
-
     actifs_count = len(set(operateur_list))
+
+    if mois:
+        mois_num = month_name_to_number(mois)
+        if mois_num is None:
+            return "Invalid month name", 400
+        print('Mois sélectionné (num):', mois_num)
+        img_categorie = verticalBar(db, month=mois_num)
+        img_famille = bubble(db, month=mois_num)
+        img_employe = horizentalBar(db, month=mois_num)
+        img_priorite = bubble(db, property="priorite", month=mois_num)
+        img_mois = plotmois(db)
+
+
+        return jsonify({
+            'img_categorie': img_categorie,
+            'img_famille': img_famille,
+            'img_employe': img_employe,
+            'img_priorite': img_priorite,
+            'img_mois': img_mois
+        })
+    else:
+        img_categorie = verticalBar(db)
+        img_famille = bubble(db)
+        img_employe = horizentalBar(db)
+        img_priorite = bubble(db, property="priorite")
+        img_mois = plotmois(db)
 
     incidents_count = ReclamationUser.query.count()
     categories_count = 10
 
-    reclamations = ReclamationUser.query.order_by((ReclamationUser.id)).all()
+    reclamations = ReclamationUser.query.order_by(ReclamationUser.id).all()
 
-    img_categorie = verticalBar(db)
-    img_famille = bubble(db)
-    img_employe = horizentalBar(db)
-    img_priorite = bubble(db, property="priorite")
-    img_mois = plotmois(db)
+    return render_template('statistique.html', actifs_count=actifs_count, incidents_count=incidents_count,
+                           categories_count=categories_count, reclamations=reclamations, img_categorie=img_categorie,
+                           img_famille=img_famille, img_employe=img_employe, img_priorite=img_priorite, img_mois=img_mois)
 
-    return render_template('statistique.html', actifs_count=actifs_count, incidents_count=incidents_count, categories_count=categories_count, reclamations=reclamations, img_categorie=img_categorie, img_famille=img_famille, img_employe=img_employe, img_priorite=img_priorite, img_mois=img_mois)
+def month_name_to_number(month_name):
+    month_names = {
+        'janvier': 1, 'février': 2, 'mars': 3, 'avril': 4,
+        'mai': 5, 'juin': 6, 'juillet': 7, 'août': 8,
+        'septembre': 9, 'octobre': 10, 'novembre': 11, 'décembre': 12
+    }
+    return month_names.get(month_name.lower())
 
 
 
