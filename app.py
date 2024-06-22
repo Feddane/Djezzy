@@ -200,6 +200,27 @@ def historique_supervisor():
 
     return render_template('historique_supervisor.html', results=results)
 
+def generate_statistic_images(db, mois=None):
+    mois_num = None
+    if mois:
+        mois_num = month_name_to_number(mois)
+        if mois_num is None:
+            return None, "Invalid month name"
+
+    img_categorie = verticalBar(db, month=mois_num)
+    img_famille = bubble(db, month=mois_num)
+    img_employe = horizentalBar(db, month=mois_num)
+    img_priorite = bubble(db, property="priorite", month=mois_num)
+    img_mois = plotmois(db)
+
+    return {
+        'img_categorie': img_categorie,
+        'img_famille': img_famille,
+        'img_employe': img_employe,
+        'img_priorite': img_priorite,
+        'img_mois': img_mois
+    }, None
+
 @app.route('/statistique/data', methods=['GET'])
 def statistique_data():
     if 'username' not in session:
@@ -208,39 +229,11 @@ def statistique_data():
     mois = request.args.get('mois')
     print('Mois sélectionné:', mois)
 
-    if mois:
-        mois_num = month_name_to_number(mois)
-        if mois_num is None:
-            return "Invalid month name", 400
-        print('Mois sélectionné (num):', mois_num)
-        img_categorie = verticalBar(db, month=mois_num)
-        img_famille = bubble(db, month=mois_num)
-        img_employe = horizentalBar(db, month=mois_num)
-        img_priorite = bubble(db, property="priorite", month=mois_num)
-        img_mois = plotmois(db)
+    images, error = generate_statistic_images(db, mois)
+    if error:
+        return error, 400
 
-        return jsonify({
-            'img_categorie': img_categorie,
-            'img_famille': img_famille,
-            'img_employe': img_employe,
-            'img_priorite': img_priorite,
-            'img_mois': img_mois
-        })
-    else:
-
-        img_categorie = verticalBar(db)
-        img_famille = bubble(db)
-        img_employe = horizentalBar(db)
-        img_priorite = bubble(db, property="priorite")
-        img_mois = plotmois(db)
-
-        return jsonify({
-            'img_categorie': img_categorie,
-            'img_famille': img_famille,
-            'img_employe': img_employe,
-            'img_priorite': img_priorite,
-            'img_mois': img_mois
-        })
+    return jsonify(images)
 
 @app.route('/statistique', methods=['GET'])
 def statistique():
@@ -259,32 +252,17 @@ def statistique():
 
     actifs_count = len(set(operateur_list))
 
-    if mois:
-        mois_num = month_name_to_number(mois)
-        if mois_num is None:
-            return "Invalid month name", 400
-        print('Mois sélectionné (num):', mois_num)
-        img_categorie = verticalBar(db, month=mois_num)
-        img_famille = bubble(db, month=mois_num)
-        img_employe = horizentalBar(db, month=mois_num)
-        img_priorite = bubble(db, property="priorite", month=mois_num)
-        img_mois = plotmois(db)
-
-    else:
-        img_categorie = verticalBar(db)
-        img_famille = bubble(db)
-        img_employe = horizentalBar(db)
-        img_priorite = bubble(db, property="priorite")
-        img_mois = plotmois(db)
+    images, error = generate_statistic_images(db, mois)
+    if error:
+        return error, 400
 
     incidents_count = ReclamationUser.query.count()
     categories_count = 10
-
     reclamations = ReclamationUser.query.order_by(ReclamationUser.id).all()
 
     return render_template('statistique.html', actifs_count=actifs_count, incidents_count=incidents_count,
-                           categories_count=categories_count, reclamations=reclamations, img_categorie=img_categorie,
-                           img_famille=img_famille, img_employe=img_employe, img_priorite=img_priorite, img_mois=img_mois)
+                           categories_count=categories_count, reclamations=reclamations, **images)
+
 
 def month_name_to_number(month_name):
     month_names = {
