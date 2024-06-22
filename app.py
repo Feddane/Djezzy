@@ -227,7 +227,6 @@ def statistique_data():
         return redirect(url_for('login_supervisor'))
 
     mois = request.args.get('mois')
-    print('Mois sélectionné:', mois)
 
     images, error = generate_statistic_images(db, mois)
     if error:
@@ -241,7 +240,6 @@ def statistique():
         return redirect(url_for('login_supervisor'))
 
     mois = request.args.get('mois')
-    print('Mois sélectionné:', mois)
 
     operateur_file_path = os.path.join(app.static_folder, 'operateur.txt')
     try:
