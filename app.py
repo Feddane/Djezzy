@@ -200,6 +200,48 @@ def historique_supervisor():
 
     return render_template('historique_supervisor.html', results=results)
 
+@app.route('/statistique/data', methods=['GET'])
+def statistique_data():
+    if 'username' not in session:
+        return redirect(url_for('login_supervisor'))
+
+    mois = request.args.get('mois')
+    print('Mois sélectionné:', mois)
+
+    if mois:
+        mois_num = month_name_to_number(mois)
+        if mois_num is None:
+            return "Invalid month name", 400
+        print('Mois sélectionné (num):', mois_num)
+        img_categorie = verticalBar(db, month=mois_num)
+        img_famille = bubble(db, month=mois_num)
+        img_employe = horizentalBar(db, month=mois_num)
+        img_priorite = bubble(db, property="priorite", month=mois_num)
+        img_mois = plotmois(db)
+
+        return jsonify({
+            'img_categorie': img_categorie,
+            'img_famille': img_famille,
+            'img_employe': img_employe,
+            'img_priorite': img_priorite,
+            'img_mois': img_mois
+        })
+    else:
+
+        img_categorie = verticalBar(db)
+        img_famille = bubble(db)
+        img_employe = horizentalBar(db)
+        img_priorite = bubble(db, property="priorite")
+        img_mois = plotmois(db)
+
+        return jsonify({
+            'img_categorie': img_categorie,
+            'img_famille': img_famille,
+            'img_employe': img_employe,
+            'img_priorite': img_priorite,
+            'img_mois': img_mois
+        })
+
 @app.route('/statistique', methods=['GET'])
 def statistique():
     if 'username' not in session:
@@ -228,14 +270,6 @@ def statistique():
         img_priorite = bubble(db, property="priorite", month=mois_num)
         img_mois = plotmois(db)
 
-
-        return jsonify({
-            'img_categorie': img_categorie,
-            'img_famille': img_famille,
-            'img_employe': img_employe,
-            'img_priorite': img_priorite,
-            'img_mois': img_mois
-        })
     else:
         img_categorie = verticalBar(db)
         img_famille = bubble(db)

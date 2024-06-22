@@ -1,3 +1,6 @@
+import matplotlib
+matplotlib.use('Agg')
+
 import pandas as pd
 import circlify as cr
 import matplotlib.pyplot as plt
