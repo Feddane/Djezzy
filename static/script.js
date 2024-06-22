@@ -61,6 +61,7 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         }
     }
+    
 
     /****************Gerer les mois selectionnes************/
     const moisSelect = document.getElementById('mois');
