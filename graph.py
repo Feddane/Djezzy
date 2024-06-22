@@ -12,7 +12,7 @@ from random import choice
 def split_text(text, max_line_length):
     return '\n'.join(textwrap.wrap(text, max_line_length))
 
-def bubble(db_conn, property="famille", month=None):
+def bubble(db_conn, property="famille", month=None, categorie=None):
     engine = db_conn.engine
 
     if not month:
@@ -66,7 +66,7 @@ def bubble(db_conn, property="famille", month=None):
     buf.seek(0)
     return base64.b64encode(buf.getvalue()).decode('utf8')
 
-def horizentalBar(db_conn, month=None):
+def horizentalBar(db_conn, month=None, categorie=None):
     engine = db_conn.engine
 
     if not month:
@@ -131,7 +131,7 @@ def verticalBar(db_conn, month=None):
     buf.seek(0)
     return base64.b64encode(buf.getvalue()).decode('utf8')
 
-def plotmois(db):
+def plotmois(db, categorie=None):
     query = """
     SELECT date_ouverture
     FROM reclamation_users

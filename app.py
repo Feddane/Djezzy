@@ -200,26 +200,28 @@ def historique_supervisor():
 
     return render_template('historique_supervisor.html', results=results)
 
-def generate_statistic_images(db, mois=None):
+def generate_statistic_images(db, mois=None, categorie=None):
     mois_num = None
     if mois:
         mois_num = month_name_to_number(mois)
         if mois_num is None:
             return None, "Invalid month name"
 
+    img_famille = bubble(db, property="famille", month=mois_num, categorie=categorie)
+    img_employe = horizentalBar(db, month=mois_num, categorie=categorie)
+    img_priorite = bubble(db, property="priorite", month=mois_num, categorie=categorie)
     img_categorie = verticalBar(db, month=mois_num)
-    img_famille = bubble(db, month=mois_num)
-    img_employe = horizentalBar(db, month=mois_num)
-    img_priorite = bubble(db, property="priorite", month=mois_num)
-    img_mois = plotmois(db)
+    img_mois = plotmois(db, categorie=categorie)
 
     return {
-        'img_categorie': img_categorie,
         'img_famille': img_famille,
         'img_employe': img_employe,
         'img_priorite': img_priorite,
+        'img_categorie': img_categorie,
         'img_mois': img_mois
     }, None
+
+
 
 @app.route('/statistique/data', methods=['GET'])
 def statistique_data():
@@ -227,12 +229,15 @@ def statistique_data():
         return redirect(url_for('login_supervisor'))
 
     mois = request.args.get('mois')
+    categorie = request.args.get('categorie')
+    print("categorie", categorie)
 
-    images, error = generate_statistic_images(db, mois)
+    images, error = generate_statistic_images(db, mois, categorie)
     if error:
         return error, 400
 
     return jsonify(images)
+
 
 @app.route('/statistique', methods=['GET'])
 def statistique():
@@ -240,6 +245,8 @@ def statistique():
         return redirect(url_for('login_supervisor'))
 
     mois = request.args.get('mois')
+    categorie = request.args.get('categorie')
+    print("categorie", categorie)
 
     operateur_file_path = os.path.join(app.static_folder, 'operateur.txt')
     try:
@@ -250,7 +257,7 @@ def statistique():
 
     actifs_count = len(set(operateur_list))
 
-    images, error = generate_statistic_images(db, mois)
+    images, error = generate_statistic_images(db, mois, categorie)
     if error:
         return error, 400
 

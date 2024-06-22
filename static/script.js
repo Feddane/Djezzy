@@ -61,7 +61,7 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         }
     }
-    
+
 
     /****************Gerer les mois selectionnes************/
     const moisSelect = document.getElementById('mois');
@@ -97,6 +97,42 @@ document.addEventListener('DOMContentLoaded', function() {
     } else {
         console.error('Element with id "mois" not found.');
     }
+
+    /*************categorie **************/
+    const categorie = document.getElementById('categorie2');
+
+    if (categorie) {
+        categorie.addEventListener('change', function() {
+            const selectedCategorie = this.value;
+            console.log('Selected categorie:', selectedCategorie);
+
+            if (selectedCategorie !== "") {
+                fetch(`/statistique/data?categorie=${selectedCategorie}`)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        updateImage('img_categorie', data.img_categorie);
+                        updateImage('img_famille', data.img_famille);
+                        updateImage('img_employe', data.img_employe);
+                        updateImage('img_priorite', data.img_priorite);
+                        updateImage('img_mois', data.img_mois);
+                    })
+                    .catch(error => {
+                        console.error('Error fetching data:', error);
+                    });
+            } else {
+                console.log('No categorie selected, showing general statistics.');
+                updateGeneralStatistics();
+            }
+        });
+    } else {
+        console.error('Element with id "categorie2" not found.');
+    }
+
     
     function updateImage(id, base64Data) {
         const imgElement = document.getElementById(id);

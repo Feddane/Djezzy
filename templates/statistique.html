@@ -79,7 +79,23 @@
                     <option value="decembre">Décembre</option>
                 </select>
             </div>
-            
+            <div class="filter">
+              <label for="categorie">Catégorie</label>
+              <select id="categorie2" name="categorie">
+                  <option value="">(Tout)</option>
+                  <option value="acte_de_malveillance">Acte de malveillance</option>
+                  <option value="autres">Autres</option>
+                  <option value="controle">Contrôle</option>
+                  <option value="demande_acces">Demande d'accès</option>
+                  <option value="mission">Mission</option>
+                  <option value="panne_technique_systeme">Panne technique système</option>
+                  <option value="travaux">Travaux</option>
+                  <option value="accident">Accident</option>
+                  <option value="incident">Incident</option>
+                  <option value="demande_securisation">Demande de sécurisation</option>
+              </select>
+          </div>
+
         </div>
         <img src="{{ url_for('static', filename='image/logo_Djezzy.png') }}" alt="Djezzy Logo">
     </div>
