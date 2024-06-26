@@ -801,6 +801,41 @@ def creer_admin():
 
     return render_template('creer_admin.html')
 
+@app.route('/supprimer', methods=['GET', 'POST'])
+def supprimer():
+    if request.method == 'POST':
+        if 'username' not in session:
+            flash('Vous devez être connecté pour effectuer cette action.', 'error')
+            return redirect(url_for('login'))
+
+        username = request.form.get('username')
+        password = request.form.get('password')
+        role = request.form.get('role')
+
+        if role == 'admin':
+            utilisateur = Admin.query.filter_by(username=username).first()
+        elif role == 'superviseur':
+            utilisateur = Superviseur.query.filter_by(username=username).first()
+        elif role == 'utilisateur':
+            utilisateur = User.query.filter_by(username=username).first()
+        else:
+            flash('Rôle d\'utilisateur non valide.', 'error')
+            return redirect(url_for('supprimer'))
+
+        if utilisateur:
+            db.session.delete(utilisateur)
+            db.session.commit()
+            flash(f'{role.capitalize()} supprimé avec succès.', 'success')
+        else:
+            flash('Nom d\'utilisateur incorrect.', 'error')
+
+        return redirect(url_for('supprimer'))
+
+    return render_template('supprimer.html')
+
+
+
+
 @app.route('/logout')
 def logout():
     session.pop('username', None)
