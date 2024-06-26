@@ -431,13 +431,13 @@ def export_user():
     query = ReclamationUser.query
 
     if categorie:
-        query = query.filter(ReclamationUser.categorie.like(f"%{categorie}%"))
+        query = query.filter(ReclamationUser.categorie.ilike(f"%{categorie}%"))
     if date:
         query = query.filter(ReclamationUser.date_ouverture == date)
     if status:
-        query = query.filter(ReclamationUser.status.like(f"%{status}%"))
+        query = query.filter(ReclamationUser.status.ilike(f"%{status}%"))
 
-    results = query.all()
+    results = query.order_by(ReclamationUser.id.asc()).all()
 
     if not results:
         flash("Le tableau est vide, vous ne pouvez pas exporter de données.", "error")
@@ -450,6 +450,10 @@ def export_user():
         df = pd.DataFrame([(r.id, r.titre, r.sites, r.action_entreprise, r.date_ouverture, r.date_fin, r.operateur, r.echeance, 
                             r.etages, r.affecte_a, r.priorite, r.acces, r.ouvert_par, r.description, r.status, r.categorie, 
                             r.famille, r.commentaire, r.fichier) for r in results], columns=columns)
+
+        # Tri par ID du plus petit au plus grand
+        df.sort_values(by='ID', ascending=True, inplace=True)
+
         output = BytesIO()
         with pd.ExcelWriter(output, engine='openpyxl') as writer:
             df.to_excel(writer, index=False, sheet_name='Reclamations')
@@ -466,9 +470,7 @@ def export_user():
                 adjusted_width = (max_length + 2)
                 worksheet.column_dimensions[column].width = adjusted_width
         output.seek(0)
-        return send_file(output, download_name='reclamations.xlsx', as_attachment=True)
-
-
+        return send_file(output, download_name='reclamations_user.xlsx', as_attachment=True)
 
 
 #all about ADMIN
@@ -652,7 +654,7 @@ def update_date_fin():
 @app.route('/export', methods=['GET'])
 def export():
     if 'username' not in session:
-        return redirect(url_for('login_admin'))
+        return redirect(url_for('login'))
 
     categorie = request.args.get('categorie')
     date = request.args.get('date')
@@ -661,13 +663,13 @@ def export():
     query = Reclamation.query
 
     if categorie:
-        query = query.filter(Reclamation.categorie.like(f"%{categorie}%"))
+        query = query.filter(Reclamation.categorie.ilike(f"%{categorie}%"))
     if date:
         query = query.filter(Reclamation.date_ouverture == date)
     if status:
-        query = query.filter(Reclamation.status.like(f"%{status}%"))
+        query = query.filter(Reclamation.status.ilike(f"%{status}%"))
 
-    results = query.all()
+    results = query.order_by(Reclamation.id.asc()).all()
 
     if not results:
         flash("Le tableau est vide, vous ne pouvez pas exporter de données.", "error")
@@ -680,6 +682,10 @@ def export():
         df = pd.DataFrame([(r.id, r.titre, r.sites, r.action_entreprise, r.date_ouverture, r.date_fin, r.operateur, r.echeance, 
                             r.etages, r.affecte_a, r.priorite, r.acces, r.ouvert_par, r.description, r.status, r.categorie, 
                             r.famille, r.commentaire, r.fichier) for r in results], columns=columns)
+
+
+        df.sort_values(by='ID', ascending=True, inplace=True)
+
         output = BytesIO()
         with pd.ExcelWriter(output, engine='openpyxl') as writer:
             df.to_excel(writer, index=False, sheet_name='Reclamations')
@@ -697,6 +703,7 @@ def export():
                 worksheet.column_dimensions[column].width = adjusted_width
         output.seek(0)
         return send_file(output, download_name='reclamations.xlsx', as_attachment=True)
+
 
 @app.route('/all_reclamations', methods=['GET'])
 def all_reclamations():
