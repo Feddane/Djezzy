@@ -781,6 +781,26 @@ def creer_superviseur():
     return render_template('creer_superviseur.html')
 
 
+@app.route('/creer_admin', methods=['GET', 'POST'])
+def creer_admin():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+
+        new_user = Admin(username=username, password=password)
+
+        try:
+            db.session.add(new_user)
+            db.session.commit()
+            flash('Administrateur créé avec succès!', 'success')
+        except Exception as e:
+            db.session.rollback()
+            flash("Erreur lors de la création de l'administrateur. Veuillez réessayer.", 'danger')
+
+        return redirect(url_for('creer_admin'))
+
+    return render_template('creer_admin.html')
+
 @app.route('/logout')
 def logout():
     session.pop('username', None)
