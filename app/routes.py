@@ -1,92 +1,12 @@
-from flask import Flask, render_template, request, redirect, url_for, session, flash, send_file, jsonify
-from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import func
-import pandas as pd
-from io import BytesIO
-from graph import bubble, verticalBar, horizentalBar, plotmois
+from flask import  render_template, request, redirect, url_for, session, flash, send_file, jsonify
+from . import create_app, db
+from .models import Reclamation, ReclamationUser, Admin, Superviseur, User
 import os
-from flask_login import current_user
+from io import BytesIO
+import pandas as pd
+from .graph import bubble, verticalBar, horizentalBar, plotmois
 
-app = Flask(__name__)
-app.config['SECRET_KEY'] = 'secret-key'
-
-# Configuration pour PostgreSQL
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:root@localhost/users'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-
-db = SQLAlchemy(app)
-
-upload_dir = 'static/uploads'
-os.makedirs(upload_dir, exist_ok=True)
-
-class Admin(db.Model):
-    __tablename__ = 'table_admins'
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(150), nullable=False)
-    password = db.Column(db.String(150), nullable=False)
-
-class Reclamation(db.Model):
-    __tablename__ = 'reclamation'
-    id = db.Column(db.Integer, primary_key=True)
-    titre = db.Column(db.String(200))
-    sites = db.Column(db.String(200))
-    action_entreprise = db.Column(db.String(200))
-    date_ouverture = db.Column(db.Date)
-    date_fin = db.Column(db.Date)
-    operateur = db.Column(db.String(200))
-    echeance = db.Column(db.Date)
-    etages = db.Column(db.String(200))
-    affecte_a = db.Column(db.String(200))
-    priorite = db.Column(db.String(200))
-    acces = db.Column(db.String(200))
-    ouvert_par = db.Column(db.String(200))
-    description = db.Column(db.Text)
-    status = db.Column(db.String(200))
-    categorie = db.Column(db.String(200))
-    famille = db.Column(db.String(200))
-    commentaire = db.Column(db.Text)
-    fichier = db.Column(db.String(200))
-    role = db.Column(db.String(50), nullable=False)
-    def __repr__(self):
-        return f'<Reclamation {self.id} - {self.role}>'
-
-class User(db.Model):
-    __tablename__ = 'table_users'
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(150), nullable=False)
-    first_name = db.Column(db.String(150), nullable=False)
-    last_name = db.Column(db.String(150), nullable=False)
-    email = db.Column(db.String(150), unique=True, nullable=False)
-    password = db.Column(db.String(150), nullable=False)
-
-class ReclamationUser(db.Model):
-    __tablename__ = 'reclamation_users'
-    id = db.Column(db.Integer, primary_key=True)
-    titre = db.Column(db.String(200))
-    sites = db.Column(db.String(200))
-    action_entreprise = db.Column(db.String(200))
-    date_ouverture = db.Column(db.Date)
-    date_fin = db.Column(db.Date)
-    operateur = db.Column(db.String(200))
-    echeance = db.Column(db.Date)
-    etages = db.Column(db.String(200))
-    affecte_a = db.Column(db.String(200))
-    priorite = db.Column(db.String(200))
-    acces = db.Column(db.String(200))
-    ouvert_par = db.Column(db.String(200))
-    description = db.Column(db.Text)
-    status = db.Column(db.String(200))
-    categorie = db.Column(db.String(200))
-    famille = db.Column(db.String(200))
-    commentaire = db.Column(db.Text)
-    fichier = db.Column(db.String(200))
-
-class Superviseur(db.Model):
-    __tablename__ = 'table_superviseur'
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(150), nullable=False)
-    password = db.Column(db.String(150), nullable=False)
-
+app = create_app()
 
 @app.route('/')
 def home():
@@ -189,7 +109,7 @@ def historique_supervisor():
     date_fin = request.args.get('date_fin')
     status = request.args.get('status')
 
-    # Filtrer les requêtes faites par les superviseurs
+
     query = Reclamation.query.filter_by(role='superviseur')
 
     if categorie:
@@ -204,7 +124,6 @@ def historique_supervisor():
     results = query.all()
 
     return render_template('historique_supervisor.html', results=results)
-
 
 def generate_statistic_images(db, mois=None, categorie=None):
     mois_num = None
@@ -437,13 +356,13 @@ def export_user():
     query = ReclamationUser.query
 
     if categorie:
-        query = query.filter(ReclamationUser.categorie.ilike(f"%{categorie}%"))
+        query = query.filter(ReclamationUser.categorie.like(f"%{categorie}%"))
     if date:
         query = query.filter(ReclamationUser.date_ouverture == date)
     if status:
-        query = query.filter(ReclamationUser.status.ilike(f"%{status}%"))
+        query = query.filter(ReclamationUser.status.like(f"%{status}%"))
 
-    results = query.order_by(ReclamationUser.id.asc()).all()
+    results = query.all()
 
     if not results:
         flash("Le tableau est vide, vous ne pouvez pas exporter de données.", "error")
@@ -456,10 +375,6 @@ def export_user():
         df = pd.DataFrame([(r.id, r.titre, r.sites, r.action_entreprise, r.date_ouverture, r.date_fin, r.operateur, r.echeance, 
                             r.etages, r.affecte_a, r.priorite, r.acces, r.ouvert_par, r.description, r.status, r.categorie, 
                             r.famille, r.commentaire, r.fichier) for r in results], columns=columns)
-
-
-        df.sort_values(by='ID', ascending=True, inplace=True)
-
         output = BytesIO()
         with pd.ExcelWriter(output, engine='openpyxl') as writer:
             df.to_excel(writer, index=False, sheet_name='Reclamations')
@@ -476,7 +391,9 @@ def export_user():
                 adjusted_width = (max_length + 2)
                 worksheet.column_dimensions[column].width = adjusted_width
         output.seek(0)
-        return send_file(output, download_name='reclamations_user.xlsx', as_attachment=True)
+        return send_file(output, download_name='reclamations.xlsx', as_attachment=True)
+
+
 
 
 #all about ADMIN
@@ -566,8 +483,7 @@ def reclamation():
             categorie=categorie,
             famille=famille,
             commentaire=commentaire,
-            fichier=fichier_nom,
-            role='admin'
+            fichier=fichier_nom
         )
 
         db.session.add(nouvelle_reclamation)
@@ -661,7 +577,7 @@ def update_date_fin():
 @app.route('/export', methods=['GET'])
 def export():
     if 'username' not in session:
-        return redirect(url_for('login'))
+        return redirect(url_for('login_admin'))
 
     categorie = request.args.get('categorie')
     date = request.args.get('date')
@@ -670,13 +586,13 @@ def export():
     query = Reclamation.query
 
     if categorie:
-        query = query.filter(Reclamation.categorie.ilike(f"%{categorie}%"))
+        query = query.filter(Reclamation.categorie.like(f"%{categorie}%"))
     if date:
         query = query.filter(Reclamation.date_ouverture == date)
     if status:
-        query = query.filter(Reclamation.status.ilike(f"%{status}%"))
+        query = query.filter(Reclamation.status.like(f"%{status}%"))
 
-    results = query.order_by(Reclamation.id.asc()).all()
+    results = query.all()
 
     if not results:
         flash("Le tableau est vide, vous ne pouvez pas exporter de données.", "error")
@@ -689,10 +605,6 @@ def export():
         df = pd.DataFrame([(r.id, r.titre, r.sites, r.action_entreprise, r.date_ouverture, r.date_fin, r.operateur, r.echeance, 
                             r.etages, r.affecte_a, r.priorite, r.acces, r.ouvert_par, r.description, r.status, r.categorie, 
                             r.famille, r.commentaire, r.fichier) for r in results], columns=columns)
-
-
-        df.sort_values(by='ID', ascending=True, inplace=True)
-
         output = BytesIO()
         with pd.ExcelWriter(output, engine='openpyxl') as writer:
             df.to_excel(writer, index=False, sheet_name='Reclamations')
@@ -710,7 +622,6 @@ def export():
                 worksheet.column_dimensions[column].width = adjusted_width
         output.seek(0)
         return send_file(output, download_name='reclamations.xlsx', as_attachment=True)
-
 
 @app.route('/all_reclamations', methods=['GET'])
 def all_reclamations():
@@ -817,7 +728,6 @@ def creer_superviseur():
 
     return render_template('creer_superviseur.html')
 
-
 @app.route('/creer_admin', methods=['GET', 'POST'])
 def creer_admin():
     if request.method == 'POST':
@@ -871,12 +781,7 @@ def supprimer():
     return render_template('supprimer.html')
 
 
-
-
 @app.route('/logout')
 def logout():
     session.pop('username', None)
     return redirect(url_for('home'))
-
-if __name__ == '__main__':
-    app.run(debug=True)

@@ -1,4 +1,6 @@
-from app import app, db, Admin
+from app import db
+from app.models import Admin
+from app.routes import app
 
 
 app.app_context().push()
