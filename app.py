@@ -1,10 +1,11 @@
-from flask import Flask, render_template, request, redirect, url_for, session, flash, send_file, jsonify, make_response
+from flask import Flask, render_template, request, redirect, url_for, session, flash, send_file, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import func
 import pandas as pd
 from io import BytesIO
 from graph import bubble, verticalBar, horizentalBar, plotmois
 import os
+from flask_login import current_user
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secret-key'
@@ -45,6 +46,9 @@ class Reclamation(db.Model):
     famille = db.Column(db.String(200))
     commentaire = db.Column(db.Text)
     fichier = db.Column(db.String(200))
+    role = db.Column(db.String(50), nullable=False)
+    def __repr__(self):
+        return f'<Reclamation {self.id} - {self.role}>'
 
 class User(db.Model):
     __tablename__ = 'table_users'
@@ -164,7 +168,8 @@ def reclamation_supervisor():
             categorie=categorie,
             famille=famille,
             commentaire=commentaire,
-            fichier=fichier_nom
+            fichier=fichier_nom,
+            role='superviseur'
         )
 
         db.session.add(nouvelle_reclamation)
@@ -184,7 +189,8 @@ def historique_supervisor():
     date_fin = request.args.get('date_fin')
     status = request.args.get('status')
 
-    query = Reclamation.query
+    # Filtrer les requêtes faites par les superviseurs
+    query = Reclamation.query.filter_by(role='superviseur')
 
     if categorie:
         query = query.filter(Reclamation.categorie.ilike(f"%{categorie}%"))
@@ -193,12 +199,12 @@ def historique_supervisor():
     if status:
         query = query.filter(Reclamation.status.ilike(f"%{status}%"))
 
-
     query = query.order_by(Reclamation.id)
 
     results = query.all()
 
     return render_template('historique_supervisor.html', results=results)
+
 
 def generate_statistic_images(db, mois=None, categorie=None):
     mois_num = None
@@ -560,7 +566,8 @@ def reclamation():
             categorie=categorie,
             famille=famille,
             commentaire=commentaire,
-            fichier=fichier_nom
+            fichier=fichier_nom,
+            role='admin'
         )
 
         db.session.add(nouvelle_reclamation)
@@ -711,6 +718,36 @@ def all_reclamations():
         return jsonify({'error': 'Unauthorized'}), 401
 
     reclamations = Reclamation.query.order_by(Reclamation.id).all()
+    results = [{
+        'id': r.id,
+        'titre': r.titre,
+        'sites': r.sites,
+        'action_entreprise': r.action_entreprise,
+        'date_ouverture': r.date_ouverture.strftime('%Y-%m-%d'),
+        'date_fin': r.date_fin.strftime('%Y-%m-%d'),
+        'operateur': r.operateur,
+        'echeance': r.echeance.strftime('%Y-%m-%d'),
+        'etages': r.etages,
+        'affecte_a': r.affecte_a,
+        'priorite': r.priorite,
+        'acces': r.acces,
+        'ouvert_par': r.ouvert_par,
+        'description': r.description,
+        'status': r.status,
+        'categorie': r.categorie,
+        'famille': r.famille,
+        'commentaire': r.commentaire,
+        'fichier': r.fichier
+    } for r in reclamations]
+    return jsonify(results)
+
+
+@app.route('/all_reclamations_supervisor', methods=['GET'])
+def all_reclamations_supervisor():
+    if 'username' not in session:
+        return jsonify({'error': 'Unauthorized'}), 401
+
+    reclamations = Reclamation.query.filter_by(role='superviseur').order_by(Reclamation.id).all()
     results = [{
         'id': r.id,
         'titre': r.titre,
