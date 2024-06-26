@@ -28,6 +28,9 @@ class Reclamation(db.Model):
     famille = db.Column(db.String(200))
     commentaire = db.Column(db.Text)
     fichier = db.Column(db.String(200))
+    role = db.Column(db.String(50), nullable=False)
+    def __repr__(self):
+        return f'<Reclamation {self.id} - {self.role}>'
 
 class User(db.Model):
     __tablename__ = 'table_users'

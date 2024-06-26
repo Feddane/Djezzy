@@ -88,7 +88,8 @@ def reclamation_supervisor():
             categorie=categorie,
             famille=famille,
             commentaire=commentaire,
-            fichier=fichier_nom
+            fichier=fichier_nom,
+            role='superviseur'
         )
 
         db.session.add(nouvelle_reclamation)
@@ -108,7 +109,8 @@ def historique_supervisor():
     date_fin = request.args.get('date_fin')
     status = request.args.get('status')
 
-    query = Reclamation.query
+
+    query = Reclamation.query.filter_by(role='superviseur')
 
     if categorie:
         query = query.filter(Reclamation.categorie.ilike(f"%{categorie}%"))
@@ -116,7 +118,6 @@ def historique_supervisor():
         query = query.filter(Reclamation.date_ouverture.between(date_debut, date_fin))
     if status:
         query = query.filter(Reclamation.status.ilike(f"%{status}%"))
-
 
     query = query.order_by(Reclamation.id)
 
@@ -620,6 +621,36 @@ def all_reclamations():
     return jsonify(results)
 
 
+@app.route('/all_reclamations_supervisor', methods=['GET'])
+def all_reclamations_supervisor():
+    if 'username' not in session:
+        return jsonify({'error': 'Unauthorized'}), 401
+
+    reclamations = Reclamation.query.filter_by(role='superviseur').order_by(Reclamation.id).all()
+    results = [{
+        'id': r.id,
+        'titre': r.titre,
+        'sites': r.sites,
+        'action_entreprise': r.action_entreprise,
+        'date_ouverture': r.date_ouverture.strftime('%Y-%m-%d'),
+        'date_fin': r.date_fin.strftime('%Y-%m-%d'),
+        'operateur': r.operateur,
+        'echeance': r.echeance.strftime('%Y-%m-%d'),
+        'etages': r.etages,
+        'affecte_a': r.affecte_a,
+        'priorite': r.priorite,
+        'acces': r.acces,
+        'ouvert_par': r.ouvert_par,
+        'description': r.description,
+        'status': r.status,
+        'categorie': r.categorie,
+        'famille': r.famille,
+        'commentaire': r.commentaire,
+        'fichier': r.fichier
+    } for r in reclamations]
+    return jsonify(results)
+
+
 @app.route('/creer_user', methods=['GET', 'POST'])
 def creer_user():
     if request.method == 'POST':
@@ -664,6 +695,58 @@ def creer_superviseur():
         return redirect(url_for('creer_superviseur'))
 
     return render_template('creer_superviseur.html')
+
+@app.route('/creer_admin', methods=['GET', 'POST'])
+def creer_admin():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+
+        new_user = Admin(username=username, password=password)
+
+        try:
+            db.session.add(new_user)
+            db.session.commit()
+            flash('Administrateur créé avec succès!', 'success')
+        except Exception as e:
+            db.session.rollback()
+            flash("Erreur lors de la création de l'administrateur. Veuillez réessayer.", 'danger')
+
+        return redirect(url_for('creer_admin'))
+
+    return render_template('creer_admin.html')
+
+@app.route('/supprimer', methods=['GET', 'POST'])
+def supprimer():
+    if request.method == 'POST':
+        if 'username' not in session:
+            flash('Vous devez être connecté pour effectuer cette action.', 'error')
+            return redirect(url_for('login'))
+
+        username = request.form.get('username')
+        password = request.form.get('password')
+        role = request.form.get('role')
+
+        if role == 'admin':
+            utilisateur = Admin.query.filter_by(username=username).first()
+        elif role == 'superviseur':
+            utilisateur = Superviseur.query.filter_by(username=username).first()
+        elif role == 'utilisateur':
+            utilisateur = User.query.filter_by(username=username).first()
+        else:
+            flash('Rôle d\'utilisateur non valide.', 'error')
+            return redirect(url_for('supprimer'))
+
+        if utilisateur:
+            db.session.delete(utilisateur)
+            db.session.commit()
+            flash(f'{role.capitalize()} supprimé avec succès.', 'success')
+        else:
+            flash('Nom d\'utilisateur incorrect.', 'error')
+
+        return redirect(url_for('supprimer'))
+
+    return render_template('supprimer.html')
 
 
 @app.route('/logout')
