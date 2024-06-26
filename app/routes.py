@@ -4,7 +4,7 @@ from .models import Reclamation, ReclamationUser, Admin, Superviseur, User
 import os
 from io import BytesIO
 import pandas as pd
-from .graph import bubble, verticalBar, horizentalBar, plotmois
+from .graph import generate_statistic_images
 
 app = create_app()
 
@@ -88,8 +88,7 @@ def reclamation_supervisor():
             categorie=categorie,
             famille=famille,
             commentaire=commentaire,
-            fichier=fichier_nom,
-            role='superviseur'
+            fichier=fichier_nom
         )
 
         db.session.add(nouvelle_reclamation)
@@ -109,8 +108,7 @@ def historique_supervisor():
     date_fin = request.args.get('date_fin')
     status = request.args.get('status')
 
-
-    query = Reclamation.query.filter_by(role='superviseur')
+    query = Reclamation.query
 
     if categorie:
         query = query.filter(Reclamation.categorie.ilike(f"%{categorie}%"))
@@ -119,33 +117,12 @@ def historique_supervisor():
     if status:
         query = query.filter(Reclamation.status.ilike(f"%{status}%"))
 
+
     query = query.order_by(Reclamation.id)
 
     results = query.all()
 
     return render_template('historique_supervisor.html', results=results)
-
-def generate_statistic_images(db, mois=None, categorie=None):
-    mois_num = None
-    if mois:
-        mois_num = month_name_to_number(mois)
-        if mois_num is None:
-            return None, "Invalid month name"
-
-    img_famille = bubble(db, property="famille", month=mois_num, categorie=categorie)
-    img_employe = horizentalBar(db, month=mois_num, categorie=categorie)
-    img_priorite = bubble(db, property="priorite", month=mois_num, categorie=categorie)
-    img_categorie = verticalBar(db, month=mois_num)
-    img_mois = plotmois(db, categorie=categorie)
-
-    return {
-        'img_famille': img_famille,
-        'img_employe': img_employe,
-        'img_priorite': img_priorite,
-        'img_categorie': img_categorie,
-        'img_mois': img_mois
-    }, None
-
 
 
 @app.route('/statistique/data', methods=['GET'])
@@ -155,9 +132,8 @@ def statistique_data():
 
     mois = request.args.get('mois')
     categorie = request.args.get('categorie')
-    print("categorie", categorie)
 
-    images, error = generate_statistic_images(db, mois, categorie)
+    images, error = generate_statistic_images(mois, categorie)
     if error:
         return error, 400
 
@@ -182,7 +158,7 @@ def statistique():
 
     actifs_count = len(set(operateur_list))
 
-    images, error = generate_statistic_images(db, mois, categorie)
+    images, error = generate_statistic_images(mois, categorie)
     if error:
         return error, 400
 
@@ -192,15 +168,6 @@ def statistique():
 
     return render_template('statistique.html', actifs_count=actifs_count, incidents_count=incidents_count,
                            categories_count=categories_count, reclamations=reclamations, **images)
-
-
-def month_name_to_number(month_name):
-    month_names = {
-        'janvier': 1, 'février': 2, 'mars': 3, 'avril': 4,
-        'mai': 5, 'juin': 6, 'juillet': 7, 'août': 8,
-        'septembre': 9, 'octobre': 10, 'novembre': 11, 'décembre': 12
-    }
-    return month_names.get(month_name.lower())
 
 
 
@@ -653,36 +620,6 @@ def all_reclamations():
     return jsonify(results)
 
 
-@app.route('/all_reclamations_supervisor', methods=['GET'])
-def all_reclamations_supervisor():
-    if 'username' not in session:
-        return jsonify({'error': 'Unauthorized'}), 401
-
-    reclamations = Reclamation.query.filter_by(role='superviseur').order_by(Reclamation.id).all()
-    results = [{
-        'id': r.id,
-        'titre': r.titre,
-        'sites': r.sites,
-        'action_entreprise': r.action_entreprise,
-        'date_ouverture': r.date_ouverture.strftime('%Y-%m-%d'),
-        'date_fin': r.date_fin.strftime('%Y-%m-%d'),
-        'operateur': r.operateur,
-        'echeance': r.echeance.strftime('%Y-%m-%d'),
-        'etages': r.etages,
-        'affecte_a': r.affecte_a,
-        'priorite': r.priorite,
-        'acces': r.acces,
-        'ouvert_par': r.ouvert_par,
-        'description': r.description,
-        'status': r.status,
-        'categorie': r.categorie,
-        'famille': r.famille,
-        'commentaire': r.commentaire,
-        'fichier': r.fichier
-    } for r in reclamations]
-    return jsonify(results)
-
-
 @app.route('/creer_user', methods=['GET', 'POST'])
 def creer_user():
     if request.method == 'POST':
@@ -727,58 +664,6 @@ def creer_superviseur():
         return redirect(url_for('creer_superviseur'))
 
     return render_template('creer_superviseur.html')
-
-@app.route('/creer_admin', methods=['GET', 'POST'])
-def creer_admin():
-    if request.method == 'POST':
-        username = request.form['username']
-        password = request.form['password']
-
-        new_user = Admin(username=username, password=password)
-
-        try:
-            db.session.add(new_user)
-            db.session.commit()
-            flash('Administrateur créé avec succès!', 'success')
-        except Exception as e:
-            db.session.rollback()
-            flash("Erreur lors de la création de l'administrateur. Veuillez réessayer.", 'danger')
-
-        return redirect(url_for('creer_admin'))
-
-    return render_template('creer_admin.html')
-
-@app.route('/supprimer', methods=['GET', 'POST'])
-def supprimer():
-    if request.method == 'POST':
-        if 'username' not in session:
-            flash('Vous devez être connecté pour effectuer cette action.', 'error')
-            return redirect(url_for('login'))
-
-        username = request.form.get('username')
-        password = request.form.get('password')
-        role = request.form.get('role')
-
-        if role == 'admin':
-            utilisateur = Admin.query.filter_by(username=username).first()
-        elif role == 'superviseur':
-            utilisateur = Superviseur.query.filter_by(username=username).first()
-        elif role == 'utilisateur':
-            utilisateur = User.query.filter_by(username=username).first()
-        else:
-            flash('Rôle d\'utilisateur non valide.', 'error')
-            return redirect(url_for('supprimer'))
-
-        if utilisateur:
-            db.session.delete(utilisateur)
-            db.session.commit()
-            flash(f'{role.capitalize()} supprimé avec succès.', 'success')
-        else:
-            flash('Nom d\'utilisateur incorrect.', 'error')
-
-        return redirect(url_for('supprimer'))
-
-    return render_template('supprimer.html')
 
 
 @app.route('/logout')

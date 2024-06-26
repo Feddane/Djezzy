@@ -1,6 +1,9 @@
 import matplotlib
 matplotlib.use('Agg')
 
+from .models import ReclamationUser
+from . import db
+from sqlalchemy import func, extract
 import pandas as pd
 import circlify as cr
 import matplotlib.pyplot as plt
@@ -12,28 +15,26 @@ from random import choice
 def split_text(text, max_line_length):
     return '\n'.join(textwrap.wrap(text, max_line_length))
 
-def bubble(db_conn, property="famille", month=None, categorie=None):
-    engine = db_conn.engine
 
-    if not month:
-        query = f"""
-            SELECT {property}, COUNT(*) as count
-            FROM reclamation_users
-            GROUP BY {property}
-            ORDER BY count DESC;
-        """
-        params = {}
-    else:
-        query = f"""
-            SELECT {property}, COUNT(*) as count
-            FROM reclamation_users
-            WHERE EXTRACT(YEAR from date_fin) = EXTRACT(YEAR from CURRENT_DATE) AND EXTRACT(MONTH from date_fin) = %(month)s
-            GROUP BY {property}
-            ORDER BY count DESC;
-        """
-        params = {'month': month}
+def bubble(property="famille", month=None, categorie=None):
 
-    res = pd.read_sql_query(query, con=engine, params=params)
+    current_year = func.extract('year', func.current_date())
+    query = db.session.query(getattr(ReclamationUser, property), func.count().label('count'))
+
+    if month:
+        query = query.filter(extract('year', ReclamationUser.date_fin) == extract('year', func.current_date()))
+        query = query.filter(extract('month', ReclamationUser.date_fin) == month)
+
+    if categorie:
+        query = query.filter(ReclamationUser.categorie == categorie)
+
+    query = query.group_by(getattr(ReclamationUser, property))
+    query = query.order_by(func.count().desc())
+
+    res = query.all()
+    
+    res = pd.DataFrame(res, columns=[property, "count"])
+
     circles = cr.circlify(res['count'].tolist(),
                             show_enclosure=False,
                             target_enclosure=cr.Circle(x=0, y=0, r=1))
@@ -66,26 +67,24 @@ def bubble(db_conn, property="famille", month=None, categorie=None):
     buf.seek(0)
     return base64.b64encode(buf.getvalue()).decode('utf8')
 
-def horizentalBar(db_conn, month=None, categorie=None):
-    engine = db_conn.engine
+def horizentalBar(month=None, categorie=None):
 
-    if not month:
-        query = """ 
-            SELECT operateur, COUNT(*) as count
-            FROM reclamation_users
-            GROUP BY operateur;
-        """
-        params = {}
-    else:
-        query = """ 
-            SELECT operateur, COUNT(*) as count
-            FROM reclamation_users
-            WHERE EXTRACT(YEAR from date_fin) = EXTRACT(YEAR from CURRENT_DATE) AND EXTRACT(MONTH from date_fin) = %(month)s
-            GROUP BY operateur;
-        """
-        params = {'month': month}
+    current_year = func.extract('year', func.current_date())
+    query = db.session.query(ReclamationUser.operateur, func.count().label('count'))
 
-    res = pd.read_sql_query(query, con=engine, params=params)
+    if month:
+        query = query.filter(extract('year', ReclamationUser.date_fin) == extract('year', func.current_date()))
+        query = query.filter(extract('month', ReclamationUser.date_fin) == month)
+
+    if categorie:
+        query = query.filter(ReclamationUser.categorie == categorie)
+
+    query = query.group_by(ReclamationUser.operateur)
+
+    res = query.all()
+    
+    res = pd.DataFrame(res, columns=["operateur", "count"])
+
     fig, ax = plt.subplots()
     plt.box(False)
 
@@ -100,26 +99,21 @@ def horizentalBar(db_conn, month=None, categorie=None):
     buf.seek(0)
     return base64.b64encode(buf.getvalue()).decode('utf8')
 
-def verticalBar(db_conn, month=None):
-    engine = db_conn.engine
+def verticalBar(month=None):
 
-    if not month:
-        query = """
-            SELECT categorie, COUNT(*) as count
-            FROM reclamation_users
-            GROUP BY categorie;
-        """
-        params = {}
-    else:
-        query = """
-            SELECT categorie, COUNT(*) as count
-            FROM reclamation_users
-            WHERE EXTRACT(YEAR from date_fin) = EXTRACT(YEAR from CURRENT_DATE) AND EXTRACT(MONTH from date_fin) = %(month)s
-            GROUP BY categorie;
-        """
-        params = {'month': month}
+    current_year = func.extract('year', func.current_date())
+    query = db.session.query(ReclamationUser.categorie, func.count().label('count'))
 
-    res = pd.read_sql_query(query, con=engine, params=params)
+    if month:
+        query = query.filter(extract('year', ReclamationUser.date_fin) == extract('year', func.current_date()))
+        query = query.filter(extract('month', ReclamationUser.date_fin) == month)
+
+    query = query.group_by(ReclamationUser.categorie)
+
+    res = query.all()
+    
+    res = pd.DataFrame(res, columns=["categorie", "count"])
+
     fig, ax = plt.subplots()
     plt.box(False)
     bar_container = ax.bar([split_text(text, 10) for text in res["categorie"].tolist()], res["count"].tolist(), color="#00BDAE")
@@ -131,17 +125,27 @@ def verticalBar(db_conn, month=None):
     buf.seek(0)
     return base64.b64encode(buf.getvalue()).decode('utf8')
 
-def plotmois(db, categorie=None):
-    query = """
-    SELECT date_ouverture
-    FROM reclamation_users
-    WHERE date_ouverture IS NOT NULL
-    """
-    df = pd.read_sql_query(query, db.engine)
-    df['date_ouverture'] = pd.to_datetime(df['date_ouverture'])
+def plotmois(categorie=None):
+    query = db.session.query(func.to_char(ReclamationUser.date_ouverture, "YYYY-MM-DD"))
+    query = query.filter(ReclamationUser.date_ouverture.is_not(None))
+    query = query.filter(extract('year', ReclamationUser.date_fin) == extract('year', func.current_date()))
 
-    df['mois_annee'] = df['date_ouverture'].dt.to_period('M')
-    monthly_counts = df['mois_annee'].value_counts().sort_index()
+    if categorie:
+        query = query.filter(ReclamationUser.categorie == categorie)
+
+    res = query.all()
+
+    res = pd.DataFrame(res, columns=["date_ouverture"])
+
+    res['date_ouverture'] = pd.to_datetime(res['date_ouverture'])
+
+    res['mois_annee'] = res['date_ouverture'].dt.to_period('M')
+    monthly_counts = res['mois_annee'].value_counts().sort_index()
+
+
+    if monthly_counts.empty:
+        print("No data to plot.")
+        return None
 
     plt.fill_between(monthly_counts.index.astype(str), monthly_counts.values, color='#DABCD1', alpha=0.4)
     plt.plot(monthly_counts.index.astype(str), monthly_counts.values, color='Slateblue', alpha=0.6)
@@ -154,3 +158,32 @@ def plotmois(db, categorie=None):
     plt.close()
     buf.seek(0)
     return base64.b64encode(buf.getvalue()).decode('utf8')
+
+def month_name_to_number(month_name):
+    month_names = {
+        'janvier': 1, 'février': 2, 'mars': 3, 'avril': 4,
+        'mai': 5, 'juin': 6, 'juillet': 7, 'août': 8,
+        'septembre': 9, 'octobre': 10, 'novembre': 11, 'décembre': 12
+    }
+    return month_names.get(month_name.lower())
+
+def generate_statistic_images(mois=None, categorie=None):
+    mois_num = None
+    if mois:
+        mois_num = month_name_to_number(mois)
+        if mois_num is None:
+            return None, "Invalid month name"
+
+    img_famille = bubble(property="famille", month=mois_num, categorie=categorie)
+    img_employe = horizentalBar(month=mois_num, categorie=categorie)
+    img_priorite = bubble(property="priorite", month=mois_num, categorie=categorie)
+    img_categorie = verticalBar(month=mois_num)
+    img_mois = plotmois(categorie=categorie)
+
+    return {
+        'img_famille': img_famille,
+        'img_employe': img_employe,
+        'img_priorite': img_priorite,
+        'img_categorie': img_categorie,
+        'img_mois': img_mois
+    }, None
