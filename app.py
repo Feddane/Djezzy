@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, session, flash, send_file, jsonify
+from flask import Flask, render_template, request, redirect, url_for, session, flash, send_file, jsonify, make_response
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import func
 import pandas as pd
@@ -451,7 +451,7 @@ def export_user():
                             r.etages, r.affecte_a, r.priorite, r.acces, r.ouvert_par, r.description, r.status, r.categorie, 
                             r.famille, r.commentaire, r.fichier) for r in results], columns=columns)
 
-        # Tri par ID du plus petit au plus grand
+
         df.sort_values(by='ID', ascending=True, inplace=True)
 
         output = BytesIO()
