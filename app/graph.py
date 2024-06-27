@@ -167,6 +167,7 @@ def month_name_to_number(month_name):
     }
     return month_names.get(month_name.lower())
 
+
 def generate_statistic_images(mois=None, categorie=None):
     mois_num = None
     if mois:
