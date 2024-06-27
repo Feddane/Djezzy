@@ -474,7 +474,7 @@ def export_user():
     c.save()
 
     buffer.seek(0)
-    return send_file(buffer, as_attachment=True, download_name='BRQ.pdf', mimetype='application/pdf')
+    return send_file(buffer, as_attachment=True, download_name='BRQ_User.pdf', mimetype='application/pdf')
 
 @app.route('/all_reclamations_user', methods=['GET'])
 def all_reclamations_user():
