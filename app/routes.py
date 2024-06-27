@@ -1,10 +1,16 @@
-from flask import  render_template, request, redirect, url_for, session, flash, send_file, jsonify
+from flask import render_template, request, redirect, url_for, session, flash, send_file, jsonify
 from . import create_app, db
 from .models import Reclamation, Admin, Superviseur, User
 import os
 from io import BytesIO
 import pandas as pd
 from .graph import generate_statistic_images
+from datetime import date
+from reportlab.lib.pagesizes import letter
+from reportlab.pdfgen import canvas
+from reportlab.lib.colors import red, gray, black
+import io
+
 
 app = create_app()
 
@@ -398,7 +404,8 @@ def reclamation():
             categorie=categorie,
             famille=famille,
             commentaire=commentaire,
-            fichier=fichier_nom
+            fichier=fichier_nom,
+            role='admin'
         )
 
         db.session.add(nouvelle_reclamation)
@@ -488,51 +495,84 @@ def update_date_fin():
 @app.route('/export', methods=['GET'])
 def export():
     if 'username' not in session:
-        return redirect(url_for('login_admin'))
+        return redirect(url_for('home'))
+    
+    today = date.today()
+    reclamations = Reclamation.query.filter_by(date_ouverture=today).all()
 
-    categorie = request.args.get('categorie')
-    date = request.args.get('date')
-    status = request.args.get('status')
+    buffer = BytesIO()
+    c = canvas.Canvas(buffer, pagesize=letter)
+    width, height = letter
+    y = height - 40
 
-    query = Reclamation.query
+    # Draw the date at the top right
+    c.setFont("Times-Roman", 13)
+    c.drawString(width - 100, y, f"Date : {today.strftime('%Y-%m-%d')}")
+    y -= 26
+    
+    # Draw the title
+    c.setFont("Times-Bold", 18)
+    c.drawString(30, y, "Requêtes enregistrées")
+    c.setFillColor(gray)  # Set fill color to gray for the title
+    c.setLineWidth(2)
+    y -= 40
+    
+    # Reset fill color for subsequent text
+    c.setFillColor('black')  # Reset fill color to black
+    c.setFont("Times-Roman", 14)
 
-    if categorie:
-        query = query.filter(Reclamation.categorie.like(f"%{categorie}%"))
-    if date:
-        query = query.filter(Reclamation.date_ouverture == date)
-    if status:
-        query = query.filter(Reclamation.status.like(f"%{status}%"))
+    for index, reclamation in enumerate(reclamations):
+        # Draw red line before each Requête N°
+        c.setStrokeColor(red)
+        c.setLineWidth(1)
+        c.line(30, y+8, width-30, y+8)  # Draw a red line
+        y -= 10  # Adjust spacing after the line
+        
+        # Draw Requête N° in bold and red
+        c.setFont("Times-Bold", 14)
+        c.setFillColor(red)
+        c.drawString(30, y, f"Requête N° : {reclamation.id}")
+        c.setFillColor('black')  # Reset fill color to black for subsequent text
+        c.setFont("Times-Roman", 14)
+        y -= 26  # Add space after Requête N°
 
-    results = query.all()
+        # Draw other fields
+        c.drawString(30, y, f"Titre : {reclamation.titre}")
+        y -= 15
+        c.drawString(30, y, f"Status : {reclamation.status}")
+        y -= 15
+        c.drawString(30, y, f"Priorité : {reclamation.priorite}")
+        y -= 15
+        c.drawString(30, y, f"Categorie : {reclamation.categorie}")
+        y -= 15
+        c.drawString(30, y, f"Ouvert par : {reclamation.ouvert_par}")
+        y -= 15
+        c.drawString(30, y, f"Affecté à : {reclamation.affecte_a}")
+        y -= 15
+        c.drawString(30, y, f"Échéance : {reclamation.echeance}")
+        y -= 15
+        c.drawString(30, y, f"Opérateur : {reclamation.operateur}")
+        y -= 15
 
-    if not results:
-        flash("Le tableau est vide, vous ne pouvez pas exporter de données.", "error")
-        return redirect(url_for('historique', categorie=categorie, date=date, status=status))
+        # Add a small space before Description
+        y -= 5
+        c.drawString(30, y, "Description:")
+        y -= 15
+        c.drawString(30, y, f"{reclamation.description}")
+        y -= 30  # Add extra space between records
 
-    else:
-        columns = ['ID', 'Titre', 'Sites', 'Action Entreprise', 'Date Ouverture', 'Date Fin', 'Opérateur', 'Échéance', 
-                   'Étages', 'Affecté À', 'Priorité', 'Accès', 'Ouvert Par', 'Description', 'Status', 'Catégorie', 
-                   'Famille', 'Commentaire', 'Fichier']
-        df = pd.DataFrame([(r.id, r.titre, r.sites, r.action_entreprise, r.date_ouverture, r.date_fin, r.operateur, r.echeance, 
-                            r.etages, r.affecte_a, r.priorite, r.acces, r.ouvert_par, r.description, r.status, r.categorie, 
-                            r.famille, r.commentaire, r.fichier) for r in results], columns=columns)
-        output = BytesIO()
-        with pd.ExcelWriter(output, engine='openpyxl') as writer:
-            df.to_excel(writer, index=False, sheet_name='Reclamations')
-            worksheet = writer.sheets['Reclamations']
-            for col in worksheet.columns:
-                max_length = 0
-                column = col[0].column_letter
-                for cell in col:
-                    try:
-                        if len(str(cell.value)) > max_length:
-                            max_length = len(str(cell.value))
-                    except:
-                        pass
-                adjusted_width = (max_length + 2)
-                worksheet.column_dimensions[column].width = adjusted_width
-        output.seek(0)
-        return send_file(output, download_name='reclamations.xlsx', as_attachment=True)
+    # Draw red line after the last Requête N°
+    c.setStrokeColor(red)
+    c.setLineWidth(1)
+    c.line(30, y+8, width-30, y+8)  # Draw a red line
+    y -= 10  # Adjust spacing after the line
+
+    c.showPage()
+    c.save()
+
+    buffer.seek(0)
+    return send_file(buffer, as_attachment=True, download_name='BRQ.pdf', mimetype='application/pdf')
+    
 
 @app.route('/all_reclamations', methods=['GET'])
 def all_reclamations():
