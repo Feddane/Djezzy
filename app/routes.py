@@ -498,28 +498,28 @@ def export():
     today = date.today()
     reclamations = Reclamation.query.filter_by(date_ouverture=today).all()
 
+    if not reclamations:
+        flash("Il n'y a pas de réclamations à exporter pour aujourd'hui.", "warning")
+        return redirect(url_for('home'))
+
     buffer = BytesIO()
     c = canvas.Canvas(buffer, pagesize=letter)
     width, height = letter
     y = height - 40
 
-
     def space_available(space_needed):
         nonlocal y
         return y - space_needed > 40
 
-
     c.setFont("Times-Roman", 13)
     c.drawString(width - 150, y, f"Date : {today.strftime('%Y-%m-%d')}")
     y -= 26
-
 
     c.setFont("Times-Bold", 18)
     c.setFillColor(grey)
     c.drawString(30, y, "Requêtes enregistrées")
     c.setLineWidth(5)
     y -= 40
-
 
     c.setFillColor('black')
     c.setFont("Times-Roman", 14)
@@ -530,19 +530,16 @@ def export():
             c.setFont("Times-Roman", 14)
             y = height - 40
 
-
         c.setStrokeColor('red')
         c.setLineWidth(5)
         c.line(30, y + 15, width - 30, y + 15)
 
- 
         c.setFont("Times-Bold", 16)
         c.setFillColor('red')
         c.drawString(30, y, f"Requête N° : {reclamation.id}")
         c.setFillColor('black')
         c.setFont("Times-Roman", 14)
         y -= 45
-
 
         fields = [
             (f"Titre : {reclamation.titre}", 15),
@@ -575,11 +572,9 @@ def export():
         if index < len(reclamations) - 1:
             y -= 20
 
-
     c.setStrokeColor('red')
     c.setLineWidth(5)
     c.line(30, y - 10, width - 30, y - 10)
-
 
     generated_at = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     c.setFont("Times-Bold", 14)

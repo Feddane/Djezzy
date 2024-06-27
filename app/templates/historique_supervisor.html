@@ -62,9 +62,6 @@
       <div class="header-actions">
         <div>
           <form id="exportForm" action="{{ url_for('export') }}" method="get" style="display: inline;">
-            <input type="hidden" name="categorie" value="{{ request.args.get('categorie', '') }}">
-            <input type="hidden" name="date" value="{{ request.args.get('date', '') }}">
-            <input type="hidden" name="status" value="{{ request.args.get('status', '') }}">
             <button class="export" type="submit"><i class="las la-file-excel"></i>Export</button>
           </form>
           <button id="refreshButton" class="refresh"><i class="las la-sync"></i>Refresh</button>
