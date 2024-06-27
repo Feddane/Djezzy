@@ -103,6 +103,102 @@ def reclamation_supervisor():
 
     return render_template('reclamation_supervisor.html')
 
+@app.route('/export_supervisor', methods=['GET'])
+def export_supervisor():
+    if 'username' not in session:
+        return redirect(url_for('login_supervisor'))
+    
+    today = date.today()
+    reclamations = Reclamation.query.filter_by(date_ouverture=today).all()
+
+    if not reclamations:
+        flash("Il n'y a pas de réclamations à exporter pour aujourd'hui.", "warning")
+        return redirect(url_for('historique_supervisor'))
+
+    buffer = BytesIO()
+    c = canvas.Canvas(buffer, pagesize=letter)
+    width, height = letter
+    y = height - 40
+
+    def space_available(space_needed):
+        nonlocal y
+        return y - space_needed > 40
+
+    c.setFont("Times-Roman", 13)
+    c.drawString(width - 150, y, f"Date : {today.strftime('%Y-%m-%d')}")
+    y -= 26
+
+    c.setFont("Times-Bold", 18)
+    c.setFillColor(grey)
+    c.drawString(30, y, "Requêtes enregistrées")
+    c.setLineWidth(5)
+    y -= 40
+
+    c.setFillColor('black')
+    c.setFont("Times-Roman", 14)
+
+    for index, reclamation in enumerate(reclamations):
+        if not space_available(200):
+            c.showPage()
+            c.setFont("Times-Roman", 14)
+            y = height - 40
+
+        c.setStrokeColor('red')
+        c.setLineWidth(5)
+        c.line(30, y + 15, width - 30, y + 15)
+
+        c.setFont("Times-Bold", 16)
+        c.setFillColor('red')
+        c.drawString(30, y, f"Requête N° : {reclamation.id}")
+        c.setFillColor('black')
+        c.setFont("Times-Roman", 14)
+        y -= 45
+
+        fields = [
+            (f"Titre : {reclamation.titre}", 15),
+            (f"Status : {reclamation.status}", 15),
+            (f"Priorité : {reclamation.priorite}", 15),
+            (f"Categorie : {reclamation.categorie}", 15),
+            (f"Ouvert par : {reclamation.ouvert_par}", 15),
+            (f"Affecté à : {reclamation.affecte_a}", 15),
+            (f"Échéance : {reclamation.echeance}", 15),
+            (f"Opérateur : {reclamation.operateur}", 30),
+            ("Description:", 15),
+            (f"{reclamation.description}", 15),
+            ("" , 30)
+        ]
+        
+        for field, space_needed in fields:
+            if not space_available(space_needed):
+                c.showPage()
+                c.setFont("Times-Roman", 14)
+                y = height - 40
+            if field == "Description:":
+                c.setFont("Times-Bold", 14)
+                c.setFillColor(grey)
+            c.drawString(30, y, field)
+            if field == "Description:":
+                c.setFont("Times-Roman", 14)
+                c.setFillColor('black')
+            y -= space_needed
+
+        if index < len(reclamations) - 1:
+            y -= 20
+
+    c.setStrokeColor('red')
+    c.setLineWidth(5)
+    c.line(30, y - 10, width - 30, y - 10)
+
+    generated_at = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    c.setFont("Times-Bold", 14)
+    c.drawRightString(width - 30, 40, f"Généré le : {generated_at}")
+
+    c.showPage()
+    c.save()
+
+    buffer.seek(0)
+    return send_file(buffer, as_attachment=True, download_name='BRQ.pdf', mimetype='application/pdf')
+
 @app.route('/historique_supervisor', methods=['GET'])
 def historique_supervisor():
     if 'username' not in session:
@@ -283,6 +379,102 @@ def historique_user():
     results = query.all()
 
     return render_template('historique_user.html', results=results)
+
+@app.route('/export_user', methods=['GET'])
+def export_user():
+    if 'username' not in session:
+        return redirect(url_for('login_user'))
+    
+    today = date.today()
+    reclamations = Reclamation.query.filter_by(date_ouverture=today, role='user').all()
+
+    if not reclamations:
+        flash("Il n'y a pas de réclamations à exporter pour aujourd'hui.", "warning")
+        return redirect(url_for('historique_user'))
+
+    buffer = BytesIO()
+    c = canvas.Canvas(buffer, pagesize=letter)
+    width, height = letter
+    y = height - 40
+
+    def space_available(space_needed):
+        nonlocal y
+        return y - space_needed > 40
+
+    c.setFont("Times-Roman", 13)
+    c.drawString(width - 150, y, f"Date : {today.strftime('%Y-%m-%d')}")
+    y -= 26
+
+    c.setFont("Times-Bold", 18)
+    c.setFillColor(grey)
+    c.drawString(30, y, "Requêtes enregistrées")
+    c.setLineWidth(5)
+    y -= 40
+
+    c.setFillColor('black')
+    c.setFont("Times-Roman", 14)
+
+    for index, reclamation in enumerate(reclamations):
+        if not space_available(200):
+            c.showPage()
+            c.setFont("Times-Roman", 14)
+            y = height - 40
+
+        c.setStrokeColor('red')
+        c.setLineWidth(5)
+        c.line(30, y + 15, width - 30, y + 15)
+
+        c.setFont("Times-Bold", 16)
+        c.setFillColor('red')
+        c.drawString(30, y, f"Requête N° : {reclamation.id}")
+        c.setFillColor('black')
+        c.setFont("Times-Roman", 14)
+        y -= 45
+
+        fields = [
+            (f"Titre : {reclamation.titre}", 15),
+            (f"Status : {reclamation.status}", 15),
+            (f"Priorité : {reclamation.priorite}", 15),
+            (f"Categorie : {reclamation.categorie}", 15),
+            (f"Ouvert par : {reclamation.ouvert_par}", 15),
+            (f"Affecté à : {reclamation.affecte_a}", 15),
+            (f"Échéance : {reclamation.echeance}", 15),
+            (f"Opérateur : {reclamation.operateur}", 30),
+            ("Description:", 15),
+            (f"{reclamation.description}", 15),
+            ("" , 30)
+        ]
+        
+        for field, space_needed in fields:
+            if not space_available(space_needed):
+                c.showPage()
+                c.setFont("Times-Roman", 14)
+                y = height - 40
+            if field == "Description:":
+                c.setFont("Times-Bold", 14)
+                c.setFillColor(grey)
+            c.drawString(30, y, field)
+            if field == "Description:":
+                c.setFont("Times-Roman", 14)
+                c.setFillColor('black')
+            y -= space_needed
+
+        if index < len(reclamations) - 1:
+            y -= 20
+
+    c.setStrokeColor('red')
+    c.setLineWidth(5)
+    c.line(30, y - 10, width - 30, y - 10)
+
+    generated_at = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    c.setFont("Times-Bold", 14)
+    c.drawRightString(width - 30, 40, f"Généré le : {generated_at}")
+
+    c.showPage()
+    c.save()
+
+    buffer.seek(0)
+    return send_file(buffer, as_attachment=True, download_name='BRQ.pdf', mimetype='application/pdf')
 
 @app.route('/all_reclamations_user', methods=['GET'])
 def all_reclamations_user():
@@ -493,14 +685,14 @@ def update_date_fin():
 @app.route('/export', methods=['GET'])
 def export():
     if 'username' not in session:
-        return redirect(url_for('home'))
+        return redirect(url_for('login_admin'))
     
     today = date.today()
     reclamations = Reclamation.query.filter_by(date_ouverture=today).all()
 
     if not reclamations:
         flash("Il n'y a pas de réclamations à exporter pour aujourd'hui.", "warning")
-        return redirect(url_for('home'))
+        return redirect(url_for('historique'))
 
     buffer = BytesIO()
     c = canvas.Canvas(buffer, pagesize=letter)
@@ -585,7 +777,8 @@ def export():
 
     buffer.seek(0)
     return send_file(buffer, as_attachment=True, download_name='BRQ.pdf', mimetype='application/pdf')
-    
+
+
 
 @app.route('/all_reclamations', methods=['GET'])
 def all_reclamations():
