@@ -3,13 +3,11 @@ from . import create_app, db
 from .models import Reclamation, Admin, Superviseur, User
 import os
 from io import BytesIO
-import pandas as pd
 from .graph import generate_statistic_images
 from datetime import date, datetime
 from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
-from reportlab.lib.colors import red, gray, black
-import io
+from reportlab.lib.colors import grey
 
 
 app = create_app()
@@ -505,38 +503,39 @@ def export():
     width, height = letter
     y = height - 40
 
-    # Function to check if space is available on current page
+
     def space_available(space_needed):
         nonlocal y
-        return y - space_needed > 40  # 40 is a margin you might want to adjust
+        return y - space_needed > 40
 
-    # Draw the date at the top right
+
     c.setFont("Times-Roman", 13)
     c.drawString(width - 150, y, f"Date : {today.strftime('%Y-%m-%d')}")
     y -= 26
 
-    # Draw the title
+
     c.setFont("Times-Bold", 18)
+    c.setFillColor(grey)
     c.drawString(30, y, "Requêtes enregistrées")
     c.setLineWidth(5)
     y -= 40
 
-    # Reset fill color for subsequent text
+
     c.setFillColor('black')
     c.setFont("Times-Roman", 14)
 
     for index, reclamation in enumerate(reclamations):
-        if not space_available(200):  # Check if space for next record, adjust as needed
-            c.showPage()  # Start a new page
+        if not space_available(200):
+            c.showPage()
             c.setFont("Times-Roman", 14)
-            y = height - 40  # Reset y position after starting new page
+            y = height - 40
 
-        # Draw a red line before "Requête N°"
+
         c.setStrokeColor('red')
         c.setLineWidth(5)
-        c.line(30, y + 15, width - 30, y + 15)  # Adjust the y position as needed
+        c.line(30, y + 15, width - 30, y + 15)
 
-        # Draw Requête N° in bold and red
+ 
         c.setFont("Times-Bold", 16)
         c.setFillColor('red')
         c.drawString(30, y, f"Requête N° : {reclamation.id}")
@@ -544,7 +543,7 @@ def export():
         c.setFont("Times-Roman", 14)
         y -= 45
 
-        # Draw other fields
+
         fields = [
             (f"Titre : {reclamation.titre}", 15),
             (f"Status : {reclamation.status}", 15),
@@ -560,27 +559,33 @@ def export():
         ]
         
         for field, space_needed in fields:
-            if not space_available(space_needed):  # Check if space for field
-                c.showPage()  # Start a new page
+            if not space_available(space_needed):
+                c.showPage()
                 c.setFont("Times-Roman", 14)
-                y = height - 40  # Reset y position after starting new page
+                y = height - 40
+            if field == "Description:":
+                c.setFont("Times-Bold", 14)
+                c.setFillColor(grey)
             c.drawString(30, y, field)
+            if field == "Description:":
+                c.setFont("Times-Roman", 14)
+                c.setFillColor('black')
             y -= space_needed
 
         if index < len(reclamations) - 1:
-            y -= 20  # Extra space between records
+            y -= 20
 
-    # Draw a red line at the end of the last requête
+
     c.setStrokeColor('red')
     c.setLineWidth(5)
-    c.line(30, y - 10, width - 30, y - 10)  # Adjust the y position as needed
+    c.line(30, y - 10, width - 30, y - 10)
 
-    # Draw generated date and time at the bottom right of the last page
+
     generated_at = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     c.setFont("Times-Bold", 14)
     c.drawRightString(width - 30, 40, f"Généré le : {generated_at}")
 
-    c.showPage()  # End of pages
+    c.showPage()
     c.save()
 
     buffer.seek(0)
