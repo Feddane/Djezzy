@@ -513,7 +513,6 @@ def export():
     # Draw the title
     c.setFont("Times-Bold", 18)
     c.drawString(30, y, "Requêtes enregistrées")
-    c.setFillColor(gray)  # Set fill color to gray for the title
     c.setLineWidth(2)
     y -= 40
     
@@ -524,17 +523,17 @@ def export():
     for index, reclamation in enumerate(reclamations):
         # Draw red line before each Requête N°
         c.setStrokeColor(red)
-        c.setLineWidth(1)
-        c.line(30, y+8, width-30, y+8)  # Draw a red line
-        y -= 10  # Adjust spacing after the line
+        c.setLineWidth(5)  # Set line width to 2 (bold)
+        c.line(30, y+10, width-30, y+10)  # Draw a red line with increased y spacing
+        y -= 15  # Adjust spacing after the line
         
         # Draw Requête N° in bold and red
-        c.setFont("Times-Bold", 14)
+        c.setFont("Times-Bold", 16)
         c.setFillColor(red)
         c.drawString(30, y, f"Requête N° : {reclamation.id}")
         c.setFillColor('black')  # Reset fill color to black for subsequent text
         c.setFont("Times-Roman", 14)
-        y -= 26  # Add space after Requête N°
+        y -= 45  # Add space after Requête N°
 
         # Draw other fields
         c.drawString(30, y, f"Titre : {reclamation.titre}")
@@ -555,7 +554,7 @@ def export():
         y -= 15
 
         # Add a small space before Description
-        y -= 5
+        y -= 20
         c.drawString(30, y, "Description:")
         y -= 15
         c.drawString(30, y, f"{reclamation.description}")
@@ -563,9 +562,9 @@ def export():
 
     # Draw red line after the last Requête N°
     c.setStrokeColor(red)
-    c.setLineWidth(1)
-    c.line(30, y+8, width-30, y+8)  # Draw a red line
-    y -= 10  # Adjust spacing after the line
+    c.setLineWidth(5)  # Set line width to 2 (bold)
+    c.line(30, y+10, width-30, y+10)  # Draw a red line with increased y spacing
+    y -= 15  # Adjust spacing after the line
 
     c.showPage()
     c.save()
