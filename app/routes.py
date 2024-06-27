@@ -512,13 +512,13 @@ def export():
 
     # Draw the date at the top right
     c.setFont("Times-Roman", 13)
-    c.drawString(width - 100, y, f"Date : {today.strftime('%Y-%m-%d')}")
+    c.drawString(width - 150, y, f"Date : {today.strftime('%Y-%m-%d')}")
     y -= 26
 
     # Draw the title
     c.setFont("Times-Bold", 18)
     c.drawString(30, y, "Requêtes enregistrées")
-    c.setLineWidth(2)
+    c.setLineWidth(5)
     y -= 40
 
     # Reset fill color for subsequent text
@@ -530,6 +530,11 @@ def export():
             c.showPage()  # Start a new page
             c.setFont("Times-Roman", 14)
             y = height - 40  # Reset y position after starting new page
+
+        # Draw a red line before "Requête N°"
+        c.setStrokeColor('red')
+        c.setLineWidth(5)
+        c.line(30, y + 15, width - 30, y + 15)  # Adjust the y position as needed
 
         # Draw Requête N° in bold and red
         c.setFont("Times-Bold", 16)
@@ -564,6 +569,11 @@ def export():
 
         if index < len(reclamations) - 1:
             y -= 20  # Extra space between records
+
+    # Draw a red line at the end of the last requête
+    c.setStrokeColor('red')
+    c.setLineWidth(5)
+    c.line(30, y - 10, width - 30, y - 10)  # Adjust the y position as needed
 
     # Draw generated date and time at the bottom right of the last page
     generated_at = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
