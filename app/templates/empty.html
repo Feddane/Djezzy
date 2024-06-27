@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <link rel="stylesheet" href="https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <title>Empty</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script type="text/javascript" src="/static/script.js"></script>
+</head>
+<body>
+  <div class="sidebar">
+    <div class="sidebar-brand">
+        <div class="brand-flex">
+            <img src="" width="40px" alt="">
+        </div>
+    </div>
+    <div class="sidebar-main">
+        <div class="sidebar-user">
+            <img src="{{ url_for('static', filename='image/unknown.png') }}" alt="Unknown Image">
+            <div>
+                <h3>Welcome Supervisor!</h3>
+                <hr class="white-line">
+            </div>
+        </div>
+
+        <div class="sidebar-menu">
+          <div class="menu-head">
+          </div>
+          <ul>
+            <li>
+                <a href="{{ url_for('reclamation_supervisor') }}">
+                    <span class="las la-plus-circle"></span> Nouvelle requête
+                </a>
+            </li>
+            <li>
+                <a href="{{ url_for('historique_supervisor') }}">
+                    <span class="las la-plus-circle"></span> Consulter historique
+                </a>
+            </li>
+            <li>
+              <a href="{{ url_for('statistique') }}">
+                  <span class="las la-chart-bar"></span> Consulter statistique
+              </a>
+            </li>
+            <li>
+                <a href="{{ url_for('logout') }}">
+                    <span class="las la-sign-out-alt"></span> Se déconnecter
+                </a>
+            </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-header">
+    <div class="header-content">
+      <h1>Tableau de bord récapitulatif</h1>
+    </div>
+    <div class="header-actions">
+      <div class="filters">
+        <div class="filter">
+          <label for="mois">Mois</label>
+          <select id="mois" name="mois">
+            <option value="">(Tout)</option>
+            <option value="janvier">Janvier</option>
+            <option value="fevrier">Février</option>
+            <option value="mars">Mars</option>
+            <option value="avril">Avril</option>
+            <option value="mai">Mai</option>
+            <option value="juin">Juin</option>
+            <option value="juillet">Juillet</option>
+            <option value="aout">Août</option>
+            <option value="septembre">Septembre</option>
+            <option value="octobre">Octobre</option>
+            <option value="novembre">Novembre</option>
+            <option value="decembre">Décembre</option>
+          </select>
+        </div>
+        <div class="filter">
+          <label for="categorie">Catégorie</label>
+          <select id="categorie2" name="categorie">
+            <option value="">(Tout)</option>
+            <option value="Acte de malveillance">Acte de malveillance</option>
+            <option value="Autres">Autres</option>
+            <option value="Controle">Contrôle</option>
+            <option value="Demande d'accès">Demande d'accès</option>
+            <option value="Mission">Mission</option>
+            <option value="Panne technique systeme">Panne technique système</option>
+            <option value="Travaux">Travaux</option>
+            <option value="Accident">Accident</option>
+            <option value="Incident">Incident</option>
+            <option value="Demande de sécurisation">Demande de sécurisation</option>
+          </select>
+        </div>
+      </div>
+      <img src="{{ url_for('static', filename='image/logo_Djezzy.png') }}" alt="Djezzy Logo">
+    </div>
+  </div>
+
+  <div class="container d-flex justify-content-center align-items-center" style="height: 80vh;">
+    <div class="text-center">
+      <span class="las la-exclamation-circle" style="font-size: 10rem; color: #d9534f;"></span>
+      <h2 class="mt-4">Aucun incident n’a été retrouvé</h2>
+    </div>
+  </div>
+</body>
+</html>

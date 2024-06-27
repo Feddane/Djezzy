@@ -908,6 +908,10 @@ def supprimer():
     return render_template('supprimer.html')
 
 
+@app.route('/empty', methods=['GET', 'POST'])
+def empty():
+    return render_template('empty.html')
+
 @app.route('/logout')
 def logout():
     session.pop('username', None)
