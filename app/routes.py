@@ -234,8 +234,8 @@ def statistique_data():
     categorie = request.args.get('categorie')
 
     images, error = generate_statistic_images(mois, categorie)
-    if error:
-        return error, 400
+    if error or not images:
+        return redirect(url_for('empty'))
 
     return jsonify(images)
 
@@ -247,7 +247,6 @@ def statistique():
 
     mois = request.args.get('mois')
     categorie = request.args.get('categorie')
-    print("categorie", categorie)
 
     operateur_file_path = os.path.join(app.static_folder, 'operateur.txt')
     try:

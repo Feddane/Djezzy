@@ -17,7 +17,6 @@ def split_text(text, max_line_length):
 
 
 def bubble(property="famille", month=None, categorie=None):
-
     current_year = func.extract('year', func.current_date())
     query = db.session.query(getattr(Reclamation, property), func.count().label('count'))
 
@@ -33,11 +32,17 @@ def bubble(property="famille", month=None, categorie=None):
 
     res = query.all()
     
+    if not res:
+        return None  # Retourne None si aucune donnée n'est disponible
+
     res = pd.DataFrame(res, columns=[property, "count"])
 
     circles = cr.circlify(res['count'].tolist(),
                             show_enclosure=False,
                             target_enclosure=cr.Circle(x=0, y=0, r=1))
+
+    if not circles:
+        return None  # Retourne None si aucune donnée n'est disponible
 
     circles.reverse()
     fig, ax = plt.subplots()
@@ -180,6 +185,9 @@ def generate_statistic_images(mois=None, categorie=None):
     img_priorite = bubble(property="priorite", month=mois_num, categorie=categorie)
     img_categorie = verticalBar(month=mois_num)
     img_mois = plotmois(categorie=categorie)
+
+    if not img_famille or not img_employe or not img_priorite or not img_categorie or not img_mois:
+        return None, "No data available"
 
     return {
         'img_famille': img_famille,
