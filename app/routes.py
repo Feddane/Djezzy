@@ -258,8 +258,8 @@ def statistique():
     actifs_count = len(set(operateur_list))
 
     images, error = generate_statistic_images(mois, categorie)
-    if error:
-        return error, 400
+    if error or not images:
+        return redirect(url_for('empty'))
 
     incidents_count = Reclamation.query.count()
     categories_count = 10
