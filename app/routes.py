@@ -813,10 +813,13 @@ def all_reclamations():
 def creer_user():
     if request.method == 'POST':
         username = request.form['username']
+        first_name = request.form['first_name']
+        last_name = request.form['last_name']
+        email = request.form['email']
         password = request.form['password']
 
 
-        new_user = User(username=username, password=password)
+        new_user = User(username=username, first_name=first_name, last_name=last_name, email=email, password=password)
 
         try:
             db.session.add(new_user)
