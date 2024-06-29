@@ -655,6 +655,8 @@ def update_status():
 
     if 'historique_user' in request.referrer:
         return redirect(url_for('historique_user'))
+    elif 'historique_supervisor' in request.referrer:
+        return redirect(url_for('historique_supervisor'))
     else:
         return redirect(url_for('historique'))
 
@@ -677,6 +679,8 @@ def update_date_fin():
 
     if 'historique_user' in request.referrer:
         return redirect(url_for('historique_user'))
+    elif 'historique_supervisor' in request.referrer:
+        return redirect(url_for('historique_supervisor'))
     else:
         return redirect(url_for('historique'))
 
