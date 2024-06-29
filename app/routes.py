@@ -277,16 +277,13 @@ def statistique():
 def login_user():
     if request.method == 'POST':
         username = request.form['username']
-        first_name = request.form['first_name']
-        last_name = request.form['last_name']
-        email = request.form['email']
         password = request.form['password']
 
-        user = User.query.filter_by(username=username, first_name=first_name, last_name=last_name, email=email, password=password).first()
+        user = User.query.filter_by(username=username, password=password).first()
 
         if user:
 
-            session['username'] = user.first_name
+            session['username'] = user.username
             return redirect(url_for('reclamation_user'))
         else:
             flash('Coordonnées Incorrectes!', 'danger')
@@ -644,7 +641,6 @@ def update_status():
         new_status_lower = new_status.lower()
         if not (current_status_lower == 'inactif' and new_status_lower == 'actif'):
 
-           
             reclamation = Reclamation.query.get(record_id)
             reclamation.status = new_status
             db.session.commit()
@@ -652,13 +648,13 @@ def update_status():
         else:
             flash('Impossible de changer le statut de Inactif à Actif.', 'error')
 
-
     if 'historique_user' in request.referrer:
         return redirect(url_for('historique_user'))
     elif 'historique_supervisor' in request.referrer:
         return redirect(url_for('historique_supervisor'))
     else:
         return redirect(url_for('historique'))
+
 
 @app.route('/update_date_fin', methods=['POST'])
 def update_date_fin():
@@ -817,13 +813,10 @@ def all_reclamations():
 def creer_user():
     if request.method == 'POST':
         username = request.form['username']
-        first_name = request.form['first_name']
-        last_name = request.form['last_name']
-        email = request.form['email']
         password = request.form['password']
 
 
-        new_user = User(username=username, first_name=first_name, last_name=last_name, email=email, password=password)
+        new_user = User(username=username, password=password)
 
         try:
             db.session.add(new_user)

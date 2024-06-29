@@ -438,7 +438,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         <td>${actionEntreprise}</td>
                         <td>${dateOuverture}</td>
                         <td>${dateFin}</td>
-                          <td>
+                        <td>
                             <button class="edit-date-fin-button">Modifier</button>
                             <form class="edit-date-fin-form" action="/update_date_fin" method="post" style="display: none;">
                                 <input type="hidden" name="recordId" value="${id}">
@@ -455,11 +455,20 @@ document.addEventListener('DOMContentLoaded', function() {
                         <td>${ouvertPar}</td>
                         <td>${description}</td>
                         <td>${status}</td>
-                         <td>
+                        <td>
                             <button class="edit-button" data-id="${id}" data-status="${status}" data-current-status="${status}">Modifier</button>
                             <form class="edit-form" action="/update_status" method="post" style="display: none;">
                                 <input type="hidden" name="recordId" value="${id}">
-                                <input type="text" name="newStatus" value="${status}">
+                                <div class="status">
+                                    <label for="status">Status</label>
+                                    <select id="status" name="newStatus">
+                                        <option value="" hidden disabled selected></option>
+                                        <option value="Actif">Actif</option>
+                                        <option value="Résolu">Résolu</option>
+                                        <option value="Fermé">Fermé</option>
+                                        <option value="Inactif">Inactif</option>
+                                    </select>
+                                </div>
                                 <input type="hidden" name="currentStatus" value="${status}">
                                 <button type="submit">Mettre à jour</button>
                             </form>
@@ -468,7 +477,6 @@ document.addEventListener('DOMContentLoaded', function() {
                         <td>${famille}</td>
                         <td>${commentaire}</td>
                         <td>${fichier}</td>
-
                     </tr>
                 `;
             });
@@ -541,6 +549,7 @@ document.addEventListener('DOMContentLoaded', function() {
             newDocument.close();
         }
     });
+
 
     
 });
