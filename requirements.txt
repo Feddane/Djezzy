@@ -1,3 +1,4 @@
 Flask
 Flask-mySQLdb
 gunicorn
+Flask-SQLAlchemy
