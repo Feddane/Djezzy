@@ -1,6 +1,6 @@
 
 ## Project Title
-Djezzy is a web application developed with HTML, CSS, JavaScript, and Flask. It offers a user-friendly interface with distinct roles and functionalities for administrators, users, and supervisors.
+Djezzy is a web application developed with HTML, CSS, JavaScript, and Flask. It offers a user-friendly interface with distinct roles and functionalities for administrators, users, and supervisors. The application is in **French**.
 
 
 
