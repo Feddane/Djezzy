@@ -1,4 +1,4 @@
-from flask import render_template, request, redirect, url_for, session, flash, send_file, jsonify
+from flask import render_template, request, redirect, url_for, session, flash, send_file, jsonify, make_response
 from . import create_app, db
 from .models import Reclamation, Admin, Superviseur, User
 import os
@@ -8,6 +8,7 @@ from datetime import date, datetime
 from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
 from reportlab.lib.colors import grey
+import pandas as pd
 
 
 app = create_app()
@@ -778,6 +779,75 @@ def export():
     return send_file(buffer, as_attachment=True, download_name='BRQ.pdf', mimetype='application/pdf')
 
 
+@app.route('/export_excel', methods=['GET'])
+def export_excel():
+    if 'username' not in session:
+        return redirect(url_for('login_admin'))
+
+    date_ouverture = request.args.get('date_ouverture')
+    
+    if not date_ouverture:
+        flash("Veuillez sélectionner une date d'ouverture.", "error")
+        return redirect(url_for('historique'))
+
+    reclamations = Reclamation.query.filter_by(date_ouverture=date_ouverture).all()
+
+    if not reclamations:
+        flash(f"Aucune requête trouvée pour la date {date_ouverture}.", "error")
+        return redirect(url_for('historique'))
+
+    data = [{
+        "ID": r.id,
+        "Titre": r.titre,
+        "Sites": r.sites,
+        "Action Entreprise": r.action_entreprise,
+        "Date Ouverture": r.date_ouverture,
+        "Date Fin": r.date_fin,
+        "Opérateur": r.operateur,
+        "Échéance": r.echeance,
+        "Étages": r.etages,
+        "Affecté À": r.affecte_a,
+        "Priorité": r.priorite,
+        "Accès": r.acces,
+        "Ouvert Par": r.ouvert_par,
+        "Description": r.description,
+        "Status": r.status,
+        "Catégorie": r.categorie,
+        "Famille": r.famille,
+        "Commentaire": r.commentaire,
+        "Fichier": r.fichier,
+    } for r in reclamations]
+
+    df = pd.DataFrame(data)
+
+    output = BytesIO()
+
+
+    with pd.ExcelWriter(output, engine='openpyxl') as writer:
+        df.to_excel(writer, index=False, sheet_name='Reclamations')
+
+        worksheet = writer.sheets['Reclamations']
+
+
+        for column in worksheet.columns:
+            max_length = 0
+            column_letter = column[0].column_letter 
+            for cell in column:
+                try:
+                    if len(str(cell.value)) > max_length:
+                        max_length = len(str(cell.value))
+                except:
+                    pass
+            adjusted_width = max_length + 2
+            worksheet.column_dimensions[column_letter].width = adjusted_width
+
+    output.seek(0)
+
+    response = make_response(output.read())
+    response.headers["Content-Disposition"] = "attachment; filename=Brq.xlsx"
+    response.headers["Content-type"] = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+
+    return response
 
 @app.route('/all_reclamations', methods=['GET'])
 def all_reclamations():

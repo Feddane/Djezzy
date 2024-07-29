@@ -319,6 +319,31 @@ document.addEventListener('DOMContentLoaded', function() {
         $(this).addClass("selected");
     });
 
+    /***********excel button******************************** */
+    function toggleDateField() {
+        const dateInput = document.getElementById('date_debut');
+        const submitButton = document.getElementById('submitExcel');
+        
+        if (dateInput.style.display === 'none') {
+            dateInput.style.display = 'block';
+            submitButton.style.display = 'inline';
+        } else {
+            dateInput.style.display = 'none';
+            submitButton.style.display = 'none';
+        }
+    }
+    document.getElementById('excelButton').addEventListener('click', toggleDateField);
+
+
+
+    $('#excelButton').on('click', function () {
+        const dateOuverture = $('#date_debut').val();
+
+        if (dateOuverture) {
+            window.location.href = `/export_excel?date_ouverture=${dateOuverture}`;
+        }
+    });
+
     /****************refresh button *******************************/
     document.getElementById('refreshButton').addEventListener('click', function() {
 
