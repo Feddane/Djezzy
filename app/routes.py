@@ -50,23 +50,23 @@ def reclamation_supervisor():
         return redirect(url_for('login_supervisor'))
 
     if request.method == 'POST':
-        titre = request.form.get('titre')
-        sites = request.form.get('sites')
-        action_entreprise = request.form.get('action_entreprise')
+        titre = request.form.get('titre') or None
+        sites = request.form.get('sites') or None
+        action_entreprise = request.form.get('action_entreprise') or None
         date_ouverture = request.form.get('date_ouverture')
-        date_fin = request.form.get('date_fin')
+        date_fin = request.form.get('date_fin') or None
         operateur = request.form.get('operateur')
         echeance = request.form.get('echeance')
-        etages = request.form.get('etages')
-        affecte_a = request.form.get('affecte_a')
+        etages = request.form.get('etages') or None
+        affecte_a = request.form.get('affecte_a') or None
         priorite = request.form.get('priorite')
-        acces = request.form.get('acces')
-        ouvert_par = request.form.get('ouvert_par')
-        description = request.form.get('description')
-        status = request.form.get('status')
+        acces = request.form.get('acces') or None
+        ouvert_par = request.form.get('ouvert_par') or None
+        description = request.form.get('description') or None
+        status = request.form.get('status') or None
         categorie = request.form.get('categorie')
         famille = request.form.get('famille')
-        commentaire = request.form.get('commentaire')
+        commentaire = request.form.get('commentaire') or None
         fichier = request.files.get('fileUpload')
 
         fichier_nom = None
@@ -297,23 +297,23 @@ def reclamation_user():
         return redirect(url_for('login_user'))
 
     if request.method == 'POST':
-        titre = request.form.get('titre')
-        sites = request.form.get('sites')
-        action_entreprise = request.form.get('action_entreprise')
+        titre = request.form.get('titre') or None
+        sites = request.form.get('sites') or None
+        action_entreprise = request.form.get('action_entreprise') or None
         date_ouverture = request.form.get('date_ouverture')
-        date_fin = request.form.get('date_fin')
+        date_fin = request.form.get('date_fin') or None
         operateur = request.form.get('operateur')
         echeance = request.form.get('echeance')
-        etages = request.form.get('etages')
-        affecte_a = request.form.get('affecte_a')
+        etages = request.form.get('etages') or None
+        affecte_a = request.form.get('affecte_a') or None
         priorite = request.form.get('priorite')
-        acces = request.form.get('acces')
-        ouvert_par = request.form.get('ouvert_par')
-        description = request.form.get('description')
-        status = request.form.get('status')
+        acces = request.form.get('acces') or None
+        ouvert_par = request.form.get('ouvert_par') or None
+        description = request.form.get('description') or None
+        status = request.form.get('status') or None
         categorie = request.form.get('categorie')
         famille = request.form.get('famille')
-        commentaire = request.form.get('commentaire')
+        commentaire = request.form.get('commentaire') or None
         fichier = request.files.get('fileUpload')
 
         fichier_nom = None
@@ -548,23 +548,23 @@ def reclamation():
         return redirect(url_for('login_admin'))
 
     if request.method == 'POST':
-        titre = request.form.get('titre')
-        sites = request.form.get('sites')
-        action_entreprise = request.form.get('action_entreprise')
+        titre = request.form.get('titre') or None
+        sites = request.form.get('sites') or None
+        action_entreprise = request.form.get('action_entreprise') or None
         date_ouverture = request.form.get('date_ouverture')
-        date_fin = request.form.get('date_fin')
+        date_fin = request.form.get('date_fin') or None
         operateur = request.form.get('operateur')
         echeance = request.form.get('echeance')
-        etages = request.form.get('etages')
-        affecte_a = request.form.get('affecte_a')
+        etages = request.form.get('etages') or None
+        affecte_a = request.form.get('affecte_a') or None
         priorite = request.form.get('priorite')
-        acces = request.form.get('acces')
-        ouvert_par = request.form.get('ouvert_par')
-        description = request.form.get('description')
-        status = request.form.get('status')
+        acces = request.form.get('acces') or None
+        ouvert_par = request.form.get('ouvert_par') or None
+        description = request.form.get('description') or None
+        status = request.form.get('status') or None
         categorie = request.form.get('categorie')
         famille = request.form.get('famille')
-        commentaire = request.form.get('commentaire')
+        commentaire = request.form.get('commentaire') or None
         fichier = request.files.get('fileUpload')
 
         fichier_nom = None
