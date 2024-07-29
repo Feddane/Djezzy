@@ -56,6 +56,10 @@
       </div>
       <div class="header-actions">
         <div>
+          <form id="exportForm" action="{{ url_for('export_excel_user') }}" method="get" style="display: inline;">
+            <input type="date" class="date-input" id="date_debut" style="display: none;" />
+            <button id="excelButton" type="button" class="export"><i class="las la-file-excel"></i>Brq</button>
+          </form>
           <form id="exportForm" action="{{ url_for('export_user') }}" method="get" style="display: inline;">
             <button class="export" type="submit"><i class="las la-file-excel"></i>Export</button>
           </form>

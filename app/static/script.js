@@ -338,10 +338,17 @@ document.addEventListener('DOMContentLoaded', function() {
 
     $('#excelButton').on('click', function () {
         const dateOuverture = $('#date_debut').val();
-    
+        const currentUrl = window.location.href;
+
         if (dateOuverture) {
-            window.location.href = `/export_excel?date_ouverture=${dateOuverture}`;
-    
+            if (currentUrl.includes("historique_user")) {
+                window.location.href = `/export_excel_user?date_ouverture=${dateOuverture}`;
+            } else if (currentUrl.includes("historique_supervisor")) {
+                window.location.href = `/export_excel_supervisor?date_ouverture=${dateOuverture}`;
+            } else if (currentUrl.includes("historique")) {
+                window.location.href = `/export_excel?date_ouverture=${dateOuverture}`;
+            }
+
             setTimeout(() => {
                 $('#date_debut').val('');
                 $('#date_debut').hide();
@@ -349,7 +356,6 @@ document.addEventListener('DOMContentLoaded', function() {
             }, 500);
         }
     });
-    
 
     /****************refresh button *******************************/
     document.getElementById('refreshButton').addEventListener('click', function() {
