@@ -289,11 +289,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    function onSelect(val, inputElement) {
-        if (inputElement.val() !== val) {
-            alert(val);
-        }
-    }
+    function onSelect(val, inputElement) {}
 
     $(".affecte input, .ouvert input, .operateur input").on("input", function(event) {
         filterFunction(this, event);
