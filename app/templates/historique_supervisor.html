@@ -61,12 +61,12 @@
       </div>
       <div class="header-actions">
         <div>
-          <form id="exportForm" action="{{ url_for('export_excel_supervisor') }}" method="get" style="display: inline;">
-            <input type="date" class="date-input" id="date_debut" style="display: none;" />
-            <button id="excelButton" type="button" class="export"><i class="las la-file-excel"></i>Brq</button>
-          </form>
           <form id="exportForm" action="{{ url_for('export_supervisor') }}" method="get" style="display: inline;">
-            <button class="export" type="submit"><i class="las la-file-excel"></i>Export</button>
+            <input type="date" class="date-input" id="date_debut" name="date_ouverture" style="display: none;" />
+            <button id="pdfButton" class="export" type="button"><i class="las la-file-pdf"></i>Brq</button>
+          </form>
+          <form action="{{ url_for('export_excel_supervisor') }}" method="get" style="display: inline;">
+            <button class="export"><i class="las la-file-excel"></i>Excel</button>
           </form>
           <button id="refreshButton" class="refresh"><i class="las la-sync"></i>Refresh</button>
         </div>

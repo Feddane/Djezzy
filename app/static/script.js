@@ -337,9 +337,9 @@ document.addEventListener('DOMContentLoaded', function() {
     
         if (dateOuverture) {
             if (currentUrl.includes("historique_user")) {
-                window.location.href = `/export_excel_user?date_ouverture=${dateOuverture}`;
+                window.location.href = `/export_user?date_ouverture=${dateOuverture}`;
             } else if (currentUrl.includes("historique_supervisor")) {
-                window.location.href = `/export_excel_supervisor?date_ouverture=${dateOuverture}`;
+                window.location.href = `/export_supervisor?date_ouverture=${dateOuverture}`;
             } else if (currentUrl.includes("historique")) {
                 window.location.href = `/export?date_ouverture=${dateOuverture}`;
             }
