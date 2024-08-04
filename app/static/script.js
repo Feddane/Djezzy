@@ -319,43 +319,39 @@ document.addEventListener('DOMContentLoaded', function() {
         $(this).addClass("selected");
     });
 
-    /***********excel button******************************** */
+    /***********pdf button******************************** */
     function toggleDateField() {
         const dateInput = document.getElementById('date_debut');
-        const submitButton = document.getElementById('submitExcel');
-        
         if (dateInput.style.display === 'none') {
             dateInput.style.display = 'block';
-            submitButton.style.display = 'inline';
         } else {
             dateInput.style.display = 'none';
-            submitButton.style.display = 'none';
         }
     }
-    document.getElementById('excelButton').addEventListener('click', toggleDateField);
-
-
-
-    $('#excelButton').on('click', function () {
-        const dateOuverture = $('#date_debut').val();
+    
+    document.getElementById('pdfButton').addEventListener('click', toggleDateField);
+    
+    document.getElementById('pdfButton').addEventListener('click', function () {
+        const dateOuverture = document.getElementById('date_debut').value;
         const currentUrl = window.location.href;
-
+    
         if (dateOuverture) {
             if (currentUrl.includes("historique_user")) {
                 window.location.href = `/export_excel_user?date_ouverture=${dateOuverture}`;
             } else if (currentUrl.includes("historique_supervisor")) {
                 window.location.href = `/export_excel_supervisor?date_ouverture=${dateOuverture}`;
             } else if (currentUrl.includes("historique")) {
-                window.location.href = `/export_excel?date_ouverture=${dateOuverture}`;
+                window.location.href = `/export?date_ouverture=${dateOuverture}`;
             }
-
+    
             setTimeout(() => {
-                $('#date_debut').val('');
-                $('#date_debut').hide();
-                $('#submitExcel').hide();
+                document.getElementById('date_debut').value = '';
+                document.getElementById('date_debut').style.display = 'none';
             }, 500);
         }
-    });
+    });    
+      
+
 
     /****************refresh button *******************************/
     document.getElementById('refreshButton').addEventListener('click', function() {

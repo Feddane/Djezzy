@@ -104,101 +104,172 @@ def reclamation_supervisor():
 
     return render_template('reclamation_supervisor.html')
 
-@app.route('/export_supervisor', methods=['GET'])
-def export_supervisor():
-    if 'username' not in session:
-        return redirect(url_for('login_supervisor'))
+# @app.route('/export_supervisor', methods=['GET'])
+# def export_supervisor():
+#     if 'username' not in session:
+#         return redirect(url_for('login_supervisor'))
 
-    today = date.today()
-    reclamations = Reclamation.query.filter_by(date_ouverture=today).all()
+#     today = date.today()
+#     reclamations = Reclamation.query.filter_by(date_ouverture=today).all()
 
-    if not reclamations:
-        flash("Il n'y a pas de réclamations à exporter pour aujourd'hui.", "warning")
-        return redirect(url_for('historique_supervisor'))
+#     if not reclamations:
+#         flash("Il n'y a pas de réclamations à exporter pour aujourd'hui.", "warning")
+#         return redirect(url_for('historique_supervisor'))
 
-    buffer = BytesIO()
-    c = canvas.Canvas(buffer, pagesize=letter)
-    width, height = letter
-    y = height - 40
+#     buffer = BytesIO()
+#     c = canvas.Canvas(buffer, pagesize=letter)
+#     width, height = letter
+#     y = height - 40
 
-    def space_available(space_needed):
-        nonlocal y
-        return y - space_needed > 40
+#     def space_available(space_needed):
+#         nonlocal y
+#         return y - space_needed > 40
 
-    c.setFont("Times-Roman", 13)
-    c.drawString(width - 150, y, f"Date : {today.strftime('%Y-%m-%d')}")
-    y -= 26
+#     c.setFont("Times-Roman", 13)
+#     c.drawString(width - 150, y, f"Date : {today.strftime('%Y-%m-%d')}")
+#     y -= 26
 
-    c.setFont("Times-Bold", 18)
-    c.setFillColor(grey)
-    c.drawString(30, y, "Requêtes enregistrées")
-    c.setLineWidth(5)
-    y -= 40
+#     c.setFont("Times-Bold", 18)
+#     c.setFillColor(grey)
+#     c.drawString(30, y, "Requêtes enregistrées")
+#     c.setLineWidth(5)
+#     y -= 40
 
-    c.setFillColor('black')
-    c.setFont("Times-Roman", 14)
+#     c.setFillColor('black')
+#     c.setFont("Times-Roman", 14)
 
-    for index, reclamation in enumerate(reclamations):
-        if not space_available(200):
-            c.showPage()
-            c.setFont("Times-Roman", 14)
-            y = height - 40
+#     for index, reclamation in enumerate(reclamations):
+#         if not space_available(200):
+#             c.showPage()
+#             c.setFont("Times-Roman", 14)
+#             y = height - 40
 
-        c.setStrokeColor('red')
-        c.setLineWidth(5)
-        c.line(30, y + 15, width - 30, y + 15)
+#         c.setStrokeColor('red')
+#         c.setLineWidth(5)
+#         c.line(30, y + 15, width - 30, y + 15)
 
-        c.setFont("Times-Bold", 16)
-        c.setFillColor('red')
-        c.drawString(30, y, f"Requête N° : {reclamation.id}")
-        c.setFillColor('black')
-        c.setFont("Times-Roman", 14)
-        y -= 45
+#         c.setFont("Times-Bold", 16)
+#         c.setFillColor('red')
+#         c.drawString(30, y, f"Requête N° : {reclamation.id}")
+#         c.setFillColor('black')
+#         c.setFont("Times-Roman", 14)
+#         y -= 45
 
-        fields = [
-            (f"Titre : {reclamation.titre}", 15),
-            (f"Status : {reclamation.status}", 15),
-            (f"Priorité : {reclamation.priorite}", 15),
-            (f"Categorie : {reclamation.categorie}", 15),
-            (f"Ouvert par : {reclamation.ouvert_par}", 15),
-            (f"Affecté à : {reclamation.affecte_a}", 15),
-            (f"Échéance : {reclamation.echeance}", 15),
-            (f"Opérateur : {reclamation.operateur}", 30),
-            ("Description:", 15),
-            (f"{reclamation.description}", 15),
-            ("" , 30)
-        ]
+#         fields = [
+#             (f"Titre : {reclamation.titre}", 15),
+#             (f"Status : {reclamation.status}", 15),
+#             (f"Priorité : {reclamation.priorite}", 15),
+#             (f"Categorie : {reclamation.categorie}", 15),
+#             (f"Ouvert par : {reclamation.ouvert_par}", 15),
+#             (f"Affecté à : {reclamation.affecte_a}", 15),
+#             (f"Échéance : {reclamation.echeance}", 15),
+#             (f"Opérateur : {reclamation.operateur}", 30),
+#             ("Description:", 15),
+#             (f"{reclamation.description}", 15),
+#             ("" , 30)
+#         ]
         
-        for field, space_needed in fields:
-            if not space_available(space_needed):
-                c.showPage()
-                c.setFont("Times-Roman", 14)
-                y = height - 40
-            if field == "Description:":
-                c.setFont("Times-Bold", 14)
-                c.setFillColor(grey)
-            c.drawString(30, y, field)
-            if field == "Description:":
-                c.setFont("Times-Roman", 14)
-                c.setFillColor('black')
-            y -= space_needed
+#         for field, space_needed in fields:
+#             if not space_available(space_needed):
+#                 c.showPage()
+#                 c.setFont("Times-Roman", 14)
+#                 y = height - 40
+#             if field == "Description:":
+#                 c.setFont("Times-Bold", 14)
+#                 c.setFillColor(grey)
+#             c.drawString(30, y, field)
+#             if field == "Description:":
+#                 c.setFont("Times-Roman", 14)
+#                 c.setFillColor('black')
+#             y -= space_needed
 
-        if index < len(reclamations) - 1:
-            y -= 20
+#         if index < len(reclamations) - 1:
+#             y -= 20
 
-    c.setStrokeColor('red')
-    c.setLineWidth(5)
-    c.line(30, y - 10, width - 30, y - 10)
+#     c.setStrokeColor('red')
+#     c.setLineWidth(5)
+#     c.line(30, y - 10, width - 30, y - 10)
 
-    generated_at = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-    c.setFont("Times-Bold", 14)
-    c.drawRightString(width - 30, 40, f"Généré le : {generated_at}")
+#     generated_at = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+#     c.setFont("Times-Bold", 14)
+#     c.drawRightString(width - 30, 40, f"Généré le : {generated_at}")
 
-    c.showPage()
-    c.save()
+#     c.showPage()
+#     c.save()
 
-    buffer.seek(0)
-    return send_file(buffer, as_attachment=True, download_name='BRQ.pdf', mimetype='application/pdf')
+#     buffer.seek(0)
+#     return send_file(buffer, as_attachment=True, download_name='BRQ.pdf', mimetype='application/pdf')
+
+
+# @app.route('/export_excel_supervisor', methods=['GET'])
+# def export_excel_supervisor():
+#     if 'username' not in session:
+#         return redirect(url_for('login_supervisor'))
+
+#     date_ouverture = request.args.get('date_ouverture')
+
+#     if not date_ouverture:
+#         flash("Veuillez sélectionner une date d'ouverture.", "error")
+#         return redirect(url_for('historique_supervisor'))
+
+#     reclamations = Reclamation.query.filter_by(date_ouverture=date_ouverture).all()
+
+#     if not reclamations:
+#         flash(f"Aucune requête trouvée pour la date {date_ouverture}.", "error")
+#         return redirect(url_for('historique_supervisor'))
+
+#     data = [{
+#         "ID": r.id,
+#         "Titre": r.titre,
+#         "Sites": r.sites,
+#         "Action Entreprise": r.action_entreprise,
+#         "Date Ouverture": r.date_ouverture,
+#         "Date Fin": r.date_fin,
+#         "Opérateur": r.operateur,
+#         "Échéance": r.echeance,
+#         "Étages": r.etages,
+#         "Affecté À": r.affecte_a,
+#         "Priorité": r.priorite,
+#         "Accès": r.acces,
+#         "Ouvert Par": r.ouvert_par,
+#         "Description": r.description,
+#         "Status": r.status,
+#         "Catégorie": r.categorie,
+#         "Famille": r.famille,
+#         "Commentaire": r.commentaire,
+#         "Fichier": r.fichier,
+#     } for r in reclamations]
+
+#     df = pd.DataFrame(data)
+
+#     output = BytesIO()
+
+
+#     with pd.ExcelWriter(output, engine='openpyxl') as writer:
+#         df.to_excel(writer, index=False, sheet_name='Reclamations')
+
+#         worksheet = writer.sheets['Reclamations']
+
+
+#         for column in worksheet.columns:
+#             max_length = 0
+#             column_letter = column[0].column_letter 
+#             for cell in column:
+#                 try:
+#                     if len(str(cell.value)) > max_length:
+#                         max_length = len(str(cell.value))
+#                 except:
+#                     pass
+#             adjusted_width = max_length + 2
+#             worksheet.column_dimensions[column_letter].width = adjusted_width
+
+#     output.seek(0)
+
+#     response = make_response(output.read())
+#     response.headers["Content-Disposition"] = "attachment; filename=Brq.xlsx"
+#     response.headers["Content-type"] = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+
+#     return response
 
 @app.route('/historique_supervisor', methods=['GET'])
 def historique_supervisor():
@@ -269,76 +340,6 @@ def statistique():
     return render_template('statistique.html', actifs_count=actifs_count, incidents_count=incidents_count,
                            categories_count=categories_count, reclamations=reclamations, **images)
 
-
-@app.route('/export_excel_supervisor', methods=['GET'])
-def export_excel_supervisor():
-    if 'username' not in session:
-        return redirect(url_for('login_supervisor'))
-
-    date_ouverture = request.args.get('date_ouverture')
-
-    if not date_ouverture:
-        flash("Veuillez sélectionner une date d'ouverture.", "error")
-        return redirect(url_for('historique_supervisor'))
-
-    reclamations = Reclamation.query.filter_by(date_ouverture=date_ouverture).all()
-
-    if not reclamations:
-        flash(f"Aucune requête trouvée pour la date {date_ouverture}.", "error")
-        return redirect(url_for('historique_supervisor'))
-
-    data = [{
-        "ID": r.id,
-        "Titre": r.titre,
-        "Sites": r.sites,
-        "Action Entreprise": r.action_entreprise,
-        "Date Ouverture": r.date_ouverture,
-        "Date Fin": r.date_fin,
-        "Opérateur": r.operateur,
-        "Échéance": r.echeance,
-        "Étages": r.etages,
-        "Affecté À": r.affecte_a,
-        "Priorité": r.priorite,
-        "Accès": r.acces,
-        "Ouvert Par": r.ouvert_par,
-        "Description": r.description,
-        "Status": r.status,
-        "Catégorie": r.categorie,
-        "Famille": r.famille,
-        "Commentaire": r.commentaire,
-        "Fichier": r.fichier,
-    } for r in reclamations]
-
-    df = pd.DataFrame(data)
-
-    output = BytesIO()
-
-
-    with pd.ExcelWriter(output, engine='openpyxl') as writer:
-        df.to_excel(writer, index=False, sheet_name='Reclamations')
-
-        worksheet = writer.sheets['Reclamations']
-
-
-        for column in worksheet.columns:
-            max_length = 0
-            column_letter = column[0].column_letter 
-            for cell in column:
-                try:
-                    if len(str(cell.value)) > max_length:
-                        max_length = len(str(cell.value))
-                except:
-                    pass
-            adjusted_width = max_length + 2
-            worksheet.column_dimensions[column_letter].width = adjusted_width
-
-    output.seek(0)
-
-    response = make_response(output.read())
-    response.headers["Content-Disposition"] = "attachment; filename=Brq.xlsx"
-    response.headers["Content-type"] = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-
-    return response
 
 
 #all about USER
@@ -445,172 +446,172 @@ def historique_user():
 
     return render_template('historique_user.html', results=results)
 
-@app.route('/export_user', methods=['GET'])
-def export_user():
-    if 'username' not in session:
-        return redirect(url_for('login_user'))
+# @app.route('/export_user', methods=['GET'])
+# def export_user():
+#     if 'username' not in session:
+#         return redirect(url_for('login_user'))
     
-    today = date.today()
-    reclamations = Reclamation.query.filter_by(date_ouverture=today, role='user').all()
+#     today = date.today()
+#     reclamations = Reclamation.query.filter_by(date_ouverture=today, role='user').all()
 
-    if not reclamations:
-        flash("Il n'y a pas de réclamations à exporter pour aujourd'hui.", "warning")
-        return redirect(url_for('historique_user'))
+#     if not reclamations:
+#         flash("Il n'y a pas de réclamations à exporter pour aujourd'hui.", "warning")
+#         return redirect(url_for('historique_user'))
 
-    buffer = BytesIO()
-    c = canvas.Canvas(buffer, pagesize=letter)
-    width, height = letter
-    y = height - 40
+#     buffer = BytesIO()
+#     c = canvas.Canvas(buffer, pagesize=letter)
+#     width, height = letter
+#     y = height - 40
 
-    def space_available(space_needed):
-        nonlocal y
-        return y - space_needed > 40
+#     def space_available(space_needed):
+#         nonlocal y
+#         return y - space_needed > 40
 
-    c.setFont("Times-Roman", 13)
-    c.drawString(width - 150, y, f"Date : {today.strftime('%Y-%m-%d')}")
-    y -= 26
+#     c.setFont("Times-Roman", 13)
+#     c.drawString(width - 150, y, f"Date : {today.strftime('%Y-%m-%d')}")
+#     y -= 26
 
-    c.setFont("Times-Bold", 18)
-    c.setFillColor(grey)
-    c.drawString(30, y, "Requêtes enregistrées")
-    c.setLineWidth(5)
-    y -= 40
+#     c.setFont("Times-Bold", 18)
+#     c.setFillColor(grey)
+#     c.drawString(30, y, "Requêtes enregistrées")
+#     c.setLineWidth(5)
+#     y -= 40
 
-    c.setFillColor('black')
-    c.setFont("Times-Roman", 14)
+#     c.setFillColor('black')
+#     c.setFont("Times-Roman", 14)
 
-    for index, reclamation in enumerate(reclamations):
-        if not space_available(200):
-            c.showPage()
-            c.setFont("Times-Roman", 14)
-            y = height - 40
+#     for index, reclamation in enumerate(reclamations):
+#         if not space_available(200):
+#             c.showPage()
+#             c.setFont("Times-Roman", 14)
+#             y = height - 40
 
-        c.setStrokeColor('red')
-        c.setLineWidth(5)
-        c.line(30, y + 15, width - 30, y + 15)
+#         c.setStrokeColor('red')
+#         c.setLineWidth(5)
+#         c.line(30, y + 15, width - 30, y + 15)
 
-        c.setFont("Times-Bold", 16)
-        c.setFillColor('red')
-        c.drawString(30, y, f"Requête N° : {reclamation.id}")
-        c.setFillColor('black')
-        c.setFont("Times-Roman", 14)
-        y -= 45
+#         c.setFont("Times-Bold", 16)
+#         c.setFillColor('red')
+#         c.drawString(30, y, f"Requête N° : {reclamation.id}")
+#         c.setFillColor('black')
+#         c.setFont("Times-Roman", 14)
+#         y -= 45
 
-        fields = [
-            (f"Titre : {reclamation.titre}", 15),
-            (f"Status : {reclamation.status}", 15),
-            (f"Priorité : {reclamation.priorite}", 15),
-            (f"Categorie : {reclamation.categorie}", 15),
-            (f"Ouvert par : {reclamation.ouvert_par}", 15),
-            (f"Affecté à : {reclamation.affecte_a}", 15),
-            (f"Échéance : {reclamation.echeance}", 15),
-            (f"Opérateur : {reclamation.operateur}", 30),
-            ("Description:", 15),
-            (f"{reclamation.description}", 15),
-            ("" , 30)
-        ]
+#         fields = [
+#             (f"Titre : {reclamation.titre}", 15),
+#             (f"Status : {reclamation.status}", 15),
+#             (f"Priorité : {reclamation.priorite}", 15),
+#             (f"Categorie : {reclamation.categorie}", 15),
+#             (f"Ouvert par : {reclamation.ouvert_par}", 15),
+#             (f"Affecté à : {reclamation.affecte_a}", 15),
+#             (f"Échéance : {reclamation.echeance}", 15),
+#             (f"Opérateur : {reclamation.operateur}", 30),
+#             ("Description:", 15),
+#             (f"{reclamation.description}", 15),
+#             ("" , 30)
+#         ]
         
-        for field, space_needed in fields:
-            if not space_available(space_needed):
-                c.showPage()
-                c.setFont("Times-Roman", 14)
-                y = height - 40
-            if field == "Description:":
-                c.setFont("Times-Bold", 14)
-                c.setFillColor(grey)
-            c.drawString(30, y, field)
-            if field == "Description:":
-                c.setFont("Times-Roman", 14)
-                c.setFillColor('black')
-            y -= space_needed
+#         for field, space_needed in fields:
+#             if not space_available(space_needed):
+#                 c.showPage()
+#                 c.setFont("Times-Roman", 14)
+#                 y = height - 40
+#             if field == "Description:":
+#                 c.setFont("Times-Bold", 14)
+#                 c.setFillColor(grey)
+#             c.drawString(30, y, field)
+#             if field == "Description:":
+#                 c.setFont("Times-Roman", 14)
+#                 c.setFillColor('black')
+#             y -= space_needed
 
-        if index < len(reclamations) - 1:
-            y -= 20
+#         if index < len(reclamations) - 1:
+#             y -= 20
 
-    c.setStrokeColor('red')
-    c.setLineWidth(5)
-    c.line(30, y - 10, width - 30, y - 10)
+#     c.setStrokeColor('red')
+#     c.setLineWidth(5)
+#     c.line(30, y - 10, width - 30, y - 10)
 
-    generated_at = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-    c.setFont("Times-Bold", 14)
-    c.drawRightString(width - 30, 40, f"Généré le : {generated_at}")
+#     generated_at = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+#     c.setFont("Times-Bold", 14)
+#     c.drawRightString(width - 30, 40, f"Généré le : {generated_at}")
 
-    c.showPage()
-    c.save()
+#     c.showPage()
+#     c.save()
 
-    buffer.seek(0)
-    return send_file(buffer, as_attachment=True, download_name='BRQ_User.pdf', mimetype='application/pdf')
+#     buffer.seek(0)
+#     return send_file(buffer, as_attachment=True, download_name='BRQ_User.pdf', mimetype='application/pdf')
 
-@app.route('/export_excel_user', methods=['GET'])
-def export_excel_user():
-    if 'username' not in session:
-        return redirect(url_for('login_user'))
+# @app.route('/export_excel_user', methods=['GET'])
+# def export_excel_user():
+#     if 'username' not in session:
+#         return redirect(url_for('login_user'))
 
-    date_ouverture = request.args.get('date_ouverture')
+#     date_ouverture = request.args.get('date_ouverture')
     
-    if not date_ouverture:
-        flash("Veuillez sélectionner une date d'ouverture.", "error")
-        return redirect(url_for('historique_user'))
+#     if not date_ouverture:
+#         flash("Veuillez sélectionner une date d'ouverture.", "error")
+#         return redirect(url_for('historique_user'))
 
-    reclamations = Reclamation.query.filter_by(date_ouverture=date_ouverture, role='user').all()
-    print(reclamations)
+#     reclamations = Reclamation.query.filter_by(date_ouverture=date_ouverture, role='user').all()
+#     print(reclamations)
 
-    if not reclamations:
-        flash(f"Aucune requête trouvée pour la date {date_ouverture}.", "error")
-        return redirect(url_for('historique_user'))
+#     if not reclamations:
+#         flash(f"Aucune requête trouvée pour la date {date_ouverture}.", "error")
+#         return redirect(url_for('historique_user'))
 
-    data = [{
-        "ID": r.id,
-        "Titre": r.titre,
-        "Sites": r.sites,
-        "Action Entreprise": r.action_entreprise,
-        "Date Ouverture": r.date_ouverture,
-        "Date Fin": r.date_fin,
-        "Opérateur": r.operateur,
-        "Échéance": r.echeance,
-        "Étages": r.etages,
-        "Affecté À": r.affecte_a,
-        "Priorité": r.priorite,
-        "Accès": r.acces,
-        "Ouvert Par": r.ouvert_par,
-        "Description": r.description,
-        "Status": r.status,
-        "Catégorie": r.categorie,
-        "Famille": r.famille,
-        "Commentaire": r.commentaire,
-        "Fichier": r.fichier,
-    } for r in reclamations]
+#     data = [{
+#         "ID": r.id,
+#         "Titre": r.titre,
+#         "Sites": r.sites,
+#         "Action Entreprise": r.action_entreprise,
+#         "Date Ouverture": r.date_ouverture,
+#         "Date Fin": r.date_fin,
+#         "Opérateur": r.operateur,
+#         "Échéance": r.echeance,
+#         "Étages": r.etages,
+#         "Affecté À": r.affecte_a,
+#         "Priorité": r.priorite,
+#         "Accès": r.acces,
+#         "Ouvert Par": r.ouvert_par,
+#         "Description": r.description,
+#         "Status": r.status,
+#         "Catégorie": r.categorie,
+#         "Famille": r.famille,
+#         "Commentaire": r.commentaire,
+#         "Fichier": r.fichier,
+#     } for r in reclamations]
 
-    df = pd.DataFrame(data)
+#     df = pd.DataFrame(data)
 
-    output = BytesIO()
-
-
-    with pd.ExcelWriter(output, engine='openpyxl') as writer:
-        df.to_excel(writer, index=False, sheet_name='Reclamations')
-
-        worksheet = writer.sheets['Reclamations']
+#     output = BytesIO()
 
 
-        for column in worksheet.columns:
-            max_length = 0
-            column_letter = column[0].column_letter 
-            for cell in column:
-                try:
-                    if len(str(cell.value)) > max_length:
-                        max_length = len(str(cell.value))
-                except:
-                    pass
-            adjusted_width = max_length + 2
-            worksheet.column_dimensions[column_letter].width = adjusted_width
+#     with pd.ExcelWriter(output, engine='openpyxl') as writer:
+#         df.to_excel(writer, index=False, sheet_name='Reclamations')
 
-    output.seek(0)
+#         worksheet = writer.sheets['Reclamations']
 
-    response = make_response(output.read())
-    response.headers["Content-Disposition"] = "attachment; filename=BRQ_User.xlsx"
-    response.headers["Content-type"] = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
 
-    return response
+#         for column in worksheet.columns:
+#             max_length = 0
+#             column_letter = column[0].column_letter 
+#             for cell in column:
+#                 try:
+#                     if len(str(cell.value)) > max_length:
+#                         max_length = len(str(cell.value))
+#                 except:
+#                     pass
+#             adjusted_width = max_length + 2
+#             worksheet.column_dimensions[column_letter].width = adjusted_width
+
+#     output.seek(0)
+
+#     response = make_response(output.read())
+#     response.headers["Content-Disposition"] = "attachment; filename=BRQ_User.xlsx"
+#     response.headers["Content-type"] = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+
+#     return response
 
 @app.route('/all_reclamations_user', methods=['GET'])
 def all_reclamations_user():
@@ -826,11 +827,16 @@ def export():
     if 'username' not in session:
         return redirect(url_for('login_admin'))
     
-    today = date.today()
-    reclamations = Reclamation.query.filter_by(date_ouverture=today).all()
+    date_ouverture = request.args.get('date_ouverture')
+
+    if not date_ouverture:
+        flash("Veuillez sélectionner une date d'ouverture.", "error")
+        return redirect(url_for('historique'))
+
+    reclamations = Reclamation.query.filter_by(date_ouverture=date_ouverture).all()
 
     if not reclamations:
-        flash("Il n'y a pas de réclamations à exporter pour aujourd'hui.", "warning")
+        flash(f"Aucune requête trouvée pour la date {date_ouverture}.", "error")
         return redirect(url_for('historique'))
 
     buffer = BytesIO()
@@ -843,7 +849,7 @@ def export():
         return y - space_needed > 40
 
     c.setFont("Times-Roman", 13)
-    c.drawString(width - 150, y, f"Date : {today.strftime('%Y-%m-%d')}")
+    c.drawString(width - 150, y, f"Date : {date_ouverture}")
     y -= 26
 
     c.setFont("Times-Bold", 18)
@@ -923,16 +929,11 @@ def export_excel():
     if 'username' not in session:
         return redirect(url_for('login_admin'))
 
-    date_ouverture = request.args.get('date_ouverture')
-    
-    if not date_ouverture:
-        flash("Veuillez sélectionner une date d'ouverture.", "error")
-        return redirect(url_for('historique'))
-
-    reclamations = Reclamation.query.filter_by(date_ouverture=date_ouverture).all()
+    today = date.today()
+    reclamations = Reclamation.query.filter_by(date_ouverture=today).all()
 
     if not reclamations:
-        flash(f"Aucune requête trouvée pour la date {date_ouverture}.", "error")
+        flash("Il n'y a pas de réclamations à exporter pour aujourd'hui.", "warning")
         return redirect(url_for('historique'))
 
     data = [{
@@ -961,12 +962,10 @@ def export_excel():
 
     output = BytesIO()
 
-
     with pd.ExcelWriter(output, engine='openpyxl') as writer:
         df.to_excel(writer, index=False, sheet_name='Reclamations')
 
         worksheet = writer.sheets['Reclamations']
-
 
         for column in worksheet.columns:
             max_length = 0
@@ -977,8 +976,8 @@ def export_excel():
                         max_length = len(str(cell.value))
                 except:
                     pass
-            adjusted_width = max_length + 2
-            worksheet.column_dimensions[column_letter].width = adjusted_width
+                adjusted_width = max_length + 2
+                worksheet.column_dimensions[column_letter].width = adjusted_width
 
     output.seek(0)
 
@@ -987,6 +986,8 @@ def export_excel():
     response.headers["Content-type"] = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
 
     return response
+
+
 
 @app.route('/all_reclamations', methods=['GET'])
 def all_reclamations():
