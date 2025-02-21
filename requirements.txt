@@ -1,8 +1,0 @@
-Flask
-gunicorn
-Flask-SQLAlchemy
-psycopg2-binary
-matplotlib
-pandas
-circlify
-reportlab
