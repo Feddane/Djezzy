@@ -1,0 +1,32 @@
+version: '3.8'
+services:
+  web:
+    build: .
+    ports:
+      - "5000:5000"
+    depends_on:
+      - db
+    environment:
+      SECRET_KEY: ${SECRET_KEY}
+      SQLALCHEMY_DATABASE_URI: ${DATABASE_URL}
+    volumes:
+      - .:/app
+    env_file:
+      - .env  # Loads environment variables from .env file
+
+  db:
+    image: postgres:13
+    restart: always
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    env_file:
+      - .env  # Loads environment variables from .env file
+
+volumes:
+  pgdata:
