@@ -14,36 +14,50 @@ Djezzy is a web application developed with HTML, CSS, JavaScript, and Flask. It 
 - Statistic page for the supervisors
 
 
+
 ## Installation
 
-1- Clone the repository
-```bash
-  git clone git@github.com:Feddane/Djezzy.git
-```
+### Prerequisites
 
-2- Navigate to the project directory
-```bash
-  cd Djezzy
-```
+- Install [Docker](https://docs.docker.com/get-docker/)
+- Install [Docker Compose](https://docs.docker.com/compose/install/)
 
-3- Install the required dependencies
-``` bash
-    pip install -r requirements.txt
-```
+### Steps
 
-4- Modify the config.py file
-``` bash
-    class Config:
-        SECRET_KEY = "your-secret-key"
-        SQLALCHEMY_DATABASE_URI = 'postgresql://username:password@localhost/database_name'
-        SQLALCHEMY_TRACK_MODIFICATIONS = False
+   1. Clone the repository:
 
-```
+       ```bash
+       git clone git@github.com:Feddane/Djezzy.git
+       ```
 
-5- Run the application
-``` bash
-    python run.py
-```
+   2. Navigate to the project directory:
+   
+       ```bash 
+       cd Djezzy
+       ```
+
+   3. Create a `.env` file (if not already present) and configure it:  
+
+       ```bash
+       cp .env.example .env
+       ```
+
+       Or manually set environment variables inside `.env`:  
+
+       ```dotenv
+       POSTGRES_USER=your_username
+       POSTGRES_PASSWORD=your_password
+       POSTGRES_DB=your_db
+       SECRET_KEY=your-secret-key
+       DATABASE_URL=postgresql://your_username:your_password@db/your_db
+       ```
+
+   4. Start the application with Docker:
+   
+       ```bash 
+       docker-compose up -d --build
+       ```
+
 ## Usage
 After installation, open your web browser and go to http://127.0.0.1:5000/. You will be presented with a homepage offering three roles: Admin, User, and Supervisor. Select a role to proceed.
 
